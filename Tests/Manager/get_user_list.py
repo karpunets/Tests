@@ -34,97 +34,97 @@ def test_Positive_f_l_p_names_one_user(setup_add_delete_user_for_GET_USER_LIST, 
     assert response.status_code == 200
     assert answer == response.json()
 
-# @allure.feature('Позивтный тест')
-# @allure.story('Проверяем поиск всех абонентов(не заполнены поля)')
-# def test_all_empty(setup_add_delete_user_for_GET_USER_LIST, make_request):
-#     name = 'get_user_list'
-#     # Подготавливаем данные в JSON для запроса
-#     data = _.get_JSON_request(name, **{"data": "[]"})
-#     print(data)
-#     # Делаем запрос и получаем ответ
-#     response = make_request(url=URL.get_user_list, data=data)
-#     # Данные которые должны быть в ответе
-#     answer = _.get_JSON_response(name, **{"data": "[]"})
-#     print(answer)
-#
-#     assert response.status_code == 200
-#     assert answer == response.json()
+@allure.feature('Позивтный тест')
+@allure.story('Проверяем поиск всех абонентов(не заполнены поля)')
+def test_all_empty(setup_add_delete_user_for_GET_USER_LIST, make_request):
+    name = 'get_user_list'
+    # Подготавливаем данные в JSON для запроса
+    data = _.get_JSON_request(name, **{"data": "[]"})
+    print(data)
+    # Делаем запрос и получаем ответ
+    response = make_request(url=URL.get_user_list, data=data)
+    # Данные которые должны быть в ответе
+    answer = _.get_JSON_response(name, **{"data": "[]"})
+    print(answer)
 
-# @allure.feature('Позивтный тест')
-# @allure.story('Поиск по Логину, роли и групе')
-# def test_Positive_roleid_goupid_login_one_user(setup_add_delete_user_for_GET_USER_LIST, make_request):
-#     name = 'get_user_list'
-#     #Подготавливаем данные в JSON для запроса
-#     data = _.get_JSON_request(name, **{"roleId":3,
-#                                                    "groupId":2,
-#                                                    "login":"get_userlist_login_one"})
-#     #Делаем запрос и получаем ответ
-#     response = make_request(url=URL.get_user_list, data=data)
-#     #Данные которые должны быть в ответе
-#     answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST[0],
-#                                                        "fname": "get_userlist_fName_one",
-#                                                        "lname": "get_userlist_lName_one",
-#                                                        "pname": "get_userlist_pName_one",
-#                                                        "agentId": "get_userlist_agentId_one",
-#                                                        "login":"get_userlist_login_one",
-#                                                        "loginAD":"get_userlist_loginAD_one",
-#                                                        "phone":"666816321"
-#                                                        })
-#
-#     assert response.status_code == 200
-#     #Совпадает ли ответ с предполагаемым
-#     assert answer == response.json()
-#
-# @allure.feature('Позивтный тест')
-# @allure.story('Поиск по adLogin, agentId и телефону')
-#
-# def test_Positive_AD_phone_agent_ID_one_user(setup_add_delete_user_for_GET_USER_LIST, make_request):
-#     name = 'get_user_list'
-#     #Подготавливаем данные в JSON для запроса
-#     data = _.get_JSON_request(name, **{"adLogin": "get_userlist_loginAD_one",
-#                                                    "agentId":"get_userlist_agentId_one",
-#                                                    "phone":"666816321"})
-#     #Делаем запрос и получаем ответ
-#     response = make_request(url=URL.get_user_list, data=data)
-#     #Данные которые должны быть в ответе
-#     answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST[0],
-#                                                        "fname": "get_userlist_fName_one",
-#                                                        "lname": "get_userlist_lName_one",
-#                                                        "pname": "get_userlist_pName_one",
-#                                                        "agentId": "get_userlist_agentId_one",
-#                                                        "login":"get_userlist_login_one",
-#                                                        "loginAD":"get_userlist_loginAD_one",
-#                                                        "phone":"666816321"
-#                                                        })
-#
-#     assert response.status_code == 200
-#     #Совпадает ли ответ с предполагаемым
-#     assert answer == response.json()
+    assert response.status_code == 200
+    assert answer == response.json()
 
-# @allure.feature('Позивтный тест')
-# @allure.story('Пагинация')
-# def test_Positive_pagination_n_ps(setup_add_delete_user_for_GET_USER_LIST_for_GET_USER_LIST, make_request):
-#     name = 'get_user_list'
-#     #Подготавливаем данные в JSON для запроса
-#     data = _.get_JSON_request(name,**{"fname": "get_userlist_fName",
-#                                                    "page_number":2,
-#                                                    "page_size":15})
-#     #Делаем запрос и получаем ответ
-#     response = make_request(url=URL.get_user_list, data=data)
-#     #Данные которые должны быть в ответе
-#     answer = _.get_JSON_response(name,**{'id': setup_add_delete_user_for_GET_USER_LIST_for_GET_USER_LIST[0],
-#                                                        "fname": "get_userlist_fName_one",
-#                                                        "lname": "get_userlist_lName_one",
-#                                                        "pname": "get_userlist_pName_one",
-#                                                        "agentId": "get_userlist_agentId_one",
-#                                                        "login":"get_userlist_login_one",
-#                                                        "loginAD":"get_userlist_loginAD_one",
-#                                                        "phone":"666816321"
-#                                                        })
-#
-#     assert response.status_code == 200
-#     #Совпадает ли ответ с предполагаемым
-#     assert answer == response.json()
+@allure.feature('Позивтный тест')
+@allure.story('Поиск по Логину, роли и групе')
+def test_Positive_roleid_goupid_login_one_user(setup_add_delete_user_for_GET_USER_LIST, make_request):
+    name = 'get_user_list'
+    #Подготавливаем данные в JSON для запроса
+    data = _.get_JSON_request(name, **{"roleId":3,
+                                                   "groupId":2,
+                                                   "login":"get_userlist_login_one"})
+    #Делаем запрос и получаем ответ
+    response = make_request(url=URL.get_user_list, data=data)
+    #Данные которые должны быть в ответе
+    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST[0],
+                                                       "fname": "get_userlist_fName_one",
+                                                       "lname": "get_userlist_lName_one",
+                                                       "pname": "get_userlist_pName_one",
+                                                       "agentId": "get_userlist_agentId_one",
+                                                       "login":"get_userlist_login_one",
+                                                       "loginAD":"get_userlist_loginAD_one",
+                                                       "phone":"666816321"
+                                                       })
+
+    assert response.status_code == 200
+    #Совпадает ли ответ с предполагаемым
+    assert answer == response.json()
+
+@allure.feature('Позивтный тест')
+@allure.story('Поиск по adLogin, agentId и телефону')
+
+def test_Positive_AD_phone_agent_ID_one_user(setup_add_delete_user_for_GET_USER_LIST, make_request):
+    name = 'get_user_list'
+    #Подготавливаем данные в JSON для запроса
+    data = _.get_JSON_request(name, **{"adLogin": "get_userlist_loginAD_one",
+                                                   "agentId":"get_userlist_agentId_one",
+                                                   "phone":"666816321"})
+    #Делаем запрос и получаем ответ
+    response = make_request(url=URL.get_user_list, data=data)
+    #Данные которые должны быть в ответе
+    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST[0],
+                                                       "fname": "get_userlist_fName_one",
+                                                       "lname": "get_userlist_lName_one",
+                                                       "pname": "get_userlist_pName_one",
+                                                       "agentId": "get_userlist_agentId_one",
+                                                       "login":"get_userlist_login_one",
+                                                       "loginAD":"get_userlist_loginAD_one",
+                                                       "phone":"666816321"
+                                                       })
+
+    assert response.status_code == 200
+    #Совпадает ли ответ с предполагаемым
+    assert answer == response.json()
+
+@allure.feature('Позивтный тест')
+@allure.story('Пагинация')
+def test_Positive_pagination_n_ps(setup_add_delete_user_for_GET_USER_LIST_for_GET_USER_LIST, make_request):
+    name = 'get_user_list'
+    #Подготавливаем данные в JSON для запроса
+    data = _.get_JSON_request(name,**{"fname": "get_userlist_fName",
+                                                   "page_number":2,
+                                                   "page_size":15})
+    #Делаем запрос и получаем ответ
+    response = make_request(url=URL.get_user_list, data=data)
+    #Данные которые должны быть в ответе
+    answer = _.get_JSON_response(name,**{'id': setup_add_delete_user_for_GET_USER_LIST_for_GET_USER_LIST[0],
+                                                       "fname": "get_userlist_fName_one",
+                                                       "lname": "get_userlist_lName_one",
+                                                       "pname": "get_userlist_pName_one",
+                                                       "agentId": "get_userlist_agentId_one",
+                                                       "login":"get_userlist_login_one",
+                                                       "loginAD":"get_userlist_loginAD_one",
+                                                       "phone":"666816321"
+                                                       })
+
+    assert response.status_code == 200
+    #Совпадает ли ответ с предполагаемым
+    assert answer == response.json()
 
 
 # def test_Positive_pagination_srtfild_ord(setup_add_delete_user_for_GET_USER_LIST_for_GET_USER_LIST, make_request):
