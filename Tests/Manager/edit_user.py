@@ -342,77 +342,77 @@ def test_Positive_login_loginAD_phone_edit(setup_add_delete_user_for_edit_user, 
     assert response.status_code == 200
     assert answer == response.json()
 
-    # @allure.feature('Негативный тест')
-    # @allure.story('Изменяем логин удаленного пользователя на уже существующий')
-    # def test_Positive_login_loginAD_phone_edit(setup_add_delete_user_for_edit_user, make_request):
-    #     name = 'edit_user'
-    #     # Подготавливаем данные в JSON для запроса
-    #     data = _.get_JSON_request(name, **{ 'id': setup_add_delete_user_for_edit_user[0],
-    #                                                      "fname": "edit_user_fName_one",
-    #                                                      "password": "edit_user_password_one",
-    #                                                     "lname": "edit_user_lName_one",
-    #                                                     "pname": "edit_user_pName_one",
-    #                                                      "email": "edit_user@smiddle.com",
-    #                                                      "fax":"edit_user_fax",
-    #                                                     "agentId": "edit_user_agentId_one",
-    #                                                     "login":"edit_user_login_one_edited",
-    #                                                     "loginAD":"edit_user_loginAD_one_edited",
-    #                                                     "phone":"123456789"
-    #                                                      })
-    #
-    #     # Делаем запрос и получаем ответ
-    #     response = make_request(url=URL.edit_user, data=data)
-    #     # Данные которые должны быть в ответе
-    #     answer = _.get_JSON_response(name, ** {'id': setup_add_delete_user_for_edit_user[0],
-    #                                                         "fname": "edit_user_fName_one",
-    #                                                          "password": "edit_user_password_one",
-    #                                                         "lname": "edit_user_lName_one",
-    #                                                         "pname": "edit_user_pName_one",
-    #                                                          "email": "edit_user@smiddle.com",
-    #                                                          "fax":"edit_user_fax",
-    #                                                         "agentId": "edit_user_agentId_one",
-    #                                                         "login":"edit_user_login_one_edited",
-    #                                                         "loginAD":"edit_user_loginAD_one_edited",
-    #                                                         "phone":"123456789"
-    #                                                          })
-    #
-    #     assert response.status_code == 200
-    #     assert answer == response.json()
-    #
-    #
-    # @allure.feature('Негативный тест')
-    # @allure.story('Изменяем телефон удаленного пользователя на уже существующий')
-    # def test_Positive_login_loginAD_phone_edit(setup_add_delete_user_for_edit_user, make_request):
-    #     name = 'edit_user'
-    #     # Подготавливаем данные в JSON для запроса
-    #     data = _.get_JSON_request(name, **{ 'id': setup_add_delete_user_for_edit_user[0],
-    #                                                      "fname": "edit_user_fName_one",
-    #                                                      "password": "edit_user_password_one",
-    #                                                     "lname": "edit_user_lName_one",
-    #                                                     "pname": "edit_user_pName_one",
-    #                                                      "email": "edit_user@smiddle.com",
-    #                                                      "fax":"edit_user_fax",
-    #                                                     "agentId": "edit_user_agentId_one",
-    #                                                     "login":"edit_user_login_one_edited",
-    #                                                     "loginAD":"edit_user_loginAD_one_edited",
-    #                                                     "phone":"123456789"
-    #                                                      })
-    #
-    #     # Делаем запрос и получаем ответ
-    #     response = make_request(url=URL.edit_user, data=data)
-    #     # Данные которые должны быть в ответе
-    #     answer = _.get_JSON_response(name, ** {'id': setup_add_delete_user_for_edit_user[0],
-    #                                                         "fname": "edit_user_fName_one",
-    #                                                          "password": "edit_user_password_one",
-    #                                                         "lname": "edit_user_lName_one",
-    #                                                         "pname": "edit_user_pName_one",
-    #                                                          "email": "edit_user@smiddle.com",
-    #                                                          "fax":"edit_user_fax",
-    #                                                         "agentId": "edit_user_agentId_one",
-    #                                                         "login":"edit_user_login_one_edited",
-    #                                                         "loginAD":"edit_user_loginAD_one_edited",
-    #                                                         "phone":"123456789"
-    #                                                          })
-    #
-    #     assert response.status_code == 200
-    #     assert answer == response.json()
+    @allure.feature('Негативный тест')
+    @allure.story('Изменяем логин удаленного пользователя на уже существующий')
+    def test_Positive_login_loginAD_phone_edit(setup_add_delete_user_for_edit_user, make_request):
+        name = 'edit_user'
+        # Подготавливаем данные в JSON для запроса
+        data = _.get_JSON_request(name, **{ 'id': setup_add_delete_user_for_edit_user[0],
+                                                         "fname": "edit_user_fName_one",
+                                                         "password": "edit_user_password_one",
+                                                        "lname": "edit_user_lName_one",
+                                                        "pname": "edit_user_pName_one",
+                                                         "email": "edit_user@smiddle.com",
+                                                         "fax":"edit_user_fax",
+                                                        "agentId": "edit_user_agentId_one",
+                                                        "login":"edit_user_login_one_edited",
+                                                        "loginAD":"edit_user_loginAD_one_edited",
+                                                        "phone":"123456789"
+                                                         })
+
+        # Делаем запрос и получаем ответ
+        response = make_request(url=URL.edit_user, data=data)
+        # Данные которые должны быть в ответе
+        answer = _.get_JSON_response(name, ** {'id': setup_add_delete_user_for_edit_user[0],
+                                                            "fname": "edit_user_fName_one",
+                                                             "password": "edit_user_password_one",
+                                                            "lname": "edit_user_lName_one",
+                                                            "pname": "edit_user_pName_one",
+                                                             "email": "edit_user@smiddle.com",
+                                                             "fax":"edit_user_fax",
+                                                            "agentId": "edit_user_agentId_one",
+                                                            "login":"edit_user_login_one_edited",
+                                                            "loginAD":"edit_user_loginAD_one_edited",
+                                                            "phone":"123456789"
+                                                             })
+
+        assert response.status_code == 200
+        assert answer == response.json()
+
+
+    @allure.feature('Негативный тест')
+    @allure.story('Изменяем телефон удаленного пользователя на уже существующий')
+    def test_Positive_login_loginAD_phone_edit(setup_add_delete_user_for_edit_user, make_request):
+        name = 'edit_user'
+        # Подготавливаем данные в JSON для запроса
+        data = _.get_JSON_request(name, **{ 'id': setup_add_delete_user_for_edit_user[0],
+                                                         "fname": "edit_user_fName_one",
+                                                         "password": "edit_user_password_one",
+                                                        "lname": "edit_user_lName_one",
+                                                        "pname": "edit_user_pName_one",
+                                                         "email": "edit_user@smiddle.com",
+                                                         "fax":"edit_user_fax",
+                                                        "agentId": "edit_user_agentId_one",
+                                                        "login":"edit_user_login_one_edited",
+                                                        "loginAD":"edit_user_loginAD_one_edited",
+                                                        "phone":"123456789"
+                                                         })
+
+        # Делаем запрос и получаем ответ
+        response = make_request(url=URL.edit_user, data=data)
+        # Данные которые должны быть в ответе
+        answer = _.get_JSON_response(name, ** {'id': setup_add_delete_user_for_edit_user[0],
+                                                            "fname": "edit_user_fName_one",
+                                                             "password": "edit_user_password_one",
+                                                            "lname": "edit_user_lName_one",
+                                                            "pname": "edit_user_pName_one",
+                                                             "email": "edit_user@smiddle.com",
+                                                             "fax":"edit_user_fax",
+                                                            "agentId": "edit_user_agentId_one",
+                                                            "login":"edit_user_login_one_edited",
+                                                            "loginAD":"edit_user_loginAD_one_edited",
+                                                            "phone":"123456789"
+                                                             })
+
+        assert response.status_code == 200
+        assert answer == response.json()

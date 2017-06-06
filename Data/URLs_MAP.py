@@ -1,7 +1,7 @@
 server = 'http://172.22.2.66:8080'
 headers = {
         'content-type': "application/json;charset=UTF-8",
-        'authorization': "Basic cm9vdDpyb290"}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h"
+        'authorization': "Basic QVBJX2F1dG90ZXN0OkFQSV9hdXRvdGVzdA=="}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h"  "Basic cm9vdDpyb290"
 
 get_user_list = '%s/SmiddleManager/adm/management/get_user_list'%server
 add_user = '%s/SmiddleManager/adm/management/add_user'%server
