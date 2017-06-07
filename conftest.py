@@ -25,7 +25,7 @@ def make_request():
     return some_request
 
 
-@pytest.fixture()
+@pytest.fixture(scope="module")
 def setup_add_delete_user_for_GET_USER_LIST():
     user_id_list = {}
     # Получаем список пользователей для добавления
