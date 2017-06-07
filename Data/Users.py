@@ -17,6 +17,22 @@ one_user_get_userlist = {"fname": "get_userlist_fName_one",
                 "groups": [{"id": 2}],
                 "roles": [{"id": 3}]}
 
+deleted_user_get_user_list = {"fname": "get_userlist_fName_deleted",
+                "lname": "get_userlist_lName_deleted",
+                "pname": "get_userlist_pName_deleted",
+                "phone": "6668163212",
+                "login": "get_userlist_login_deleted",
+                "password": "get_userlist_password_deleted",
+                "loginAD": "get_userlist_loginAD_deleted",
+                "agentId": "get_userlist_agentId_deleted",
+                "scMode": "0",
+                "unmappedCalls": False,
+                "enabled": True,
+                "deleted": True,
+                "dateCreate": 1494845540000,
+                "groups": [{"id": 2}],
+                "roles": [{"id": 3}]}
+
 
 edit_user = {"fname": "edit_user_fName_one",
              "password": "edit_user_password_one",
@@ -33,7 +49,7 @@ edit_user = {"fname": "edit_user_fName_one",
 
 def make_50_users_for_get_user_list():
     # Количество пользователей для теста
-    users_count = 50
+    users_count = 3
     user_list = {}
     # Создаем список JSONов для создания пользователей
     for i in range(1, users_count + 1):
@@ -60,7 +76,6 @@ def make_50_users_for_get_user_list():
         user_list["Pagination_user_%s" % i] = data
     #
     user_list['one_user_get_userlist'] = one_user_get_userlist
+    user_list['deleted_user_get_user_list'] = deleted_user_get_user_list
     return user_list
 
-
-#print(make_50_users_for_get_user_list())

@@ -19,7 +19,7 @@ def test_Positive_f_l_p_names_one_user(setup_add_delete_user_for_GET_USER_LIST, 
     # Делаем запрос и получаем ответ
     response = make_request(url=URL.get_user_list, data=data)
     # Данные которые должны быть в ответе
-    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST,
+    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST[0],
                                           "fname": "get_userlist_fName_one",
                                           "lname": "get_userlist_lName_one",
                                           "pname": "get_userlist_pName_one",
@@ -31,7 +31,6 @@ def test_Positive_f_l_p_names_one_user(setup_add_delete_user_for_GET_USER_LIST, 
 
     assert response.status_code == 200
     assert answer == response.json()
-
 
 @allure.feature('Позитивный тест')
 @allure.story('Проверяем поиск всех абонентов(не заполнены поля)')
@@ -55,7 +54,7 @@ def test_Positive_roleid_goupid_login_one_user(setup_add_delete_user_for_GET_USE
     # Делаем запрос и получаем ответ
     response = make_request(url=URL.get_user_list, data=data)
     # Данные которые должны быть в ответе
-    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST,
+    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST[0],
                                           "fname": "get_userlist_fName_one",
                                           "lname": "get_userlist_lName_one",
                                           "pname": "get_userlist_pName_one",
@@ -80,7 +79,7 @@ def test_Positive_AD_phone_agent_ID_one_user(setup_add_delete_user_for_GET_USER_
     # Делаем запрос и получаем ответ
     response = make_request(url=URL.get_user_list, data=data)
     # Данные которые должны быть в ответе
-    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST,
+    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST[0],
                                           "fname": "get_userlist_fName_one",
                                           "lname": "get_userlist_lName_one",
                                           "pname": "get_userlist_pName_one",
@@ -258,7 +257,7 @@ def test_Negative_pagination_num_size(setup_add_delete_user_for_GET_USER_LIST, m
     #Делаем запрос и получаем ответ
     response = make_request(url=URL.get_user_list, data=data)
     #Данные которые должны быть в ответе
-    answer = _.get_JSON_response(name,**{'id': setup_add_delete_user_for_GET_USER_LIST,
+    answer = _.get_JSON_response(name,**{'id': setup_add_delete_user_for_GET_USER_LIST[0],
                                                        "fname": "get_userlist_fName_one",
                                                        "lname": "get_userlist_lName_one",
                                                        "pname": "get_userlist_pName_one",
@@ -273,3 +272,85 @@ def test_Negative_pagination_num_size(setup_add_delete_user_for_GET_USER_LIST, m
     assert response.status_code == 200
     #Совпадает ли ответ с предполагаемым
     #assert answer == response.json()
+
+
+@allure.feature('Позитивный тест')
+@allure.story('Проверяем поиск по ФИО удаленного пользователя')
+def test_Positive_f_l_p_names_deleted_user(setup_add_delete_user_for_GET_USER_LIST, make_request):
+    # Подготавливаем данные в JSON для запроса
+    data = _.get_JSON_request(name, **{"fName": "get_userlist_fName_deleted",
+                                       "lName": "get_userlist_lName_deleted",
+                                       "pName": "get_userlist_pName_deleted",
+                                       "showDeletedOnly": True
+                                       })
+
+    # Делаем запрос и получаем ответ
+    response = make_request(url=URL.get_user_list, data=data)
+    # Данные которые должны быть в ответе
+    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST[1],
+                                          "fname": "get_userlist_fName_deleted",
+                                          "lname": "get_userlist_lName_deleted",
+                                          "pname": "get_userlist_pName_deleted",
+                                          "agentId": "get_userlist_agentId_deleted",
+                                          "login": "get_userlist_login_deleted",
+                                          "loginAD": "get_userlist_loginAD_deleted",
+                                          "phone": "6668163212",
+                                          'deleted': True
+                                          })
+
+    assert response.status_code == 200
+    assert answer == response.json()
+
+
+@allure.feature('Позитивный тест')
+@allure.story('Поиск по Логину, роли и групе удаленного пользователя')
+def test_Positive_roleid_goupid_login_deleted_user(setup_add_delete_user_for_GET_USER_LIST, make_request):
+    # Подготавливаем данные в JSON для запроса
+    data = _.get_JSON_request(name, **{"roleId": 3,
+                                       "groupId": 2,
+                                       "login": "get_userlist_login_deleted",
+                                       "showDeletedOnly": True})
+    # Делаем запрос и получаем ответ
+    response = make_request(url=URL.get_user_list, data=data)
+    # Данные которые должны быть в ответе
+    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST[1],
+                                          "fname": "get_userlist_fName_deleted",
+                                          "lname": "get_userlist_lName_deleted",
+                                          "pname": "get_userlist_pName_deleted",
+                                          "agentId": "get_userlist_agentId_deleted",
+                                          "login": "get_userlist_login_deleted",
+                                          "loginAD": "get_userlist_loginAD_deleted",
+                                          "phone": "6668163212",
+                                          'deleted': True
+                                          })
+
+    assert response.status_code == 200
+    # Совпадает ли ответ с предполагаемым
+    assert answer == response.json()
+
+
+@allure.feature('Позитивный тест')
+@allure.story('Поиск по adLogin, agentId и телефону удаленного пользователя')
+def test_Positive_AD_phone_agent_ID_deleted_user(setup_add_delete_user_for_GET_USER_LIST, make_request):
+    # Подготавливаем данные в JSON для запроса
+    data = _.get_JSON_request(name, **{"adLogin": "get_userlist_loginAD_deleted",
+                                       "agentId": "get_userlist_agentId_deleted",
+                                       "phone": "6668163212",
+                                       "showDeletedOnly": True})
+    # Делаем запрос и получаем ответ
+    response = make_request(url=URL.get_user_list, data=data)
+    # Данные которые должны быть в ответе
+    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST[1],
+                                          "fname": "get_userlist_fName_deleted",
+                                          "lname": "get_userlist_lName_deleted",
+                                          "pname": "get_userlist_pName_deleted",
+                                          "agentId": "get_userlist_agentId_deleted",
+                                          "login": "get_userlist_login_deleted",
+                                          "loginAD": "get_userlist_loginAD_deleted",
+                                          "phone": "6668163212",
+                                          'deleted': True
+                                          })
+
+    assert response.status_code == 200
+    # Совпадает ли ответ с предполагаемым
+    assert answer == response.json()

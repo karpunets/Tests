@@ -37,7 +37,8 @@ def setup_add_delete_user_for_GET_USER_LIST():
         # Записываем ID добавленных пользователей
         user_id_list[i] = response.json()['id']
     one_user_user_id = user_id_list['one_user_get_userlist']
-    yield one_user_user_id
+    deleted_user_user_id = user_id_list['deleted_user_get_user_list']
+    yield one_user_user_id, deleted_user_user_id
     #Отправляем ИД юзера для удаления
     for i in user_id_list:
         payload = json.dumps({'userId':user_id_list[i]})
