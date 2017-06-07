@@ -55,11 +55,7 @@ def setup_add_delete_user_for_edit_user():
     response = requests.post(URL.add_user, data=payload, headers=headers)
     #Добавились ли данные
     assert response.status_code == 200
-    response_json = response.json()
-    #Вытягиваем user_id с ответа
-    user_id = response_json['id']
-    user_list = get_user.make_50_users_for_get_user_list()
-    user_list = user_list + user_id
+    user_id = response.json()['id']
     #Отправляем данные и переходим к Teardown
     yield user_id, response.text
     #Отправляем ИД юзера для удаления

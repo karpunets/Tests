@@ -1,6 +1,1 @@
-{
-  "Tests/Manager/get_user_list.py::test_Negative_more_256": true,
-  "Tests/Manager/get_user_list.py::test_Positive_pagination_n_ps": true,
-  "Tests/Manager/get_user_list.py::test_Positive_pagination_srtfild_ord": true,
-  "Tests/Manager/get_user_list.py::test_all_empty": true
-}
+{}
