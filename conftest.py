@@ -13,7 +13,7 @@ from Data.Requests_default_map import defaul_request
 headers = URL.headers
 
 
-@pytest.fixture()
+@pytest.fixture(scope="function")
 #Формирование запроса и получение результата по полученным данным
 def make_request():
 
