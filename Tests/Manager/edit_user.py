@@ -5,7 +5,7 @@ from Data.Make_requests_and_answers import JSON_generator as _
 import Data.URLs_MAP as URL
 
 
-@allure.feature('Позивтный тест')
+@allure.feature('Позитивный тест')
 @allure.story('Редактируем ФИО')
 def test_Positive_f_l_p_names_edit(setup_add_delete_user_for_edit_user, make_request):
     name = 'edit_user'
@@ -42,7 +42,7 @@ def test_Positive_f_l_p_names_edit(setup_add_delete_user_for_edit_user, make_req
     assert answer == response.json()
 
 
-@allure.feature('Позивтный тест')
+@allure.feature('Позитивный тест')
 @allure.story('Редактируем e-mail, факс, agentId')
 def test_Positive_email_fax_agentId_edit(setup_add_delete_user_for_edit_user, make_request):
     name = 'edit_user'
@@ -80,7 +80,7 @@ def test_Positive_email_fax_agentId_edit(setup_add_delete_user_for_edit_user, ma
     assert answer == response.json()
 
 
-@allure.feature('Позивтный тест')
+@allure.feature('Позитивный тест')
 @allure.story('Редактируем login, loginAD, номер телефона')
 def test_Positive_login_loginAD_phone_edit(setup_add_delete_user_for_edit_user, make_request):
     name = 'edit_user'
@@ -118,7 +118,7 @@ def test_Positive_login_loginAD_phone_edit(setup_add_delete_user_for_edit_user, 
     assert answer == response.json()
 
 
-@allure.feature('Позивтный тест')
+@allure.feature('Позитивный тест')
 @allure.story('Редактируем ФИО на уже существующую')
 def test_Positive_f_l_p_names_edit(setup_add_delete_user_for_edit_user, make_request):
     name = 'edit_user'
@@ -155,7 +155,7 @@ def test_Positive_f_l_p_names_edit(setup_add_delete_user_for_edit_user, make_req
     assert answer == response.json()
 
 
-# @allure.feature('Позивтный тест')
+# @allure.feature('Позитивный тест')
 # @allure.story('Редактируем ФИО удаленного пользователя')
 # def test_Positive_f_l_p_names_edit(setup_add_delete_user_for_edit_user, make_request):
 #     name = 'edit_user'
@@ -191,7 +191,7 @@ def test_Positive_f_l_p_names_edit(setup_add_delete_user_for_edit_user, make_req
 #     assert response.status_code == 200
 #     assert answer == response.json()
 #
-# @allure.feature('Позивтный тест')
+# @allure.feature('Позитивный тест')
 # @allure.story('Редактируем e-mail, факс, agentId удаленного пользователя')
 # def test_Positive_email_fax_agentId_edit(setup_add_delete_user_for_edit_user, make_request):
 #     name = 'edit_user'
@@ -228,7 +228,7 @@ def test_Positive_f_l_p_names_edit(setup_add_delete_user_for_edit_user, make_req
 #     assert response.status_code == 200
 #     assert answer == response.json()
 #
-# @allure.feature('Позивтный тест')
+# @allure.feature('Позитивный тест')
 # @allure.story('Редактируем login, loginAD, номер телефона удаленного пользователя')
 # def test_Positive_login_loginAD_phone_edit(setup_add_delete_user_for_edit_user, make_request):
 #     name = 'edit_user'
