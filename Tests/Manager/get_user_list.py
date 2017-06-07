@@ -17,10 +17,9 @@ def test_Positive_f_l_p_names_one_user(setup_add_delete_user_for_GET_USER_LIST, 
                                        })
 
     # Делаем запрос и получаем ответ
-    print(data)
     response = make_request(url=URL.get_user_list, data=data)
     # Данные которые должны быть в ответе
-    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST[0],
+    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST,
                                           "fname": "get_userlist_fName_one",
                                           "lname": "get_userlist_lName_one",
                                           "pname": "get_userlist_pName_one",
@@ -30,8 +29,6 @@ def test_Positive_f_l_p_names_one_user(setup_add_delete_user_for_GET_USER_LIST, 
                                           "phone": "666816321"
                                           })
 
-    print(answer)
-    print(response.json())
     assert response.status_code == 200
     assert answer == response.json()
 
@@ -62,7 +59,7 @@ def test_Positive_roleid_goupid_login_one_user(setup_add_delete_user_for_GET_USE
     # Делаем запрос и получаем ответ
     response = make_request(url=URL.get_user_list, data=data)
     # Данные которые должны быть в ответе
-    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST[0],
+    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST,
                                           "fname": "get_userlist_fName_one",
                                           "lname": "get_userlist_lName_one",
                                           "pname": "get_userlist_pName_one",
@@ -87,7 +84,7 @@ def test_Positive_AD_phone_agent_ID_one_user(setup_add_delete_user_for_GET_USER_
     # Делаем запрос и получаем ответ
     response = make_request(url=URL.get_user_list, data=data)
     # Данные которые должны быть в ответе
-    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST[0],
+    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST,
                                           "fname": "get_userlist_fName_one",
                                           "lname": "get_userlist_lName_one",
                                           "pname": "get_userlist_pName_one",
@@ -112,7 +109,7 @@ def test_Positive_pagination_n_ps(setup_add_delete_user_for_GET_USER_LIST, make_
     # Делаем запрос и получаем ответ
     response = make_request(url=URL.get_user_list, data=data)
     # Данные которые должны быть в ответе
-    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST[0],
+    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST,
                                           "fname": "get_userlist_fName_one",
                                           "lname": "get_userlist_lName_one",
                                           "pname": "get_userlist_pName_one",
@@ -136,7 +133,7 @@ def test_Positive_pagination_srtfild_ord(setup_add_delete_user_for_GET_USER_LIST
     # Делаем запрос и получаем ответ
     response = make_request(url=URL.get_user_list, data=data)
     # Данные которые должны быть в ответе
-    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST[0],
+    answer = _.get_JSON_response(name, **{'id': setup_add_delete_user_for_GET_USER_LIST,
                                           "fname": "get_userlist_fName_one",
                                           "lname": "get_userlist_lName_one",
                                           "pname": "get_userlist_pName_one",
@@ -271,29 +268,29 @@ def test_Negative_phone(setup_add_delete_user_for_GET_USER_LIST, make_request):
     # Совпадает ли ответ с предполагаемым
     assert answer == response.json()
 
-# def test_Negative_pagination_num_size(setup_add_delete_user_for_GET_USER_LIST, make_request):
-#     
-#     #Подготавливаем данные в JSON для запроса
-#     data = _.get_JSON_request(name,**{"fname": "get_userlist_fName_one",
-#                                                    "page_number":999,
-#                                                    "page_size":100})
-#     #Делаем запрос и получаем ответ
-#     response = make_request(url=URL.get_user_list, data=data)
-#     #Данные которые должны быть в ответе
-#     answer = _.get_JSON_response(name,**{'id': setup_add_delete_user_for_GET_USER_LIST[0],
-#                                                        "fname": "get_userlist_fName_one",
-#                                                        "lname": "get_userlist_lName_one",
-#                                                        "pname": "get_userlist_pName_one",
-#                                                        "agentId": "get_userlist_agentId_one",
-#                                                        "login":"get_userlist_login_one",
-#                                                        "loginAD":"get_userlist_loginAD_one",
-#                                                        "phone":"666816321",
-#                                                           "page_number": 1,
-#                                                           "page_size": 100
-#                                                        })
-#
-#     assert response.status_code == 200
-#     #Совпадает ли ответ с предполагаемым
-#     #assert answer == response.json()
-#     print(answer)
-#     print(response.json())
+def test_Negative_pagination_num_size(setup_add_delete_user_for_GET_USER_LIST, make_request):
+
+    #Подготавливаем данные в JSON для запроса
+    data = _.get_JSON_request(name,**{"fname": "get_userlist_fName_one",
+                                                   "page_number":999,
+                                                   "page_size":100})
+    #Делаем запрос и получаем ответ
+    response = make_request(url=URL.get_user_list, data=data)
+    #Данные которые должны быть в ответе
+    answer = _.get_JSON_response(name,**{'id': setup_add_delete_user_for_GET_USER_LIST,
+                                                       "fname": "get_userlist_fName_one",
+                                                       "lname": "get_userlist_lName_one",
+                                                       "pname": "get_userlist_pName_one",
+                                                       "agentId": "get_userlist_agentId_one",
+                                                       "login":"get_userlist_login_one",
+                                                       "loginAD":"get_userlist_loginAD_one",
+                                                       "phone":"666816321",
+                                                          "page_number": 1,
+                                                          "page_size": 100
+                                                       })
+
+    assert response.status_code == 200
+    #Совпадает ли ответ с предполагаемым
+    #assert answer == response.json()
+    print(answer)
+    print(response.json())
