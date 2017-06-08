@@ -26,7 +26,7 @@ def make_request():
 
 
 @pytest.fixture(scope="module")
-def setup_add_delete_user_for_GET_USER_LIST():
+def setup_get_user_list():
     user_id_list = {}
     # Получаем список пользователей для добавления
     user_list = take_user_list()
@@ -60,7 +60,6 @@ def setup_add_delete_user_for_edit_user():
     #Отправляем данные и переходим к Teardown
     yield user_id, response.text
     #Отправляем ИД юзера для удаления
-
     data =JSON_generator.get_JSON_request('delete_user', **{'userId':user_id})
     payload = json.dumps(data)
     response = requests.post(URL.delete_user, data=payload, headers=headers)

@@ -49,7 +49,7 @@ edit_user = {"fname": "edit_user_fName_one",
 
 def make_50_users_for_get_user_list():
     # Количество пользователей для теста
-    users_count = 3
+    users_count = 50
     user_list = {}
     # Создаем список JSONов для создания пользователей
     for i in range(1, users_count + 1):
