@@ -35,7 +35,6 @@ def test_Positive_add_one_user(make_request,delete_user):
                                         "loginAD": "add_user_loginAD_one",
                                         "agentId": "add_user_agentId_one"
                                           })
-
+    delete_user["user1"] = user_id
     assert response.status_code == 200
     assert answer == response.json()
-    delete_user["user1"] = user_id
