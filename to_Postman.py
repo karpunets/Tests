@@ -7,6 +7,6 @@ def toPostman(a):
     return a
 
 
-send_value = {'fName': 'get_userlist_fName_one', 'lName': 'get_userlist_lName_one', 'pName': 'get_userlist_pName_one', 'roleId': None, 'groupId': None, 'login': None, 'adLogin': None, 'agentId': None, 'showDeletedOnly': False, 'phone': None, 'pagination': {'page_number': '1', 'page_size': '10', 'sortedField': 'login', 'order': 'ASC'}}
+send_value = {'fname': 'add_user_fName_one', 'lname': 'add_user_lName_one', 'pname': 'add_user_pName_one', 'phone': '666816000', 'login': 'add_user_login_one', 'password': 'add_user_password_one', 'loginAD': 'add_user_loginAD_one', 'agentId': 'add_user_agentId_one', 'scMode': '0', 'unmappedCalls': False, 'enabled': True, 'deleted': False, 'dateCreate': 1494845540000, 'groups': [{'id': 2}], 'roles': [{'id': 3}]}
 
 print(toPostman(send_value))

@@ -78,7 +78,6 @@ edit_user_deleted_existing = {"fname": "edit_user_fName_deleted_existing",
             "deleted": True
              }
 
-
 def make_50_users_for_get_user_list():
     # Количество пользователей для теста
     users_count = 50

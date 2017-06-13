@@ -41,3 +41,14 @@ def add_delete_user(request):
         request.addfinalizer(user_delete)
         return users_id
     return add_user
+
+@pytest.fixture(scope="function")
+def delete_user():
+    user_id = {}
+    yield user_id
+
+    for i in user_id:
+        data = JSON_generator.get_JSON_request('delete_user', **{'userId': user_id[i]})
+        payload = json.dumps(data)
+        response = requests.post(URL.delete_user, data=payload, headers=headers)
+        assert response.status_code == 200
