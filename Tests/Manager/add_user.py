@@ -9,7 +9,7 @@ name = "add_user"
 
 
 @allure.feature('Позитивный тест')
-@allure.story('Проверяем поиск по ФИО')
+@allure.story('Добавляем пользователя')
 def test_Positive_add_one_user(make_request,delete_user):
     # Подготавливаем данные в JSON для запроса
     data = _.get_JSON_request(name, **{"fname": "add_user_fName_one",
