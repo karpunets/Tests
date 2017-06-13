@@ -77,6 +77,29 @@ edit_user_deleted_existing = {"fname": "edit_user_fName_deleted_existing",
              "phone": "6668163333",
             "deleted": True
              }
+add_user_existing = {"fname": "add_user_fName_existing",
+             "password": "add_user_password_existing",
+             "lname": "add_user_lName_existing",
+             "pname": "add_user_pName_existing",
+             "email": "add_user_existing@smiddle.com",
+             "fax": "add_user_fax_existing",
+             "agentId": "add_user_agentId_existing",
+             "login": "add_user_login_existing",
+             "loginAD": "add_user_loginAD_existing",
+             "phone": "6668164444"
+             }
+add_user_deleted_existing = {"fname": "add_user_fName_deleted_existing",
+             "password": "add_user_password_deleted_existing",
+             "lname": "add_user_lName_deleted_existing",
+             "pname": "add_user_pName_deleted_existing",
+             "email": "add_user_deleted_existing@smiddle.com",
+             "fax": "add_user_fax_deleted_existing",
+             "agentId": "add_user_agentId_deleted_existing",
+             "login": "add_user_login_deleted_existing",
+             "loginAD": "add_user_loginAD_deleted_existing",
+             "phone": "6668165555",
+             "deleted":True
+             }
 
 def make_50_users_for_get_user_list():
     # Количество пользователей для теста

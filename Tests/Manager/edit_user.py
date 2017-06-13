@@ -353,7 +353,7 @@ def test_edit_phone_for_existing(add_delete_user, make_request):
 
 @allure.feature('Негативный тест')
 @allure.story('Изменяем логин удаленного пользователя на уже существующий НЕ удаленный')
-def test_edit_login_deleted_on_existing_not_delted(add_delete_user, make_request):
+def test_edit_login_deleted_on_existing_not_deleted(add_delete_user, make_request):
     user_id = add_delete_user(get.edit_user_deleted, get.edit_user_existing)
     # Подготавливаем данные в JSON для запроса
     data = _.get_JSON_request(name, **{  'id': user_id[0],
