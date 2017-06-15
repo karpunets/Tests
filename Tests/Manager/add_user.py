@@ -90,8 +90,7 @@ def test_add_user_with_existing_email_fax_loginAD(make_request,delete_user, add_
                                         "loginAD": "add_user_loginAD_existing",
                                         "agentId": "add_user_agentId_one",
                                         "email": "add_user_existing@smiddle.com",
-                                        "fax": "add_user_fax_existing"}
-    )
+                                        "fax": "add_user_fax_existing"})
 
     # Делаем запрос и получаем ответ
     response = make_request(url=URL.add_user, data=data)

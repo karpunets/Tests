@@ -7,11 +7,13 @@ def defaul_request(request_name):
     'add_user':{"fname":None,"lname":None,"pname":None,"email":None,"phone":None,"fax":None,"login":None,"password":None,
                 "loginAD":None,"agentId":None,"scMode":"0","unmappedCalls":False,"enabled":True,"deleted":False,
                 "dateCreate":1494845540000,"groups":[{"id":2}],"roles":[{"id":3}]},
-
+    'add_group':{"name":None,"parent":{"id":2}},
     'delete_user': {"userId": None},
     'edit_user':{"id":None,"fname":None,"lname":None,"pname":None,"email":None,"phone":None,
                  "fax":None,"login":None,"password":None,"loginAD":None,"agentId":None,"scMode":"0","unmappedCalls":False,
-                 "enabled":True,"deleted":False,"dateCreate":1494845540000,"groups":[{"id":2}],"roles":[{"id":3}]}
+                 "enabled":True,"deleted":False,"dateCreate":1494845540000,"groups":[{"id":2}],"roles":[{"id":3}]},
+    "delete_group": {"groupId":None},
+    "edit_group": {"id":None,"name":None,"parent":{"id":2}}
                                }
 
     return list_of_default_requests[request_name]

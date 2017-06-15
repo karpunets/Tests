@@ -4,9 +4,10 @@ import Data.URLs_MAP as URL
 from Data.Make_requests_and_answers import JSON_generator as _
 from Data.Users import make_50_users_for_get_user_list as take_user_list
 
-headers = headers = {'content-type': "application/json;charset=UTF-8"}
+headers = headers = {'content-type': "application/json;charset=UTF-8",
+                     'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}
 
-user_list = {'1':{'fieldContract':'description','fieldImport':'COMENT'},
+user_list = {
              '2':{'fieldContract':'contractCode','fieldImport':'ContractCode'},
              '3':{'fieldContract':'OutboundContactTypeOfContact','fieldImport':'OtkazValue'},
              '4':{'fieldContract':'nameRespondent','fieldImport':'FIO'},
@@ -24,8 +25,8 @@ user_list = {'1':{'fieldContract':'description','fieldImport':'COMENT'},
              '16':{'fieldContract':'improveTvInet','fieldImport':'UpgradeService'},
              '17':{'fieldContract':'DateCall','fieldImport':'DateCall'},
              '18':{'fieldContract':'newTel','fieldImport':'Contact_phone'},
-'19':{'fieldContract':'callBackTime','fieldImport':'RedialDate'},
-'20':{'fieldContract':'authorID','fieldImport':'Smiddle Login'}}
+             '19':{'fieldContract':'callBackTime','fieldImport':'RedialDate'}}
+             #,'20':{'fieldContract':'authorID','fieldImport':'Smiddle Login'} '1':{'fieldContract':'description','fieldImport':'COMENT'},
 
 
 

@@ -15,7 +15,10 @@ def defaul_response(response_name):
                       'lname': None, 'fname': None, 'pname': None, 'email': None, 'phone': None,
                       'fax': None, 'locale': None, 'dateCreate': 1494845540000, 'scMode': 0, 'unmappedCalls': False,
                       'enabled': True, 'deleted': False, 'groups': [{'id': 2, 'name': 'ROOT'}],
-                      'roles': [{'id': 3, 'name': 'ROOT'}], 'userGroupRoles': None}
+                      'roles': [{'id': 3, 'name': 'ROOT'}], 'userGroupRoles': None},
+        'add_group': {"id":731148,"name":"qqq","children":[],"cid":731148},
+        'delete_group': True,
+        "edit_group": {"id":None,"name":None,"children":[],"cid":None}
                                 }
 
     return list_of_default_requests[response_name]
