@@ -25,8 +25,10 @@ user_list = {
              '16':{'fieldContract':'improveTvInet','fieldImport':'UpgradeService'},
              '17':{'fieldContract':'DateCall','fieldImport':'DateCall'},
              '18':{'fieldContract':'newTel','fieldImport':'Contact_phone'},
-             '19':{'fieldContract':'callBackTime','fieldImport':'RedialDate'}}
-             #,'20':{'fieldContract':'authorID','fieldImport':'Smiddle Login'} '1':{'fieldContract':'description','fieldImport':'COMENT'},
+             '19':{'fieldContract':'callBackTime','fieldImport':'RedialDate'},
+             '20':{'fieldContract':'service', 'fieldImport':'service'},
+             '21':{'fieldContract':'type','fieldImport':'type'}}
+             #'22':{'fieldContract':'authorID','fieldImport':'Smiddle Login'}
 
 
 
