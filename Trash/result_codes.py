@@ -13,10 +13,6 @@ url = "%s/SmiddleCampaignManager/cm/manager/get_result_code"%server
 edit_url = "h%s/SmiddleCampaignManager/cm/manager/edit_result_variant"%server
 get_campaign_url = "%s/SmiddleCampaignManager/cm/manager/get_campaign"%server
 
-# campaignID = 66518604
-# campaignCode = "O_Tele_Cross_2"
-
-
 
 
 edit_list_call_result ={'Dialer has not yet attempted to contact that customer record': 'Dialer еще не пытался связаться с этим клиентом',
@@ -51,11 +47,11 @@ edit_list_call_result ={'Dialer has not yet attempted to contact that customer r
 edit_list_callstatus ={'active':'Активен',
                        'agentNotAvailable':'Нет агента',
                        'agentRejected':'Отклонено агентом',
-                       'callbackRequested':'общий перезвон',
-                       'closed':'закрыт',
-                       'maxAttemptsReached':'макс кол-во попыток',
-                       'pending':'ожидание',
-                       'personalCallbackRequested':'персональный перезвон',
+                       'callbackRequested':'Общий перезвон',
+                       'closed':'Закрыт',
+                       'maxAttemptsReached':'Макс кол-во попыток',
+                       'pending':'Ожидание',
+                       'personalCallbackRequested':'Персональный перезвон',
                        'retry':'Повтор',
                        'unknown':'Неизвестно'}
 

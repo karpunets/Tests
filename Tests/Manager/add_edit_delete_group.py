@@ -66,3 +66,46 @@ def test_delete_group(add_group, make_request):
     response = make_request(url=url, data={"groupId": group_id})
     assert response.status_code == 200
     assert response.json() == True
+
+@allure.feature('Негативный тест')
+@allure.story('Добавляем новую групу под ROOT с названием < 3 символов')
+def test_add_Root_group_less_3_symbols(make_request):
+    name ="add_group"
+    url = URL.add_group
+    # Подготавливаем данные в JSON для запроса
+    data = _.get_JSON_request(name, **{"name":"ab"})
+    # Делаем запрос и получаем ответ
+    response = make_request(url=url, data=data)
+    answer ={"ADM_VALIDATION_GROUP_NAME_LENGTH":"NAME length from 3 to 256"}
+    assert response.status_code == 400
+    assert answer == response.json()
+
+@allure.feature('Негативный тест')
+@allure.story('Добавляем новую групу под не существующую')
+def test_add_under_unknown_parent_group(make_request):
+    name ="add_group"
+    url = URL.add_group
+    # Подготавливаем данные в JSON для запроса
+    data = _.get_JSON_request(name, **{"name":"unspecified_group", "parent":{"id":0}})
+    # Делаем запрос и получаем ответ
+    response = make_request(url=url, data=data)
+    answer ={"ADM_VALIDATION_GROUP_PARENT_EMPTY": "PARENT GROUP ID not specified"}
+    assert response.status_code == 400
+    print(response.json())
+    assert answer == response.json()
+
+
+@allure.feature('Негативный тест')
+@allure.story('Добавляем новую групу name=null')
+def test_add_name_is_null(make_request):
+    name ="add_group"
+    url = URL.add_group
+    # Подготавливаем данные в JSON для запроса
+    data = _.get_JSON_request(name, **{"name":None})
+    # Делаем запрос и получаем ответ
+    response = make_request(url=url, data=data)
+    answer ={"ADM_VALIDATION_GROUP_NAME": "NAME not specified"}
+    assert response.status_code == 400
+    print(response.json())
+    assert answer == response.json()
+
