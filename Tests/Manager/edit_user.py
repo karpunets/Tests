@@ -273,6 +273,7 @@ def test_login_loginAD_phone_edit_deleted_user(add_delete_user, make_request):
 
 @allure.feature('Негативный тест')
 @allure.story('Изменяем логин на уже существующий')
+@pytest.mark.xfail
 def test_edit_login_for_existing(add_delete_user, make_request):
     user_id = add_delete_user(get.edit_user, get.edit_user_existing)
     # Подготавливаем данные в JSON для запроса
@@ -353,6 +354,7 @@ def test_edit_phone_for_existing(add_delete_user, make_request):
 
 @allure.feature('Негативный тест')
 @allure.story('Изменяем логин удаленного пользователя на уже существующий НЕ удаленный')
+@pytest.mark.xfail
 def test_edit_login_deleted_on_existing_not_deleted(add_delete_user, make_request):
     user_id = add_delete_user(get.edit_user_deleted, get.edit_user_existing)
     # Подготавливаем данные в JSON для запроса

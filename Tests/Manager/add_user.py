@@ -115,6 +115,7 @@ def test_add_user_with_existing_email_fax_loginAD(make_request,delete_user, add_
 
 @allure.feature('Негативный тест')
 @allure.story('Добавляем пользователя с существующим login')
+@pytest.mark.xfail
 def test_add_user_with_existing_login(make_request, add_delete_user):
     # Подготавливаем данные в JSON для запроса
     add_delete_user(get.add_user_existing)
@@ -246,6 +247,7 @@ def test_add_one_user_without_data(make_request):
 
 @allure.feature('Негативный тест')
 @allure.story('Пробуем добавить пользователя без логина')
+@pytest.mark.xfail
 def test_add_one_user_without_login(make_request):
     # Подготавливаем данные в JSON для запроса
     data = _.get_JSON_request(name, **{ "fname": "add_user_fName_deleted_existing",
