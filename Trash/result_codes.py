@@ -2,15 +2,15 @@ import pytest, allure, json, requests
 import Data.URLs_MAP as URL
 
 from Data.Make_requests_and_answers import JSON_generator as _
-from Data.Users import make_50_users_for_get_user_list as take_user_list
+from Data.Test_data import make_50_users_for_get_user_list as take_user_list
 
 headers ={'content-type': "application/json;charset=UTF-8",
            'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h
 
-server = "http://172.22.2.63:8080"
+server = "http://10.10.27.32:8080"
 
 url = "%s/SmiddleCampaignManager/cm/manager/get_result_code"%server
-edit_url = "h%s/SmiddleCampaignManager/cm/manager/edit_result_variant"%server
+edit_url = "%s/SmiddleCampaignManager/cm/manager/edit_result_variant"%server
 get_campaign_url = "%s/SmiddleCampaignManager/cm/manager/get_campaign"%server
 
 
@@ -54,6 +54,15 @@ edit_list_callstatus ={'active':'Активен',
                        'personalCallbackRequested':'Персональный перезвон',
                        'retry':'Повтор',
                        'unknown':'Неизвестно'}
+success_result_list =[{'value':'Не звонили','forInit':True},
+                     {'value':'Незаполненая форма','forInit':False},
+                     {'value':'Заявка зарегистрирована','forInit':False},
+                     {'value':'Отказ от заявки','forInit':False},
+                     {'value':'Ошибочный перевод','forInit':False},
+                     {'value':'Общий перезвон','forInit':False},
+                     {'value':'Личный перезвон','forInit':False}]
+
+number = {'value':'0','forInit':True}
 
 
 get_campaign_json = {}
@@ -71,47 +80,59 @@ campaign_list = get_campaign()
 
 for campaign in campaign_list:
 
-    if campaign['code'] != 'TELE':
-        if campaign['code'] != 'CCallBack':
+    if campaign['code'] == 'TELE':
 
-            edit_call_result = {"campaignCode":campaign['code'], "resultCode": "CD_callResult", "resultVariant":{"id":None, "value": "Абонент был потерян на IVR", "forInit":False}}
-            edit_call_status = {"campaignCode":campaign['code'], "resultCode": "CD_callStatus", "resultVariant":{"id":None, "value": "Абонент был потерян на IVR", "forInit":False}}
-            campaign ={"campaignId": campaign['id']}
-
-
-
-
-            def get_result_codes():
-                payload = json.dumps(campaign)
-                # Запрос на добавление пользователя
-                response = requests.post(url=url, data=payload, headers=headers)
-                return response.json()
+        edit_call_result = {"campaignCode": campaign['code'], "resultCode": "CD_callResult", "resultVariant": {"id": None, "value": None, "forInit": False}}
+        edit_call_status = {"campaignCode": campaign['code'], "resultCode": "CD_callStatus", "resultVariant": {"id": None, "value": None, "forInit": False}}
+        edit_call_success = {"campaignCode": campaign['code'], "resultCode": "SUCCESS", "resultVariant": {"id": None, "value": None, "forInit": False}}
+        edit_numbers = {"campaignCode": campaign['code'], "resultCode": "CD_callsMade", "resultVariant": {"id": None, "value": None, "forInit": False}}
+        campaign = {"campaignId": campaign['id']}
 
 
-            a = get_result_codes()
-
-            #print(a)
-
-            for i in a:
-                if i['code']=='CD_callResult':
-                    for k in i['resultVariants']:
-                        for j in edit_list_call_result:
-                            if j == k['value']:
-                                edit_call_result["resultVariant"] = k
-                                edit_call_result["resultVariant"]['value'] = edit_list_call_result[j]
-                                payload = json.dumps(edit_call_result)
-                                response = requests.post(url=edit_url, data=payload, headers=headers)
+        def get_result_codes():
+            payload = json.dumps(campaign)
+            # Запрос на добавление пользователя
+            response = requests.post(url=url, data=payload, headers=headers)
+            return response.json()
 
 
+        a = get_result_codes()
+
+        for i in a:
+            if i['code'] == 'CD_callResult':
+                for k in i['resultVariants']:
+                    for j in edit_list_call_result:
+                        if j == k['value']:
+                            edit_call_result["resultVariant"] = k
+                            edit_call_result["resultVariant"]['value'] = edit_list_call_result[j]
+                            payload = json.dumps(edit_call_result)
+                            response = requests.post(url=edit_url, data=payload, headers=headers)
+                            print(response.status_code)
 
 
-            b = get_result_codes()
-            for p in b:
-                if p['code']=='CD_callStatus':
-                    for k in p['resultVariants']:
-                        for j in edit_list_callstatus:
-                            if j == k['value']:
-                                edit_call_status["resultVariant"] = k
-                                edit_call_status["resultVariant"]['value'] = edit_list_callstatus[j]
-                                payload = json.dumps(edit_call_status)
-                                response = requests.post(url=edit_url, data=payload, headers=headers)
+        b = get_result_codes()
+        for p in b:
+            if p['code'] == 'CD_callStatus':
+                for k in p['resultVariants']:
+                    for j in edit_list_callstatus:
+                        if j == k['value']:
+                            edit_call_status["resultVariant"] = k
+                            edit_call_status["resultVariant"]['value'] = edit_list_callstatus[j]
+                            payload = json.dumps(edit_call_status)
+                            response = requests.post(url=edit_url, data=payload, headers=headers)
+                            print(response.status_code)
+
+
+        for i in success_result_list:
+            edit_call_success["resultVariant"] = i
+            payload = json.dumps(edit_call_success)
+            response = requests.post(url=edit_url, data=payload, headers=headers)
+            print(response.status_code)
+
+
+
+
+        edit_numbers["resultVariant"] = number
+        payload = json.dumps(edit_numbers)
+        response = requests.post(url=edit_url, data=payload, headers=headers)
+        print(response.status_code)

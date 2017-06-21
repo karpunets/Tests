@@ -13,8 +13,11 @@ def defaul_request(request_name):
                  "fax":None,"login":None,"password":None,"loginAD":None,"agentId":None,"scMode":"0","unmappedCalls":False,
                  "enabled":True,"deleted":False,"dateCreate":1494845540000,"groups":[{"id":2}],"roles":[{"id":3}]},
     "delete_group": {"groupId":None},
-    "edit_group": {"id":None,"name":None,"parent":{"id":2}}
-                               }
+    "edit_group": {"id":None,"name":None,"parent":{"id":2}},
+        'add_role':{"name":None,"roleTemplateId":None,"group":{"id":2}},
+        'edit_role':{"id":None,"name":None,"group":{"id":2}},
+        'delete_role':{"roleId":None},
+    }
 
     return list_of_default_requests[request_name]
 

@@ -2,7 +2,7 @@ import pytest, allure, json, requests
 import Data.URLs_MAP as URL
 
 from Data.Make_requests_and_answers import JSON_generator as _
-from Data.Users import make_50_users_for_get_user_list as take_user_list
+from Data.Test_data import make_50_users_for_get_user_list as take_user_list
 
 
 @pytest.fixture(scope="module")

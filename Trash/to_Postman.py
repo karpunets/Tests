@@ -7,6 +7,5 @@ def toPostman(a):
     return a
 
 
-send_value = {'fname': 'add_user_fName_one', 'lname': 'add_user_lName_one', 'pname': 'add_user_pName_one', 'phone': '666816000', 'login': 'add_user_login_one', 'password': 'add_user_password_one', 'loginAD': 'add_user_loginAD_one', 'agentId': 'add_user_agentId_one', 'scMode': '0', 'unmappedCalls': False, 'enabled': True, 'deleted': False, 'dateCreate': 1494845540000, 'groups': [{'id': 2}], 'roles': [{'id': 3}]}
-
+send_value = {'contractCode': '50025704', 'type': '111323', 'service': '24850210', 'OutboundContactTypeOfContact': 'Отказ от общения', 'nameRespondent': 'Осадчик Геннадий Владимирович', 'typeInet': None, 'availabilityPC': None, 'provider': None, 'mainInet': None, 'currentSpeed': None, 'costServices': None, 'estimateQuality': None, 'typeTV': None, 'subjects': None, 'mainTV': None, 'DateCall': '08.06.2017 03:45', 'newTel': '0954292054', 'callBackTime': '19.06.2017 03:18'}
 print(toPostman(send_value))

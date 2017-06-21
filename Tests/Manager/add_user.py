@@ -1,6 +1,6 @@
 import pytest, allure, json, requests
 import Data.URLs_MAP as URL
-import Data.Users as get
+import Data.Test_data as get
 
 from Data.Make_requests_and_answers import JSON_generator as _
 
