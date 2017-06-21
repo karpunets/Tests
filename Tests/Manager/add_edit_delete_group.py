@@ -114,6 +114,7 @@ def test_add_name_is_null(make_request):
 
 @allure.feature('Негативный тест')
 @allure.story('Удаляем ROOT группу')
+@pytest.mark.xfail
 def test_delete_ROOT_group(make_request):
     url = URL.delete_group
     # Делаем запрос и получаем ответ
@@ -124,6 +125,7 @@ def test_delete_ROOT_group(make_request):
 
 @allure.feature('Позитивный тест')
 @allure.story('Редактируем название ROOT группы')
+@pytest.mark.xfail
 def test_edit_ROOT_group(make_request):
     name ="edit_group"
     url = URL.edit_group
@@ -138,6 +140,7 @@ def test_edit_ROOT_group(make_request):
 
 @allure.feature('Негативный тест')
 @allure.story('Удаляем группу, у которой есть child')
+@pytest.mark.xfail
 def test_delete_group_with_child(make_request,delete_group):
     name ="add_group"
     url = URL.add_group
