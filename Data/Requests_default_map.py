@@ -17,6 +17,10 @@ def defaul_request(request_name):
         'add_role':{"name":None,"roleTemplateId":None,"group":{"id":2}},
         'edit_role':{"id":None,"name":None,"group":{"id":2}},
         'delete_role':{"roleId":None},
+        'add_role_access':{'roleId':None, 'access':None},
+        'delete_role_access': {'roleId':None, 'access':None},
+        'Manager_logs':{"moduleName":"Settings Controller","messageParams":["message"],"types":["SYSTEM"],"action":"get_menu_for_role",
+                "dateFrom":1495462096000,"dateTo":1495721296000}
     }
 
     return list_of_default_requests[request_name]

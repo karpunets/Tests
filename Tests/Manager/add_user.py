@@ -43,8 +43,8 @@ def test_Positive_add_one_user(make_request,delete_user):
     assert response.status_code == 200
     assert answer == response.json()
 
-@allure.feature('Позитивный тест с существующей ФИО')
-@allure.story('Добавляем пользователя')
+@allure.feature('Позитивный тест')
+@allure.story('Добавляем пользователя  с существующей ФИО')
 def test_add_user_with_existing_FIO(make_request,delete_user, add_delete_user):
     # Подготавливаем данные в JSON для запроса
     add_delete_user(get.add_user_existing)
@@ -185,8 +185,8 @@ def test_add_user_with_existing_phone(make_request, add_delete_user):
     assert answer == response.json()
 
 
-@allure.feature('Позитивный тест с существующей ФИО, телефон, loginAD, agentId')
-@allure.story('Добавляем пользователя')
+@allure.feature('Позитивный тест')
+@allure.story('Добавляем пользователя с существующей ФИО, телефон, loginAD, agentId')
 def test_add_user_with_existing_FIO_phone_loginAD_agentId_deleted_user(make_request,delete_user, add_delete_user):
     # Подготавливаем данные в JSON для запроса
     add_delete_user(get.add_user_deleted_existing)

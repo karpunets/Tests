@@ -21,7 +21,9 @@ def defaul_response(response_name):
         "edit_group": {"id":None,"name":None,"children":[],"cid":None},
         'add_role':{"id":None,"name":None,"group":{"id":2,"name":"ROOT","cid":0},"tasks":None,"roleTemplateId":None, "system":False},
         'edit_role':{"id":1053592,"name":None,"group":{"id":2,"name":"ROOT","cid":0},"tasks":None,"roleTemplateId":None,"system":False},
-        'delete_role':None
+        'delete_role':None,
+        'add_role_access': {'roleId':None, 'access':None},
+        'delete_role_access':None
                                 }
 
     return list_of_default_requests[response_name]

@@ -100,7 +100,11 @@ add_user_deleted_existing = {"fname": "add_user_fName_deleted_existing",
              "phone": "6668165555",
              "deleted":True
              }
-add_role = {"name":"editing_role","roleTemplateId":None,"group":{"id":2}}
+add_role = {"name":"editing_role",
+            "roleTemplateId":None,
+            "group":{"id":2}}
+
+
 
 def make_50_users_for_get_user_list():
     # Количество пользователей для теста
