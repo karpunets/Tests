@@ -23,7 +23,8 @@ def defaul_response(response_name):
         'edit_role':{"id":1053592,"name":None,"group":{"id":2,"name":"ROOT","cid":0},"tasks":None,"roleTemplateId":None,"system":False},
         'delete_role':None,
         'add_role_access': {'roleId':None, 'access':None},
-        'delete_role_access':None
+        'delete_role_access':None,
+        'test_domain':{'id':None,"domainName":"smidle.lab","ldapServerIp":"172.22.2.11","serviceUser":"Administrator","perPage":10,"description":"smidle.lab"}
                                 }
 
     return list_of_default_requests[response_name]

@@ -1,1 +1,3 @@
-{}
+{
+  "Tests/Manager/administrative.py::test_edit_settings[500-0]": true
+}

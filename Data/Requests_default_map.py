@@ -20,7 +20,9 @@ def defaul_request(request_name):
         'add_role_access':{'roleId':None, 'access':None},
         'delete_role_access': {'roleId':None, 'access':None},
         'Manager_logs':{"moduleName":"Settings Controller","messageParams":["message"],"types":["SYSTEM"],"action":"get_menu_for_role",
-                "dateFrom":1495462096000,"dateTo":1495721296000}
+                "dateFrom":1495462096000,"dateTo":1495721296000},
+        'Manager_settings': {"id":1,"debugLevel":"1","logLength":"200"},
+        'test_domain':{"domainName":"smidle.lab","ldapServerIp":"172.22.2.11","serviceUser":"Administrator","perPage":'10',"serviceUserPassword":"Smidle098adm!","description":"smidle.lab"}
     }
 
     return list_of_default_requests[request_name]
