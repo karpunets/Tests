@@ -7,7 +7,7 @@ from Data.Test_data import make_50_users_for_get_user_list as take_user_list
 headers = {'content-type': "application/json;charset=UTF-8",
                      'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}
 
-url = "http://172.22.2.63:8080/SmiddleCampaignManager/cm/sd/contract/fieldmap"
+url = "http://172.22.2.63:8080/SmiddleCampaignManager/cm/integration/contract/fieldmap"
 
 def setup_get_user_list():
     # Запрос на добавление пользователя
@@ -26,7 +26,7 @@ for i in a:
 print(id_list)
 def delete_mapping(id_list):
     for id in id_list:
-        new_url = "http://172.22.2.63:8080/SmiddleCampaignManager/cm/sd/contract/fieldmap?id=%s"%id
+        new_url = "http://172.22.2.63:8080/SmiddleCampaignManager/cm/integration/contract/fieldmap?id=%s"%id
         response = requests.delete(url=new_url, headers=headers)
         print(response.text)
 

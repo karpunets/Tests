@@ -45,6 +45,7 @@ def test_test_domain(make_request):
     assert response.status_code == 200
     assert response.text == "successful"
 
+
 @allure.feature('Негативный тест')
 @allure.story('Проверить подключение, пустые значения')
 def test_test_domain_with_empty_fields(make_request):
@@ -56,6 +57,7 @@ def test_test_domain_with_empty_fields(make_request):
               "ADM_VALIDATION_DOMAIN_NAME_LENGTH":"NAME length from 1 to 256"}
     assert response.status_code == 400
     assert response.json() == answer
+
 
 @allure.feature('Позитивный тест')
 @allure.story('Добавить и удалить домен')
