@@ -174,3 +174,18 @@ def test_add_role_access_wrong_IDs(make_request):
     answer ={"COMMON_DISALLOWED_IDS_EXCEPTION": "CommonDisallowedIDsException: Prohibited IDs"}
     assert response.status_code == 500
     assert response.json() == answer
+
+
+@allure.feature('Позитивный тест')
+@allure.story('Для новой роли по очереди задаем значения прав ролей')
+def test_edit_new_role_tasks(add_role, make_request, delete_role):
+    role_id = add_role
+    delete_role['role_id'] = role_id
+    response = make_request(url=URL.get_task_list, data={"roleId": role_id})
+    task_list = response.json()
+    print(len(task_list['tasks']))
+    assert len(task_list['tasks']) == 154
+    for i in task_list['tasks']:
+        i['value'] = 1
+        response = make_request(url=URL.set_tasks_to_role, data=task_list)
+        assert response.status_code == 200

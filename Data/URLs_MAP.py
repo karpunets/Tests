@@ -3,6 +3,7 @@ headers = {
         'content-type': "application/json;charset=UTF-8",
         'authorization': "Basic QVBJX2F1dG90ZXN0OkFQSV9hdXRvdGVzdA=="}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h"  "Basic cm9vdDpyb290"
 
+#ADMIN
 get_user_list = '%s/SmiddleManager/adm/management/get_user_list' % server
 add_user = '%s/SmiddleManager/adm/management/add_user' % server
 delete_user = '%s/SmiddleManager/adm/management/delete_user'%server

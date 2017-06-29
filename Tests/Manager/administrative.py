@@ -74,3 +74,35 @@ def test_add_delete_domain(make_request):
     response = make_request(url = URL.delete_domain, data=data)
     assert response.status_code == 200
     assert response.json() == True
+
+
+@allure.feature('Позитивный тест')
+@allure.story('Получаем права ролей для ROOT')
+def test_get_task_list(make_request):
+    data = {"roleId":3}
+    response = make_request(url=URL.get_task_list, data = data)
+    assert response.status_code == 200
+    assert response.json()['name'] == 'ROOT'
+
+
+@allure.feature('Негативный тест')
+@allure.story('Изменяем права ролей для ROOT(системной роли)')
+def test_edit_ROOT_task_list(make_request):
+    response = make_request(url=URL.get_task_list, data = {"roleId":3})
+    task_list = response.json()
+    task_list['tasks'][0]['value'] = 0
+    response = make_request(url = URL.set_tasks_to_role, data = task_list)
+    answer = {"COMMON_EXCEPTION":"CommonException: System role can't be modified"}
+    assert response.status_code == 500
+    assert response.json() == answer
+
+
+@allure.feature('Негативный тест')
+@allure.story('Получаем права ролей для не существующей роли')
+def test_get_task_list_for_999999_roleID(make_request):
+    data = {"roleId":99999999999999}
+    response = make_request(url=URL.get_task_list, data = data)
+    answer = {'DATA_ACCESS_NO_RESULT_EXCEPTION': 'javax.persistence.NoResultException: No entity found for query'}
+    assert response.status_code == 500
+    assert response.json() == answer
+

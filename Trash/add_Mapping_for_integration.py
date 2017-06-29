@@ -7,6 +7,29 @@ from Data.Test_data import make_50_users_for_get_user_list as take_user_list
 headers = headers = {'content-type': "application/json;charset=UTF-8",
                      'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}
 
+# user_list = {
+#              '2':{'fieldContract':'contractCode','fieldImport':'ContractCode'},
+#              '3':{'fieldContract':'OutboundContactTypeOfContact','fieldImport':'OtkazValue'},
+#              '4':{'fieldContract':'nameRespondent','fieldImport':'FIO'},
+#              '5':{'fieldContract':'typeInet','fieldImport':'TypeInet'},
+#              '6':{'fieldContract':'availabilityPC','fieldImport':'DeviceInet'},
+#              '7':{'fieldContract':'provider','fieldImport':'Provider'},
+#              '8':{'fieldContract':'mainInet','fieldImport':'QualityInet'},
+#              '9':{'fieldContract':'currentSpeed','fieldImport':'SpeedInet'},
+#              '10':{'fieldContract':'costServices','fieldImport':'CostService'},
+#              '11':{'fieldContract':'estimateQuality','fieldImport':'ValuationService'},
+#              '12':{'fieldContract':'typeTV','fieldImport':'typeTV'},
+#              '13':{'fieldContract':'subjects','fieldImport':'SabjectTV'},
+#              '14':{'fieldContract':'mainTV','fieldImport':'QualityTV'},
+#              '15':{'fieldContract':'inetPurpose','fieldImport':'PurposeInet'},
+#              '16':{'fieldContract':'improveTvInet','fieldImport':'UpgradeService'},
+#              '17':{'fieldContract':'DateCall','fieldImport':'DateCall'},
+#              '18':{'fieldContract':'newTel','fieldImport':'Contact_phone'},
+#              '19':{'fieldContract':'callBackTime','fieldImport':'RedialDate'},
+#              '20':{'fieldContract':'service', 'fieldImport':'service'},
+#              '21':{'fieldContract':'type','fieldImport':'type'}}
+#              #'22':{'fieldContract':'authorID','fieldImport':'Smiddle Login'}
+
 user_list = {
              '2':{"settings":{"id":115301820},'fieldContract':'contractCode','fieldImport':'ContractCode'},
              '3':{"settings":{"id":115301820},'fieldContract':'OutboundContactTypeOfContact','fieldImport':'OtkazValue'},
@@ -28,7 +51,6 @@ user_list = {
              '19':{"settings":{"id":115301820},'fieldContract':'callBackTime','fieldImport':'RedialDate'},
              '20':{"settings":{"id":115301820},'fieldContract':'service', 'fieldImport':'service'},
              '21':{"settings":{"id":115301820},'fieldContract':'type','fieldImport':'type'}}
-             #'22':{"settings":{"id":115301820},'fieldContract':'authorID','fieldImport':'Smiddle Login'}
 
 
 
