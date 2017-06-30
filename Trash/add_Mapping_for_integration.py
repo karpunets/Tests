@@ -29,28 +29,28 @@ headers = headers = {'content-type': "application/json;charset=UTF-8",
 #              '20':{'fieldContract':'service', 'fieldImport':'service'},
 #              '21':{'fieldContract':'type','fieldImport':'type'}}
 #              #'22':{'fieldContract':'authorID','fieldImport':'Smiddle Login'}
-
+settings_id = 115301820
 user_list = {
-             '2':{"settings":{"id":115301820},'fieldContract':'contractCode','fieldImport':'ContractCode'},
-             '3':{"settings":{"id":115301820},'fieldContract':'OutboundContactTypeOfContact','fieldImport':'OtkazValue'},
-             '4':{"settings":{"id":115301820},'fieldContract':'nameRespondent','fieldImport':'FIO'},
-             '5':{"settings":{"id":115301820},'fieldContract':'typeInet','fieldImport':'TypeInet'},
-             '6':{"settings":{"id":115301820},'fieldContract':'availabilityPC','fieldImport':'DeviceInet'},
-             '7':{"settings":{"id":115301820},'fieldContract':'provider','fieldImport':'Provider'},
-             '8':{"settings":{"id":115301820},'fieldContract':'mainInet','fieldImport':'QualityInet'},
-             '9':{"settings":{"id":115301820},'fieldContract':'currentSpeed','fieldImport':'SpeedInet'},
-             '10':{"settings":{"id":115301820},'fieldContract':'costServices','fieldImport':'CostService'},
-             '11':{"settings":{"id":115301820},'fieldContract':'estimateQuality','fieldImport':'ValuationService'},
-             '12':{"settings":{"id":115301820},'fieldContract':'typeTV','fieldImport':'typeTV'},
-             '13':{"settings":{"id":115301820},'fieldContract':'subjects','fieldImport':'SabjectTV'},
-             '14':{"settings":{"id":115301820},'fieldContract':'mainTV','fieldImport':'QualityTV'},
-             '15':{"settings":{"id":115301820},'fieldContract':'inetPurpose','fieldImport':'PurposeInet'},
-             '16':{"settings":{"id":115301820},'fieldContract':'improveTvInet','fieldImport':'UpgradeService'},
-             '17':{"settings":{"id":115301820},'fieldContract':'DateCall','fieldImport':'DateCall'},
-             '18':{"settings":{"id":115301820},'fieldContract':'newTel','fieldImport':'Contact_phone'},
-             '19':{"settings":{"id":115301820},'fieldContract':'callBackTime','fieldImport':'RedialDate'},
-             '20':{"settings":{"id":115301820},'fieldContract':'service', 'fieldImport':'service'},
-             '21':{"settings":{"id":115301820},'fieldContract':'type','fieldImport':'type'}}
+             '2':{"settings":{"id":settings_id},'fieldContract':'contractCode','fieldImport':'ContractCode'},
+             '3':{"settings":{"id":settings_id},'fieldContract':'OutboundContactTypeOfContact','fieldImport':'OtkazValue'},
+             '4':{"settings":{"id":settings_id},'fieldContract':'nameRespondent','fieldImport':'FIO'},
+             '5':{"settings":{"id":settings_id},'fieldContract':'typeInet','fieldImport':'TypeInet'},
+             '6':{"settings":{"id":settings_id},'fieldContract':'availabilityPC','fieldImport':'DeviceInet'},
+             '7':{"settings":{"id":settings_id},'fieldContract':'provider','fieldImport':'Provider'},
+             '8':{"settings":{"id":settings_id},'fieldContract':'mainInet','fieldImport':'QualityInet'},
+             '9':{"settings":{"id":settings_id},'fieldContract':'currentSpeed','fieldImport':'SpeedInet'},
+             '10':{"settings":{"id":settings_id},'fieldContract':'costServices','fieldImport':'CostService'},
+             '11':{"settings":{"id":settings_id},'fieldContract':'estimateQuality','fieldImport':'ValuationService'},
+             '12':{"settings":{"id":settings_id},'fieldContract':'typeTV','fieldImport':'typeTV'},
+             '13':{"settings":{"id":settings_id},'fieldContract':'subjects','fieldImport':'SabjectTV'},
+             '14':{"settings":{"id":settings_id},'fieldContract':'mainTV','fieldImport':'QualityTV'},
+             '15':{"settings":{"id":settings_id},'fieldContract':'inetPurpose','fieldImport':'PurposeInet'},
+             '16':{"settings":{"id":settings_id},'fieldContract':'improveTvInet','fieldImport':'UpgradeService'},
+             '17':{"settings":{"id":settings_id},'fieldContract':'DateCall','fieldImport':'DateCall'},
+             '18':{"settings":{"id":settings_id},'fieldContract':'newTel','fieldImport':'Contact_phone'},
+             '19':{"settings":{"id":settings_id},'fieldContract':'callBackTime','fieldImport':'RedialDate'},
+             '20':{"settings":{"id":settings_id},'fieldContract':'service', 'fieldImport':'service'},
+             '21':{"settings":{"id":settings_id},'fieldContract':'type','fieldImport':'type'}}
 
 
 
