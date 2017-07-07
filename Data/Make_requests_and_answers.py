@@ -31,3 +31,4 @@ class JSON_generator(object):
         data = kwargs
         request = defaul_response(response_name)
         return JSON_generator.generate_JSON(request, data)
+

@@ -24,7 +24,8 @@ def defaul_response(response_name):
         'delete_role':None,
         'add_role_access': {'roleId':None, 'access':None},
         'delete_role_access':None,
-        'test_domain':{'id':None,"domainName":"smidle.lab","ldapServerIp":"172.22.2.11","serviceUser":"Administrator","perPage":10,"description":"smidle.lab"}
+        'test_domain':{'id':None,"domainName":"smidle.lab","ldapServerIp":"172.22.2.11","serviceUser":"Administrator","perPage":10,"description":"smidle.lab"},
+        'add_campaign':{"id":None,"code":None,"name":"auto_test_campaign","comment":"auto_test","deleted":False,"groups":[{"id":2}]}
                                 }
 
     return list_of_default_requests[response_name]

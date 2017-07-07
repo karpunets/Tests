@@ -4,7 +4,7 @@ import Data.URLs_MAP as URL
 from Data.Make_requests_and_answers import JSON_generator as _
 from Data.Test_data import make_50_users_for_get_user_list as take_user_list
 
-headers = headers = {'content-type': "application/json;charset=UTF-8",
+headers = {'content-type': "application/json;charset=UTF-8",
                      'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}
 
 # user_list = {
@@ -29,7 +29,7 @@ headers = headers = {'content-type': "application/json;charset=UTF-8",
 #              '20':{'fieldContract':'service', 'fieldImport':'service'},
 #              '21':{'fieldContract':'type','fieldImport':'type'}}
 #              #'22':{'fieldContract':'authorID','fieldImport':'Smiddle Login'}
-settings_id = 115301820
+settings_id = 118419683
 user_list = {
              '2':{"settings":{"id":settings_id},'fieldContract':'contractCode','fieldImport':'ContractCode'},
              '3':{"settings":{"id":settings_id},'fieldContract':'OutboundContactTypeOfContact','fieldImport':'OtkazValue'},

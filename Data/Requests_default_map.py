@@ -1,5 +1,7 @@
-def defaul_request(request_name):
+from Data.Test_data import name_generator
 
+
+def defaul_request(request_name):
     list_of_default_requests = {
         'get_user_list':{"fName":None,"lName":None,"pName":None,"roleId":None,"groupId":None,"login":None,"adLogin":None,"agentId":None,
                          "showDeletedOnly":False,"phone":None,"pagination":{"page_number":"1","page_size":"10","sortedField":"login","order":"ASC"}},
@@ -22,8 +24,23 @@ def defaul_request(request_name):
         'Manager_logs':{"moduleName":"Settings Controller","messageParams":["message"],"types":["SYSTEM"],"action":"get_menu_for_role",
                 "dateFrom":1495462096000,"dateTo":1495721296000},
         'Manager_settings': {"id":1,"debugLevel":"1","logLength":"200"},
-        'test_domain':{"domainName":"smidle.lab","ldapServerIp":"172.22.2.11","serviceUser":"Administrator","perPage":'10',"serviceUserPassword":"Smidle098adm!","description":"smidle.lab"}
+        'test_domain':{"domainName":"smidle.lab","ldapServerIp":"172.22.2.11","serviceUser":"Administrator","perPage":'10',"serviceUserPassword":"Smidle098adm!","description":"smidle.lab"},
+        'add_campaign':{"campaign":{"code":name_generator(),"name":"auto_test_campaign","comment":"auto_test","groups":[{"id":2}]},
+                        "skillGroups":[{"refURL":"/unifiedconfig/config/skillgroup/5019","changeStamp":0,"agentCount":2,
+                                        "agents":[{"refURL":"/unifiedconfig/config/agent/5060","name":None},{"refURL":"/unifiedconfig/config/agent/5063","name":None}],
+                                        "agentsAdded":None,"agentsRemoved":None, "bucketInterval":None,"correlationId":None,"department":None,"description":None,"markDeletable":None,
+                                        "mediaRoutingDomain":{"refURL":"/unifiedconfig/config/mediaroutingdomain/1","name":"Cisco_Voice"},"name":"test1",
+                                        "peripheral":{"refURL":None,"changeStamp":None,"id":5000,"name":"PIM_CUCM"},"peripheralNumber":5020,"selectedAgentCount":None,
+                                        "serviceLevelThreshold":None,"serviceLevelType":None}],
+                        "timeZone":{"refURL":"/unifiedconfig/config/timezone/Dateline%20Standard%20Time","changeStamp":None,"bias":720,
+                                    "displayName":"(UTC-12:00) International Date Line West","dstName":"Dateline Daylight Time","dstObserved":False,
+                                    "name":"Dateline Standard Time","stdName":"Dateline Standard Time"},
+                        "dialingMode":"INBOUND",
+                        "dialedNumber":"123213"}
+
     }
 
     return list_of_default_requests[request_name]
+
+
 

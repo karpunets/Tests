@@ -33,3 +33,29 @@ Manager_manifest = '%s/SmiddleManager/adm/admin/manifest' % server
 add_role_access = '%s/SmiddleManager/adm/management/add_role_access' % server
 delete_role_access = '%s/SmiddleManager/adm/management/delete_role_access'% server
 
+#CAMPAIGN MANAGER
+get_campaign='%s/SmiddleCampaignManager/cm/manager/get_campaign'%server
+get_batch='%s/SmiddleCampaignManager/cm/manager/get_batch'%server
+get_dial_list='%s/SmiddleCampaignManager/cm/dialer/get_dial_lists'%server
+check_campaign_status='%s/SmiddleCampaignManager/cm/dialer/check_campaign_status'%server
+get_result_code='%s/SmiddleCampaignManager/cm/manager/get_result_code'%server
+edit_batch='%s/SmiddleCampaignManager/cm/manager/edit_batch'%server
+get_mapfields='%s/SmiddleCampaignManager/cm/settings/get_mapfields'%server
+edit_result_code='%s/SmiddleCampaignManager/cm/manager/edit_result_code'%server
+get_result_variants='%s/SmiddleCampaignManager/cm/manager/get_result_variants'%server
+edit_result_variant='%s/SmiddleCampaignManager/cm/manager/edit_result_variant'%server
+map_field='%s/SmiddleCampaignManager/cm/settings/map_field'%server
+edit_campaign='%s/SmiddleCampaignManager/cm/manager/edit_campaign'%server
+edit_dial_list='%s/SmiddleCampaignManager/cm/dialer/edit_dial_list'%server
+get_personal_callback='%s/SmiddleCampaignManager/cm/dialer/get_personal_callback'%server
+start_campaign='%s/SmiddleCampaignManager/cm/dialer/start_campaign'%server
+get_cd_status='%s/SmiddleCampaignManager/cm/dialer/get_cd_results'%server
+stop_campaign='%s/SmiddleCampaignManager/cm/dialer/stop_campaign'%server
+get_settings='%s/SmiddleCampaignManager/cm/admin/settings'%server
+get_skillgroup_list='%s/SmiddleCampaignManager/cm/dialer/get_skillgroup_list'%server
+get_timezone_list='%s/SmiddleCampaignManager/cm/dialer/get_timezone_list'%server
+get_fixed_fields='%s/SmiddleCampaignManager/cm/settings/get_fixed_fields'%server
+remove_result_code='%s/SmiddleCampaignManager/cm/manager/remove_result_code?id=118835022'%server
+delete_mapfield='%s/SmiddleCampaignManager/cm/settings/delete_mapfield?id=118836921'%server
+delete_dial_list='%s/SmiddleCampaignManager/cm/dialer/delete_dial_list?id=118873030'%server
+delete_campaign='%s/SmiddleCampaignManager/cm/manager/delete_campaign?id=1833789'%server

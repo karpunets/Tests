@@ -1,3 +1,5 @@
+import random,string
+
 from Data.Make_requests_and_answers import JSON_generator
 import Data.Requests_default_map as get
 
@@ -137,4 +139,8 @@ def make_50_users_for_get_user_list():
     user_list['one_user_get_userlist'] = one_user_get_userlist
     user_list['deleted_user_get_user_list'] = deleted_user_get_user_list
     return user_list
+
+
+def name_generator(size=8, chars=string.ascii_letters + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
 
