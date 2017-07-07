@@ -1,4 +1,7 @@
-from Data.Test_data import name_generator
+import string, random
+
+def random_code():
+    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(8))
 
 
 def defaul_request(request_name):
@@ -25,7 +28,7 @@ def defaul_request(request_name):
                 "dateFrom":1495462096000,"dateTo":1495721296000},
         'Manager_settings': {"id":1,"debugLevel":"1","logLength":"200"},
         'test_domain':{"domainName":"smidle.lab","ldapServerIp":"172.22.2.11","serviceUser":"Administrator","perPage":'10',"serviceUserPassword":"Smidle098adm!","description":"smidle.lab"},
-        'add_campaign':{"campaign":{"code":name_generator(),"name":"auto_test_campaign","comment":"auto_test","groups":[{"id":2}]},
+        'add_campaign':{"campaign":{"code":random_code(),"name":"auto_test_campaign","comment":"auto_test","groups":[{"id":2}]},
                         "skillGroups":[{"refURL":"/unifiedconfig/config/skillgroup/5019","changeStamp":0,"agentCount":2,
                                         "agents":[{"refURL":"/unifiedconfig/config/agent/5060","name":None},{"refURL":"/unifiedconfig/config/agent/5063","name":None}],
                                         "agentsAdded":None,"agentsRemoved":None, "bucketInterval":None,"correlationId":None,"department":None,"description":None,"markDeletable":None,
@@ -36,7 +39,8 @@ def defaul_request(request_name):
                                     "displayName":"(UTC-12:00) International Date Line West","dstName":"Dateline Daylight Time","dstObserved":False,
                                     "name":"Dateline Standard Time","stdName":"Dateline Standard Time"},
                         "dialingMode":"INBOUND",
-                        "dialedNumber":"123213"}
+                        "dialedNumber":"123213"},
+        'add_result_code':{"campaign":{"id":119696173},"fieldOrder":"4","name":"123","code":"123","dataType":"STRING","forExport":True,"forFilter":True}
 
     }
 

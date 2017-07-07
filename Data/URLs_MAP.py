@@ -55,7 +55,7 @@ get_settings='%s/SmiddleCampaignManager/cm/admin/settings'%server
 get_skillgroup_list='%s/SmiddleCampaignManager/cm/dialer/get_skillgroup_list'%server
 get_timezone_list='%s/SmiddleCampaignManager/cm/dialer/get_timezone_list'%server
 get_fixed_fields='%s/SmiddleCampaignManager/cm/settings/get_fixed_fields'%server
-remove_result_code='%s/SmiddleCampaignManager/cm/manager/remove_result_code?id=118835022'%server
-delete_mapfield='%s/SmiddleCampaignManager/cm/settings/delete_mapfield?id=118836921'%server
-delete_dial_list='%s/SmiddleCampaignManager/cm/dialer/delete_dial_list?id=118873030'%server
-delete_campaign='%s/SmiddleCampaignManager/cm/manager/delete_campaign?id=1833789'%server
+remove_result_code='%s/SmiddleCampaignManager/cm/manager/remove_result_code'%server
+delete_mapfield='%s/SmiddleCampaignManager/cm/settings/delete_mapfield'%server
+delete_dial_list='%s/SmiddleCampaignManager/cm/dialer/delete_dial_list'%server
+delete_campaign='%s/SmiddleCampaignManager/cm/manager/delete_campaign'%server

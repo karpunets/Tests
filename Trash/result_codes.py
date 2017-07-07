@@ -7,7 +7,7 @@ from Data.Test_data import make_50_users_for_get_user_list as take_user_list
 headers ={'content-type': "application/json;charset=UTF-8",
            'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h
 
-server = "http://10.10.27.32:8080"
+server = "http://172.22.2.63:8080"
 
 url = "%s/SmiddleCampaignManager/cm/manager/get_result_code"%server
 edit_url = "%s/SmiddleCampaignManager/cm/manager/edit_result_variant"%server
@@ -80,7 +80,7 @@ campaign_list = get_campaign()
 
 for campaign in campaign_list:
 
-    if campaign['code'] == 'TELE':
+    if campaign['code'] != 'TELE':
 
         edit_call_result = {"campaignCode": campaign['code'], "resultCode": "CD_callResult", "resultVariant": {"id": None, "value": None, "forInit": False}}
         edit_call_status = {"campaignCode": campaign['code'], "resultCode": "CD_callStatus", "resultVariant": {"id": None, "value": None, "forInit": False}}
@@ -107,7 +107,7 @@ for campaign in campaign_list:
                             edit_call_result["resultVariant"]['value'] = edit_list_call_result[j]
                             payload = json.dumps(edit_call_result)
                             response = requests.post(url=edit_url, data=payload, headers=headers)
-                            print(response.status_code)
+                            print(response.status_code, response.text)
 
 
         b = get_result_codes()
@@ -120,14 +120,14 @@ for campaign in campaign_list:
                             edit_call_status["resultVariant"]['value'] = edit_list_callstatus[j]
                             payload = json.dumps(edit_call_status)
                             response = requests.post(url=edit_url, data=payload, headers=headers)
-                            print(response.status_code)
+                            print(response.status_code, response.text)
 
 
         for i in success_result_list:
             edit_call_success["resultVariant"] = i
             payload = json.dumps(edit_call_success)
             response = requests.post(url=edit_url, data=payload, headers=headers)
-            print(response.status_code)
+            print(response.status_code, response.text)
 
 
 
@@ -135,4 +135,4 @@ for campaign in campaign_list:
         edit_numbers["resultVariant"] = number
         payload = json.dumps(edit_numbers)
         response = requests.post(url=edit_url, data=payload, headers=headers)
-        print(response.status_code)
+        print(response.status_code, response.text)

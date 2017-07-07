@@ -8,11 +8,11 @@ from Data.Requests_default_map import defaul_request
 headers = URL.headers
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 #Формирование запроса и получение результата по полученным данным
 def make_request():
 
-    def some_request(url, data, method='POST'):
+    def some_request(url, data=None, method='POST'):
         payload = json.dumps(data)
         response = requests.request(method, url, data=payload, headers=headers)
         return response
