@@ -40,7 +40,8 @@ def defaul_request(request_name):
                                     "name":"Dateline Standard Time","stdName":"Dateline Standard Time"},
                         "dialingMode":"INBOUND",
                         "dialedNumber":"123213"},
-        'add_result_code':{"campaign":{"id":119696173},"fieldOrder":"4","name":"123","code":"123","dataType":"STRING","forExport":True,"forFilter":True}
+        'add_result_code':{"campaign":{"id":119696173},"fieldOrder":"4","name":"123","code":"123","dataType":"STRING","forExport":True,"forFilter":True},
+        'edit_result_variant': {"campaignCode":None,"resultCode":"123","resultVariant":{"value":"q","forInit":True}}
 
     }
 

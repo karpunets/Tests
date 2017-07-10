@@ -27,7 +27,7 @@ def defaul_response(response_name):
         'test_domain':{'id':None,"domainName":"smidle.lab","ldapServerIp":"172.22.2.11","serviceUser":"Administrator","perPage":10,"description":"smidle.lab"},
         'add_campaign':{"id":None,"code":None,"name":"auto_test_campaign","comment":"auto_test","deleted":False,"groups":[{"id":2}]},
         'add_result_code':{"id":None,"code":"123","forPhone":False,"name":"123","comment":None,"cdRes":False,"dataType":None,"forExport":True,
-                           "forFilter":True,"fieldOrder":4,"deleted":False,"resultVariants":None}
+                           "forFilter":True,"fieldOrder":4,"deleted":False,"resultVariants":None},
                                 }
 
     return list_of_default_requests[response_name]

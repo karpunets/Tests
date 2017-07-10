@@ -29,7 +29,10 @@ headers = {'content-type': "application/json;charset=UTF-8",
 #              '20':{'fieldContract':'service', 'fieldImport':'service'},
 #              '21':{'fieldContract':'type','fieldImport':'type'}}
 #              #'22':{'fieldContract':'authorID','fieldImport':'Smiddle Login'}
-settings_id = 118419683
+
+
+
+settings_id = 139437132
 user_list = {
              '2':{"settings":{"id":settings_id},'fieldContract':'contractCode','fieldImport':'ContractCode'},
              '3':{"settings":{"id":settings_id},'fieldContract':'OutboundContactTypeOfContact','fieldImport':'OtkazValue'},
