@@ -207,3 +207,27 @@ class Tests_add_campaign_settings:
             "SCM_EDIT_RESULT_VARIANT_EXCEPTION": "SCMEditResultVariantException: Unable to add forInit result variant='99999999' because forInit result variant already exists"}
         assert response.status_code == 500
         assert answer == response.json()
+
+
+
+
+    @allure.feature('Позитивный тест')
+    @allure.story('Добавляем варианты значений для кодов результатов')
+    @pytest.mark.parametrize(('dataType', 'value'),
+                             [('INTEGER', 123321), ('FLOAT', 123.25), ('STRING', 'string'), ('TEXT', 'some_text'),
+                              ('DATE', 132213123213)])
+    def test_add_result_variants(self, add_campaign, make_request, delete_result_code, dataType, value):
+        # Подготавливаем данные в JSON для запроса
+        campaign_id = add_campaign['id']
+        campaign_code = add_campaign['code']
+        data = _.get_JSON_request('add_result_code', **{"campaign": {"id": campaign_id},
+                                                        "dataType": dataType})
+        # Делаем запрос и получаем ответ
+        response = make_request(url=URL.edit_result_code, data=data)
+        result_code_id = response.json()['id']
+        delete_result_code['id'] = result_code_id
+        assert response.status_code == 200
+        data = _.get_JSON_request('edit_result_variant', **{"campaignCode": campaign_code,
+                                                            "resultVariant": {"value": value, "forInit": False}})
+        response = make_request(url=URL.edit_result_variant, data=data)
+        assert response.status_code == 200
