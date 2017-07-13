@@ -24,7 +24,7 @@ headers = {'content-type': "application/json;charset=UTF-8",
                      'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}
 
 
-for i in range(0,100000):
+for i in range(0,100):
     b = {
         "CAMPAIGN": "campaign%s"%i,
         "ACCOUNT_NUMBER": "accountNumber%s"%i,

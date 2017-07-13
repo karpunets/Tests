@@ -59,3 +59,4 @@ remove_result_code='%s/SmiddleCampaignManager/cm/manager/remove_result_code'%ser
 delete_mapfield='%s/SmiddleCampaignManager/cm/settings/delete_mapfield'%server
 delete_dial_list='%s/SmiddleCampaignManager/cm/dialer/delete_dial_list'%server
 delete_campaign='%s/SmiddleCampaignManager/cm/manager/delete_campaign'%server
+remove_result_variant = '%s/SmiddleCampaignManager/cm/manager/remove_result_variant'%server

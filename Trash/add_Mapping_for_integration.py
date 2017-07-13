@@ -1,8 +1,5 @@
-import pytest, allure, json, requests
-import Data.URLs_MAP as URL
+import json, requests
 
-from Data.Make_requests_and_answers import JSON_generator as _
-from Data.Test_data import make_50_users_for_get_user_list as take_user_list
 
 headers = {'content-type': "application/json;charset=UTF-8",
                      'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}
@@ -32,10 +29,10 @@ headers = {'content-type': "application/json;charset=UTF-8",
 
 
 
-settings_id = 139437132
+settings_id = 148962447
 user_list = {
              '2':{"settings":{"id":settings_id},'fieldContract':'contractCode','fieldImport':'ContractCode'},
-             '3':{"settings":{"id":settings_id},'fieldContract':'OutboundContactTypeOfContact','fieldImport':'OtkazValue'},
+             '3':{"settings":{"id":settings_id},'fieldContract':'OutboundContactTypeOfContact','fieldImport':'OutboundContactTypeOfContact'},
              '4':{"settings":{"id":settings_id},'fieldContract':'nameRespondent','fieldImport':'FIO'},
              '5':{"settings":{"id":settings_id},'fieldContract':'typeInet','fieldImport':'TypeInet'},
              '6':{"settings":{"id":settings_id},'fieldContract':'availabilityPC','fieldImport':'DeviceInet'},
@@ -52,12 +49,16 @@ user_list = {
              '17':{"settings":{"id":settings_id},'fieldContract':'DateCall','fieldImport':'DateCall'},
              '18':{"settings":{"id":settings_id},'fieldContract':'newTel','fieldImport':'Contact_phone'},
              '19':{"settings":{"id":settings_id},'fieldContract':'callBackTime','fieldImport':'RedialDate'},
-             '20':{"settings":{"id":settings_id},'fieldContract':'service', 'fieldImport':'service'},
-             '21':{"settings":{"id":settings_id},'fieldContract':'type','fieldImport':'type'}}
+             '20':{"settings":{"id":settings_id},'fieldContract':'service', 'fieldImport':'Service'},
+             '21':{"settings":{"id":settings_id},'fieldContract':'type','fieldImport':'Type'},
+             '22': {"settings": {"id": settings_id}, 'fieldContract': 'activityFeed', 'fieldImport': 'ActivityFeed'},
+             '23': {"settings": {"id": settings_id}, 'fieldContract': 'resultKontact', 'fieldImport': 'ResultKontact'},
+             '24': {"settings": {"id": settings_id}, 'fieldContract': 'authorID', 'fieldImport': 'SmiddleLogin'}
+             }
 
 
 
-url = "http://172.22.2.63:8080/SmiddleCampaignManager/cm/integration/contract/fieldmap"
+url = "http://10.10.27.32:8080/SmiddleCampaignManager/cm/integration/contract/fieldmap"
 
 def setup_get_user_list():
     for i in user_list:
@@ -66,6 +67,7 @@ def setup_get_user_list():
         response = requests.post(url=url, data = payload, headers = headers)
         # Записываем ID добавленных пользователей
         print(response.text)
+        print(response.status_code)
 
 
 setup_get_user_list()

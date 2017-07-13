@@ -1,13 +1,10 @@
-import pytest, allure, json, requests
-import Data.URLs_MAP as URL
+import pytest, json, requests
 
-from Data.Make_requests_and_answers import JSON_generator as _
-from Data.Test_data import make_50_users_for_get_user_list as take_user_list
 
 headers ={'content-type': "application/json;charset=UTF-8",
            'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h
 
-server = "http://172.22.2.63:8080"
+server = "http://10.10.27.32:8080"
 
 url = "%s/SmiddleCampaignManager/cm/manager/get_result_code"%server
 get_campaign_url = "%s/SmiddleCampaignManager/cm/manager/get_campaign"%server
@@ -16,13 +13,14 @@ get_result_code_url = '%s/SmiddleCampaignManager/cm/manager/get_result_code'%ser
 
 add_result = [  {'name':'Type', 'comment': 'Тип подключения'},
                 {'name':'Service' , 'comment': 'Сервис'},
-                {'name':'activityFeed' , 'comment': 'Канал активности'},
-                {'name':'resultKontact' , 'comment': 'Результат контакта'},
-                {'name':'OutboundContactTypeOfContact' , 'comment': 'Направление активности'}]
+                {'name':'ActivityFeed' , 'comment': 'Канал активности'},
+                {'name':'ResultKontact' , 'comment': 'Результат контакта'},
+                {'name':'OutboundContactTypeOfContact' , 'comment': 'Направление активности'}
+                ]
 
 
 
-edit_result_code = {"campaign":{"id":None},"fieldOrder":None,"name":None,"code":None,"dataType":"STRING","comment":"comm","forExport":True,"forFilter":True}
+edit_result_code = {"campaign":{"id":None},"fieldOrder":None,"name":None,"code":None,"dataType":"STRING","comment":"comm","forExport":False,"forFilter":False}
 
 get_campaign_json = {}
 
