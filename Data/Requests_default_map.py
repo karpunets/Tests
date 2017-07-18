@@ -42,8 +42,8 @@ def defaul_request(request_name):
                         "dialedNumber":"123213"},
         'add_result_code':{"campaign":{"id":119696173},"fieldOrder":"4","name":"123","code":"123","dataType":"STRING","forExport":True,"forFilter":True},
         'edit_result_variant': {"campaignCode":None,"resultCode":"123","resultVariant":{"value":"q","forInit":True}},
-        'add_map_field':{"order":"1","forExport":True,"forFilter":True,"phoneNumber":False,"enabled":True,"deleted":False,"name":None,
-                         "fieldImport":None,"dataType":"STRING","fieldAbonent":"ClientID","campaign":{"id":2164432}}
+        'add_map_field':{"order":"1","forExport":False,"forFilter":False,"phoneNumber":False, "phoneType":None, "enabled":True,"deleted":False,"name":None,
+                         "fieldImport":None,"dataType":"STRING","fieldAbonent":None,"campaign":{"id":None}}
 
     }
 

@@ -31,7 +31,7 @@ def add_delete_user(request):
             assert response.status_code == 200
             # Наполняем список ІД добавленных пользователей
             users_id.append(response.json()['id'])
-        # Удаляем добавленніх ранее пользователей
+        # Удаляем добавленных ранее пользователей
         def user_delete():
             for id in users_id:
                 data = JSON_generator.get_JSON_request('delete_user', **{'userId': id})
@@ -52,4 +52,17 @@ def delete_user():
         data = JSON_generator.get_JSON_request('delete_user', **{'userId': user_id[i]})
         payload = json.dumps(data)
         response = requests.post(URL.delete_user, data=payload, headers=headers)
+        assert response.status_code == 200
+
+
+@pytest.fixture(scope='function')
+def clear_result(request):
+    data = {}
+    yield data
+    if type(data['id']) == tuple and list:
+        for i in data['id']:
+            response = requests.delete(url=data['url'], params={'id':int(i)}, headers=URL.headers)
+            assert response.status_code == 200
+    else:
+        response = requests.delete(url=data['url'], params={'id': int(data['id'])}, headers=URL.headers)
         assert response.status_code == 200

@@ -28,6 +28,8 @@ def defaul_response(response_name):
         'add_campaign':{"id":None,"code":None,"name":"auto_test_campaign","comment":"auto_test","deleted":False,"groups":[{"id":2}]},
         'add_result_code':{"id":None,"code":"123","forPhone":False,"name":"123","comment":None,"cdRes":False,"dataType":None,"forExport":True,
                            "forFilter":True,"fieldOrder":4,"deleted":False,"resultVariants":None},
+        'add_map_field':{'id': None, 'name': None, 'fieldImport': None, 'fieldAbonent': None, 'dataType': 'STRING',
+                         'phoneType': None, 'phoneNumber': False, 'enabled': True, 'deleted': False, 'forExport': False, 'forFilter': False, 'order': 1}
                                 }
 
     return list_of_default_requests[response_name]
