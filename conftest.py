@@ -59,10 +59,12 @@ def delete_user():
 def clear_result(request):
     data = {}
     yield data
-    if type(data['id']) == tuple and list:
-        for i in data['id']:
-            response = requests.delete(url=data['url'], params={'id':int(i)}, headers=URL.headers)
-            assert response.status_code == 200
-    else:
-        response = requests.delete(url=data['url'], params={'id': int(data['id'])}, headers=URL.headers)
-        assert response.status_code == 200
+    try:
+        if type(data['id']) == tuple and list:
+            for i in data['id']:
+                requests.delete(url=data['url'], params={'id':int(i)}, headers=URL.headers)
+        else:
+            requests.delete(url=data['url'], params={'id': int(data['id'])}, headers=URL.headers)
+    except KeyError:
+        pass
+

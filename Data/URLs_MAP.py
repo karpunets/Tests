@@ -1,12 +1,12 @@
 server = 'http://172.22.2.66:8080'
 headers = {
-        'content-type': "application/json;charset=UTF-8",
-        'authorization': "Basic QVBJX2F1dG90ZXN0OkFQSV9hdXRvdGVzdA=="}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h"  "Basic cm9vdDpyb290"
+    'content-type': "application/json;charset=UTF-8",
+    'authorization': "Basic QVBJX2F1dG90ZXN0OkFQSV9hdXRvdGVzdA=="}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h"  "Basic cm9vdDpyb290"
 
-#ADMIN
+# ADMIN
 get_user_list = '%s/SmiddleManager/adm/management/get_user_list' % server
 add_user = '%s/SmiddleManager/adm/management/add_user' % server
-delete_user = '%s/SmiddleManager/adm/management/delete_user'%server
+delete_user = '%s/SmiddleManager/adm/management/delete_user' % server
 edit_user = '%s/SmiddleManager/adm/management/edit_user' % server
 post_user_group_roles = '%s/SmiddleManager/adm/management/user_group_roles' % server
 get_aduser_list = '%s/SmiddleManager/adm/management/get_aduser_list' % server
@@ -31,32 +31,43 @@ get_user_group_roles = '%s/SmiddleManager/adm/management/user_group_roles?user_i
 get_Manager_settings = '%s/SmiddleManager/adm/admin/settings' % server
 Manager_manifest = '%s/SmiddleManager/adm/admin/manifest' % server
 add_role_access = '%s/SmiddleManager/adm/management/add_role_access' % server
-delete_role_access = '%s/SmiddleManager/adm/management/delete_role_access'% server
+delete_role_access = '%s/SmiddleManager/adm/management/delete_role_access' % server
 
-#CAMPAIGN MANAGER
-get_campaign='%s/SmiddleCampaignManager/cm/manager/get_campaign'%server
-get_batch='%s/SmiddleCampaignManager/cm/manager/get_batch'%server
-get_dial_list='%s/SmiddleCampaignManager/cm/dialer/get_dial_lists'%server
-check_campaign_status='%s/SmiddleCampaignManager/cm/dialer/check_campaign_status'%server
-get_result_code='%s/SmiddleCampaignManager/cm/manager/get_result_code'%server
-edit_batch='%s/SmiddleCampaignManager/cm/manager/edit_batch'%server
-get_mapfields='%s/SmiddleCampaignManager/cm/settings/get_mapfields'%server
-edit_result_code='%s/SmiddleCampaignManager/cm/manager/edit_result_code'%server
-get_result_variants='%s/SmiddleCampaignManager/cm/manager/get_result_variants'%server
-edit_result_variant='%s/SmiddleCampaignManager/cm/manager/edit_result_variant'%server
-map_field='%s/SmiddleCampaignManager/cm/settings/map_field'%server
-edit_campaign='%s/SmiddleCampaignManager/cm/manager/edit_campaign'%server
-edit_dial_list='%s/SmiddleCampaignManager/cm/dialer/edit_dial_list'%server
-get_personal_callback='%s/SmiddleCampaignManager/cm/dialer/get_personal_callback'%server
-start_campaign='%s/SmiddleCampaignManager/cm/dialer/start_campaign'%server
-get_cd_status='%s/SmiddleCampaignManager/cm/dialer/get_cd_results'%server
-stop_campaign='%s/SmiddleCampaignManager/cm/dialer/stop_campaign'%server
-get_settings='%s/SmiddleCampaignManager/cm/admin/settings'%server
-get_skillgroup_list='%s/SmiddleCampaignManager/cm/dialer/get_skillgroup_list'%server
-get_timezone_list='%s/SmiddleCampaignManager/cm/dialer/get_timezone_list'%server
-get_fixed_fields='%s/SmiddleCampaignManager/cm/settings/get_fixed_fields'%server
-remove_result_code='%s/SmiddleCampaignManager/cm/manager/remove_result_code'%server
-delete_mapfield='%s/SmiddleCampaignManager/cm/settings/delete_mapfield'%server
-delete_dial_list='%s/SmiddleCampaignManager/cm/dialer/delete_dial_list'%server
-delete_campaign='%s/SmiddleCampaignManager/cm/manager/delete_campaign'%server
-remove_result_variant = '%s/SmiddleCampaignManager/cm/manager/remove_result_variant'%server
+# CAMPAIGN MANAGER
+get_campaign = '%s/SmiddleCampaignManager/cm/manager/get_campaign' % server
+get_batch = '%s/SmiddleCampaignManager/cm/manager/get_batch' % server
+get_dial_list = '%s/SmiddleCampaignManager/cm/dialer/get_dial_lists' % server
+check_campaign_status = '%s/SmiddleCampaignManager/cm/dialer/check_campaign_status' % server
+get_result_code = '%s/SmiddleCampaignManager/cm/manager/get_result_code' % server
+edit_batch = '%s/SmiddleCampaignManager/cm/manager/edit_batch' % server
+get_mapfields = '%s/SmiddleCampaignManager/cm/settings/get_mapfields' % server
+edit_result_code = '%s/SmiddleCampaignManager/cm/manager/edit_result_code' % server
+get_result_variants = '%s/SmiddleCampaignManager/cm/manager/get_result_variants' % server
+edit_result_variant = '%s/SmiddleCampaignManager/cm/manager/edit_result_variant' % server
+map_field = '%s/SmiddleCampaignManager/cm/settings/map_field' % server
+edit_campaign = '%s/SmiddleCampaignManager/cm/manager/edit_campaign' % server
+edit_dial_list = '%s/SmiddleCampaignManager/cm/dialer/edit_dial_list' % server
+get_personal_callback = '%s/SmiddleCampaignManager/cm/dialer/get_personal_callback' % server
+start_campaign = '%s/SmiddleCampaignManager/cm/dialer/start_campaign' % server
+get_cd_status = '%s/SmiddleCampaignManager/cm/dialer/get_cd_results' % server
+stop_campaign = '%s/SmiddleCampaignManager/cm/dialer/stop_campaign' % server
+get_settings = '%s/SmiddleCampaignManager/cm/admin/settings' % server
+get_skillgroup_list = '%s/SmiddleCampaignManager/cm/dialer/get_skillgroup_list' % server
+get_timezone_list = '%s/SmiddleCampaignManager/cm/dialer/get_timezone_list' % server
+get_fixed_fields = '%s/SmiddleCampaignManager/cm/settings/get_fixed_fields' % server
+remove_result_code = '%s/SmiddleCampaignManager/cm/manager/remove_result_code' % server
+delete_mapfield = '%s/SmiddleCampaignManager/cm/settings/delete_mapfield' % server
+delete_dial_list = '%s/SmiddleCampaignManager/cm/dialer/delete_dial_list' % server
+delete_campaign = '%s/SmiddleCampaignManager/cm/manager/delete_campaign' % server
+remove_result_variant = '%s/SmiddleCampaignManager/cm/manager/remove_result_variant' % server
+
+# SMART_CALL_BACK
+route = "%s/SmiddleSmartCallback/scb/call" % server
+route_filter = "%s/SmiddleSmartCallback/scb/call/filter" % server
+scb_manifest = "%s/SmiddleSmartCallback/scb/manifest" % server
+scb_licenses = "%s/SmiddleSmartCallback/scb/licenses" % server
+scb_count = "%s/SmiddleSmartCallback/scb/licenses/rt/count" % server
+scb_settings = "%s/SmiddleSmartCallback/scb/settings" % server
+scb_contact = "%s/SmiddleSmartCallback/scb/contact" % server
+scb_statistic = "%s/SmiddleSmartCallback/scb/call/statistic" % server
+scb_credentials = "%s/SmiddleSmartCallback/scb/credentials" % server

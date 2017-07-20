@@ -59,7 +59,7 @@ def test_all_empty(setup_get_user_list, make_request):
     response = make_request(url=URL.get_user_list, data=data)
     # Данные которые должны быть в ответе
     assert response.status_code == 200
-    assert response.json()['row_count'] == 53
+    assert response.json()['row_count'] == 54
 
 
 @allure.feature('Позитивный тест')
@@ -139,7 +139,7 @@ def test_Positive_pagination_srtfild_ord(setup_get_user_list, make_request):
 
     assert response.status_code == 200
     assert response.json()['order'] == 'DESC'
-    assert response.json()['data'][0]['login'] == 'root'
+    assert response.json()['data'][0]['login'] == 'scb_user_login'
 
 
 @allure.feature('Негативный тест')

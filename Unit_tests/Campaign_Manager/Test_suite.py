@@ -328,7 +328,7 @@ class TestMapping:
 
     # Получаем списко фиксированных полей для маппинга
     @pytest.fixture(scope='module')
-    def fixed_fields(request):
+    def fixed_fields(self):
         # Словарь для добавления Ufieldov
         result = {'INTEGER':[], 'FLOAT':[], 'STRING':[], 'TEXT':[]}
         response = requests.get(URL.get_fixed_fields, headers = URL.headers)
@@ -337,6 +337,34 @@ class TestMapping:
                 result[i['dataType']].append(i['field'])
         return result
 
+    @pytest.fixture(scope='function')
+    def add_map_field(self, add_campaign, fixed_fields, make_request, clear_result ):
+        fieldAbonent = random.choice(fixed_fields["STRING"])
+        campaign_id = add_campaign['id']
+        maps_json=[]
+        data = _.get_JSON_request('add_map_field', **{"name": "Mapping_test",
+                                                      "fieldImport": "Mapping_test",
+                                                      "fieldAbonent": fieldAbonent,
+                                                      "campaign": {"id": campaign_id}})
+        response = make_request(url=URL.map_field, data = data)
+        assert response.status_code == 200
+        maps_json.append(response.json())
+        data = _.get_JSON_request('add_map_field', **{"name": "Mapping_test",
+                                                      "fieldImport": "Mapping_test",
+                                                      "phoneNumber": True,
+                                                      "phoneType": "MOBILE",
+                                                      "campaign": {"id": campaign_id}})
+        response = make_request(url=URL.map_field, data = data)
+        assert response.status_code == 200
+        maps_json.append(response.json())
+        yield maps_json
+        print(maps_json)
+        try:
+            clear_result['url'], clear_result['id'] = URL.delete_mapfield, (maps_json[0]['id'], maps_json[1]['id'])
+        except IndexError:
+            pass
+
+
 
     # @allure.feature('Позитивный тест')
     # @allure.story('Добавляем мапинг полей(не телефоны)')
@@ -344,6 +372,7 @@ class TestMapping:
     # def test_add_map_fields(self, add_campaign, make_request, dataType, fixed_fields, clear_result):
     #     # Подготавливаем данные в JSON для запроса
     #     campaign_id = add_campaign['id']
+    #     #SAMPLE
     #     fieldAbonent = random.choice(fixed_fields[dataType])
     #     data = _.get_JSON_request('add_map_field', **{"name": "Mapping_test",
     #                                                   "fieldImport": "Mapping_test",
@@ -439,16 +468,15 @@ class TestMapping:
     #
     # @allure.feature('Позитивный тест')
     # @allure.story('Добавляем 2 раза мапинг полей с одинаковыми полями fieldImport и name')
-    # def test_add_map_fields_with_existing_name_and_fieldImport(self, add_campaign, make_request, fixed_fields,
-    #                                                            clear_result):
+    # def test_add_map_fields_with_existing_name_and_fieldImport(self, add_campaign, make_request, fixed_fields, clear_result):
     #     # Подготавливаем данные в JSON для запроса
     #     dataType = "STRING"
     #     campaign_id = add_campaign['id']
-    #     fieldAbonent = random.choice(fixed_fields[dataType])
+    #     fieldAbonents = random.sample(fixed_fields[dataType], 2)
     #     data = _.get_JSON_request('add_map_field', **{"name": "Mapping_test",
     #                                                   "fieldImport": "Mapping_test",
     #                                                   "dataType": dataType,
-    #                                                   "fieldAbonent": fieldAbonent,
+    #                                                   "fieldAbonent": fieldAbonents[0],
     #                                                   "campaign": {"id": campaign_id}})
     #     # Делаем запрос и получаем ответ
     #     response = make_request(url=URL.map_field, data=data)
@@ -458,7 +486,7 @@ class TestMapping:
     #     data = _.get_JSON_request('add_map_field', **{"name": "Mapping_test",
     #                                                   "fieldImport": "Mapping_test",
     #                                                   "dataType": dataType,
-    #                                                   "fieldAbonent": other_fieldAbonent,
+    #                                                   "fieldAbonent": fieldAbonents[1],
     #                                                   "campaign": {"id": campaign_id}})
     #     # Делаем запрос и получаем ответ
     #     response = make_request(url=URL.map_field, data=data)
@@ -467,14 +495,14 @@ class TestMapping:
     #                                                      "name": "Mapping_test",
     #                                                      "fieldImport": "Mapping_test",
     #                                                      "dataType": dataType,
-    #                                                      "fieldAbonent": other_fieldAbonent,
+    #                                                      "fieldAbonent": fieldAbonents[1],
     #                                                      "campaign": {"id": campaign_id}})
     #     clear_result['url'], clear_result['id'] = URL.delete_mapfield, (mapfield_id_1, mapfield_id_2)
     #     assert response.status_code == 200
     #     assert answer == response.json()
-
-
-    # #Не должно порпускать "forExport": True,"forFilter": True,"fieldAbonent":Ufield
+    #
+    #
+    # #Не должно пропускать "forExport": True,"forFilter": True,"fieldAbonent":Ufield
     # @allure.feature('Негативный тест')
     # @allure.story('Добавляем 2 раза мапинг полей с одинаковыми полями fieldImport и name')
     # @pytest.mark.xfail
@@ -515,3 +543,100 @@ class TestMapping:
     #     response = make_request(url=URL.map_field, data=data)
     #     print(response.json())
     #     assert response.status_code == 400
+    #
+    # @allure.feature('Негативный тест')
+    # @allure.story('Добавляем мапинг полей с неправильным dataType для fieldAbonent')
+    # @pytest.mark.parametrize('dataType', ['INTEGER', 'FLOAT', 'STRING', 'TEXT'])
+    # def test_add_map_field_with_incorrect_dataType_for_fieldAbonent(self, add_campaign, make_request, fixed_fields, dataType):
+    #     # Подготавливаем данные в JSON для запроса
+    #     campaign_id = add_campaign['id']
+    #     fieldAbonent = random.choice(fixed_fields[dataType])
+    #     dataType_values = ['INTEGER', 'FLOAT', 'STRING', 'TEXT']
+    #     #Удаляем корректное значение dataType для конкретного fieldAbonent
+    #     dataType_values.remove(dataType)
+    #     #Выбираем рандомное значение из оставшихся елементов
+    #     incorrect_dataType = random.choice(dataType_values)
+    #     data = _.get_JSON_request('add_map_field', **{"name": "Mapping_test",
+    #                                                   "fieldImport": "Mapping_test",
+    #                                                   "dataType": incorrect_dataType,
+    #                                                   "fieldAbonent": fieldAbonent,
+    #                                                   "campaign": {"id": campaign_id}})
+    #     # Делаем запрос и получаем ответ
+    #     response = make_request(url=URL.map_field, data=data)
+    #     answer = {"SCM_FIELD_MAPPING_EXCEPTION": "SCMFieldMappingException: Incorrect mapping for=%s correct type=%s"%(fieldAbonent, dataType)}
+    #     assert response.status_code==500
+    #     assert response.json() == answer
+    #
+    # # Не должно давать добавлять  phoneType для phoneNumber = False
+    # @allure.feature('Негативный тест')
+    # @allure.story('Добавляем мапинг полей(не телефоны) phoneType')
+    # @pytest.mark.xfail
+    # def test_add_map_fields_with_phoneType(self, add_campaign, make_request, dataType, fixed_fields, clear_result):
+    #     # Подготавливаем данные в JSON для запроса
+    #     campaign_id = add_campaign['id']
+    #     fieldAbonent = random.choice(fixed_fields["STRING"])
+    #     data = _.get_JSON_request('add_map_field', **{"name": "Mapping_test",
+    #                                                   "fieldImport": "Mapping_test",
+    #                                                   "phoneType": "MOBILE",
+    #                                                   "dataType": dataType,
+    #                                                   "fieldAbonent": fieldAbonent,
+    #                                                   "campaign": {"id": campaign_id}})
+    #     # Делаем запрос и получаем ответ
+    #     response = make_request(url=URL.map_field, data=data)
+    #     mapfield_id = response.json()['id']
+    #     clear_result['url'], clear_result['id'] = URL.delete_mapfield, mapfield_id
+    #     assert response.status_code == 500
+    #
+    #
+    # @allure.feature('Негативный тест')
+    # @allure.story('Добавляем мапинг полей с не существующим campaignID')
+    # def test_add_map_fields_with_wrong_campaignID(self, add_campaign, make_request,  fixed_fields):
+    #     # Подготавливаем данные в JSON для запроса
+    #     fieldAbonent = random.choice(fixed_fields["STRING"])
+    #     data = _.get_JSON_request('add_map_field', **{"name": "Mapping_test",
+    #                                                   "fieldImport": "Mapping_test",
+    #                                                   "dataType": "STRING",
+    #                                                   "fieldAbonent": fieldAbonent,
+    #                                                   "campaign": {"id": 9999999999999999}})
+    #     # Делаем запрос и получаем ответ
+    #     response = make_request(url=URL.map_field, data=data)
+    #     assert response.status_code == 500
+    @allure.feature('Позитивный тест')
+    @allure.story('Удаляем маппинг полей')
+    def test_delete_map_fields(self, add_campaign, add_map_field):
+
+        mapfield_id_no_phone, mapfield_id_phone  = add_map_field[0]['id'], add_map_field[1]['id']
+        add_map_field.pop(1), add_map_field.pop(0)
+        response_no_phone = requests.delete(url=URL.delete_mapfield, params={'id': mapfield_id_no_phone}, headers = URL.headers)
+        response_phone = requests.delete(url=URL.delete_mapfield, params={'id': mapfield_id_phone}, headers=URL.headers)
+        assert response_no_phone.status_code, response_phone.status_code == 200
+
+
+    @allure.feature('Позитивный тест')
+    @allure.story('Редактируем в маппинге(не телефон) след поля: "name", "fieldImport", "forExport", "forFilter"')
+    def test_edit_map_fields(self, add_campaign, make_request, add_map_field):
+        # Подготавливаем данные в JSON для запроса
+        campaign_id = add_campaign['id']
+        data = _.generate_JSON(add_map_field[0], {"name": "eddited_map_field",
+                                                 "fieldImport": "eddited_map_field",
+                                                 "forExport": True,
+                                                 "forFilter": True,
+                                                  })
+        data['campaign'] = {"id": campaign_id}
+        response = make_request(url=URL.map_field, data=data)
+        assert response.status_code == 200
+        assert response.json()['name'] and response.json()["fieldImport"] == "eddited_map_field"
+        assert response.json()["forExport"] and response.json()["forFilter"] == True
+
+
+    #Не существует такой кампании
+    @allure.feature('Негативный тест')
+    @allure.story('Удаляем маппинг не существующих полей')
+    @pytest.mark.xfail
+    def test_delete_map_fields_with_unknown_id(self, add_campaign):
+        response = requests.delete(url=URL.delete_mapfield, params={'id': 99999999999}, headers = URL.headers)
+        assert  response.status_code == 500
+        print(response.json())
+
+
+#Нужно дописать такие же тесты как и на добавление пользователей после фикса багов в валидации с телефонами
