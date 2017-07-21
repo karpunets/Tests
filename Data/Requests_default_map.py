@@ -45,7 +45,7 @@ def defaul_request(request_name):
         'add_map_field':{'id':None, "order":"1","forExport":False,"forFilter":False,"phoneNumber":False, "phoneType":None, "enabled":True,"deleted":False,"name":None,
                          "fieldImport":None,"dataType":"STRING","fieldAbonent":None,"campaign":{"id":None}},
         #Smart_Callback
-        'add_route':{"agentPhone": None, "clientPhone": None, "callDate": 1500292769604}
+        'add_route':{"agentNumber": None, "clientPhone": None, "callDate": 1500292769604}
     }
 
     return list_of_default_requests[request_name]

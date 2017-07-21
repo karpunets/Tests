@@ -31,7 +31,10 @@ def defaul_response(response_name):
         'add_map_field':{'id': None, 'name': None, 'fieldImport': None, 'fieldAbonent': None, 'dataType': 'STRING',
                          'phoneType': None, 'phoneNumber': False, 'enabled': True, 'deleted': False, 'forExport': False, 'forFilter': False, 'order': 1},
         #Smart_Callback
-        'add_route':{'id':None, "agentPhone": None, "clientPhone": None, "callDate": 1500292769604}
-                                }
+        'add_route':{'id':None, "agentNumber": None, "clientPhone": None, "callDate": 1500292769604},
+        "scb_manifest" : {"Build-OS": None,"Build-Time": None,"Build-Commit": None,"Project-Name": None,"Build-Java": None,"Build-By": None,"Project-Version": None},
+        "scb_licenses" : {"licenses": None,"licenseBeginDate": None,"licenseElapseDate": None,"licenseToModule": None,"licensedToCompany": None},
+        "scb_settings":{"id": None,"debugLevel": None,"logLength": None,"monitoring": None, "smartLabel": None, "routing": None},
+            }
 
     return list_of_default_requests[response_name]

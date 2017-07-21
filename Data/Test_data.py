@@ -106,7 +106,22 @@ add_role = {"name":"editing_role",
             "roleTemplateId":None,
             "group":{"id":2}}
 
-
+scb_manifest = {
+    "Build-OS": None,
+    "Build-Time": None,
+    "Build-Commit": None,
+    "Project-Name": None,
+    "Build-Java": None,
+    "Build-By": None,
+    "Project-Version": None
+}
+scb_licenses = {
+"licenses": None,
+"licenseBeginDate": None,
+"licenseElapseDate": None,
+"licenseToModule": None,
+"licensedToCompany": None
+}
 
 def make_50_users_for_get_user_list():
     # Количество пользователей для теста
