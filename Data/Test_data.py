@@ -123,6 +123,7 @@ scb_licenses = {
 "licensedToCompany": None
 }
 
+
 def make_50_users_for_get_user_list():
     # Количество пользователей для теста
     users_count = 50

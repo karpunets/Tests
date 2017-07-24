@@ -60,7 +60,7 @@ def clear_result(request):
     data = {}
     yield data
     try:
-        if type(data['id']) == tuple and list:
+        if isinstance(data['id'], list) or isinstance(data['id'], tuple):
             for i in data['id']:
                 requests.delete(url=data['url'], params={'id':int(i)}, headers=URL.headers)
         else:
