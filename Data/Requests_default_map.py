@@ -53,7 +53,8 @@ def defaul_request(request_name):
                          "fieldImport":None,"dataType":"STRING","fieldAbonent":None,"campaign":{"id":None}},
         #Smart_Callback
         'add_route':{"agentNumber": None, "clientPhone": None, "callDate": 1500292769604},
-        'scb_settings':{"id": scb_settings_id,"debugLevel": 2,"logLength": 200,"monitoring": True,"smartLabel": True, "routing": True}
+        'scb_settings':{"id": scb_settings_id,"debugLevel": 2,"logLength": 200,"monitoring": True,"smartLabel": True, "routing": True},
+        'add_contact': {"fName": None,"lName": None, "pName":None, "description": None, "phones": [ {"phoneNumber": None,"phoneType": None }]}
     }
 
     return list_of_default_requests[request_name]

@@ -35,6 +35,7 @@ def defaul_response(response_name):
         "scb_manifest" : {"Build-OS": None,"Build-Time": None,"Build-Commit": None,"Project-Name": None,"Build-Java": None,"Build-By": None,"Project-Version": None},
         "scb_licenses" : {"licenses": None,"licenseBeginDate": None,"licenseElapseDate": None,"licenseToModule": None,"licensedToCompany": None},
         "scb_settings":{"id": None,"debugLevel": None,"logLength": None,"monitoring": None, "smartLabel": None, "routing": None},
+        "add_settings":{'id': None, 'fName': None, 'lName': None, 'pName': None, 'description': None, 'createdDate': None, 'phones': [{'id': None, 'phoneNumber': None, 'phoneType': None, 'comment': None}]},
             }
 
     return list_of_default_requests[response_name]

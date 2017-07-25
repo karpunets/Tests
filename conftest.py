@@ -63,8 +63,10 @@ def clear_result(request):
         if isinstance(data['id'], list) or isinstance(data['id'], tuple):
             for i in data['id']:
                 requests.delete(url=data['url'], params={'id':int(i)}, headers=URL.headers)
+                print('AFTER TEST DELETED')
         else:
             requests.delete(url=data['url'], params={'id': int(data['id'])}, headers=URL.headers)
+            print('AFTER TEST DELETED')
     except KeyError:
         pass
 
