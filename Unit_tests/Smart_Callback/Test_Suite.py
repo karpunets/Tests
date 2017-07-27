@@ -464,7 +464,7 @@ class Test_Contact():
         response = make_request(method = "PUT", url=url, data=add_contact)
         answer = {'SCB_CONTACT_NOT_FOUND_EXCEPTION': 'ContactNotFoundException: Unable to find contact with id=999999999'}
         assert response.status_code == 500
-        # assert response.json() == answer
+        assert response.json() == answer
 
 
     @allure.feature('Негативный тест')
