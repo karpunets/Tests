@@ -162,7 +162,7 @@ class Test_Routes:
         assert (response.json()['agentNumber'], response.json()['count']) == (agent_phone, 0)
 
 
-    @allure.feature('Неагативный тест')
+    @allure.feature('Негативный тест')
     @allure.story('Получаем статистику по агенту с неизвестным agentPhone')
     def test_get_statistict_with_unknown_agent_number(self, add_route, make_request):
         url = URL.scb_statistic
