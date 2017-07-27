@@ -12,9 +12,9 @@ headers = URL.headers
 #Формирование запроса и получение результата по полученным данным
 def make_request():
 
-    def some_request(url, data=None, method='POST'):
+    def some_request(url, data=None, method='POST', params = None):
         payload = json.dumps(data)
-        response = requests.request(method, url, data=payload, headers=headers)
+        response = requests.request(method, url, data=payload, headers=headers, params=params)
         return response
 
     return some_request
@@ -63,10 +63,8 @@ def clear_result(request):
         if isinstance(data['id'], list) or isinstance(data['id'], tuple):
             for i in data['id']:
                 requests.delete(url=data['url'], params={'id':int(i)}, headers=URL.headers)
-                print('AFTER TEST DELETED')
         else:
             requests.delete(url=data['url'], params={'id': int(data['id'])}, headers=URL.headers)
-            print('AFTER TEST DELETED')
     except KeyError:
         pass
 

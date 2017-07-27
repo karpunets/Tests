@@ -126,9 +126,11 @@ add_contact = {"fName": "Autotest_fName",
 "lName": "Autotest_lName",
 "pName":"Autotest_pName",
 "description": "Autotest_description",
-"phones": [ {
-"phoneNumber": "0666816655",
-"phoneType": "MOBILE" }]}
+"phones":[{ "phoneNumber": "06668166550","phoneType": "MOBILE","comment": None},
+          {"phoneNumber": "0525731628","phoneType": "HOME","comment": None},
+          {"phoneNumber": "0443775578","phoneType": "WORK","comment": None}]}
+
+
 
 def make_50_users_for_get_user_list():
     # Количество пользователей для теста

@@ -12,20 +12,20 @@ def random_code():
 
 
 def defaul_request(request_name):
+
     list_of_default_requests = {
         'get_user_list':{"fName":None,"lName":None,"pName":None,"roleId":None,"groupId":None,"login":None,"adLogin":None,"agentId":None,
                          "showDeletedOnly":False,"phone":None,"pagination":{"page_number":"1","page_size":"10","sortedField":"login","order":"ASC"}},
-
-    'add_user':{"fname":None,"lname":None,"pname":None,"email":None,"phone":None,"fax":None,"login":None,"password":None,
-                "loginAD":None,"agentId":None,"scMode":"0","unmappedCalls":False,"enabled":True,"deleted":False,
-                "dateCreate":1494845540000,"groups":[{"id":root_group_id}],"roles":[{"id":3}]},
-    'add_group':{"name":None,"parent":{"id":root_group_id}},
-    'delete_user': {"userId": None},
-    'edit_user':{"id":None,"fname":None,"lname":None,"pname":None,"email":None,"phone":None,
-                 "fax":None,"login":None,"password":None,"loginAD":None,"agentId":None,"scMode":"0","unmappedCalls":False,
-                 "enabled":True,"deleted":False,"dateCreate":1494845540000,"groups":[{"id":root_group_id}],"roles":[{"id":3}]},
-    "delete_group": {"groupId":None},
-    "edit_group": {"id":None,"name":None,"parent":{"id":root_group_id}},
+        'add_user':{"fname":None,"lname":None,"pname":None,"email":None,"phone":None,"fax":None,"login":None,"password":None,
+                    "loginAD":None,"agentId":None,"scMode":"0","unmappedCalls":False,"enabled":True,"deleted":False,
+                    "dateCreate":1494845540000,"groups":[{"id":root_group_id}],"roles":[{"id":3}]},
+        'add_group':{"name":None,"parent":{"id":root_group_id}},
+        'delete_user': {"userId": None},
+        'edit_user':{"id":None,"fname":None,"lname":None,"pname":None,"email":None,"phone":None,
+                     "fax":None,"login":None,"password":None,"loginAD":None,"agentId":None,"scMode":"0","unmappedCalls":False,
+                     "enabled":True,"deleted":False,"dateCreate":1494845540000,"groups":[{"id":root_group_id}],"roles":[{"id":3}]},
+        "delete_group": {"groupId":None},
+        "edit_group": {"id":None,"name":None,"parent":{"id":root_group_id}},
         'add_role':{"name":None,"roleTemplateId":None,"group":{"id":root_group_id}},
         'edit_role':{"id":None,"name":None,"group":{"id":root_group_id}},
         'delete_role':{"roleId":None},
@@ -54,7 +54,9 @@ def defaul_request(request_name):
         #Smart_Callback
         'add_route':{"agentNumber": None, "clientPhone": None, "callDate": 1500292769604},
         'scb_settings':{"id": scb_settings_id,"debugLevel": 2,"logLength": 200,"monitoring": True,"smartLabel": True, "routing": True},
-        'add_contact': {"fName": None,"lName": None, "pName":None, "description": None, "phones": [ {"phoneNumber": None,"phoneType": None }]}
+        'add_contact': {"fName": None,"lName": None, "pName":None, "description": None, "phones": [ {"phoneNumber": None,"phoneType": None }]},
+        'edit_contact': {'id':None, "fName": None,"lName": None, "pName":None, "description": None, "phones": [ {'id':None, "phoneNumber": None,"phoneType": None }]}
+
     }
 
     return list_of_default_requests[request_name]
