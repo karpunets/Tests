@@ -162,7 +162,7 @@ class Test_Routes:
         assert (response.json()['agentNumber'], response.json()['count']) == (agent_phone, 0)
 
 
-    @allure.feature('Неагтивный тест')
+    @allure.feature('Неагативный тест')
     @allure.story('Получаем статистику по агенту с неизвестным agentPhone')
     def test_get_statistict_with_unknown_agent_number(self, add_route, make_request):
         url = URL.scb_statistic
@@ -362,7 +362,7 @@ class Test_Contact():
         assert response.json()['phones'] == answer
 
 
-    @allure.feature('Поизитивный тест')
+    @allure.feature('Позитивный тест')
     @allure.story('Добавляем новый контакт в справочник с несколькими телефонами')
     def test_add_contact_with_many_phones(self, make_request, clear_result):
         url = URL.scb_contact
@@ -468,8 +468,8 @@ class Test_Contact():
 
 
     @allure.feature('Негативный тест')
-    @allure.story('Редактируем контакт в справочнике с неизвесным contact id')
-    def test_edit_contact_with_unknown_id(self, make_request, add_contact):
+    @allure.story('Редактируем контакт в справочнике с phones = null')
+    def test_edit_contact_with_phone_us_null(self, make_request, add_contact):
         url = URL.scb_contact
         payload = _.generate_JSON(add_contact, {'phones':None})
         response = make_request(method = "PUT", url=url, data=payload)
