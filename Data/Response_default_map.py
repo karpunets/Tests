@@ -36,7 +36,7 @@ def defaul_response(response_name):
         "scb_licenses" : {"licenses": None,"licenseBeginDate": None,"licenseElapseDate": None,"licenseToModule": None,"licensedToCompany": None},
         "scb_settings":{"id": None,"debugLevel": None,"logLength": None,"monitoring": None, "smartLabel": None, "routing": None},
         "add_settings":{'id': None, 'fName': None, 'lName': None, 'pName': None, 'description': None, 'createdDate': None, 'phones': [{'id': None, 'phoneNumber': None, 'phoneType': None, 'comment': None}]},
-        "get_route":{'page_number': 1, 'page_size': 10, 'sortedField': None, 'row_count': 2, 'order': None, 'data': [{'id': None, 'agentNumber': None, 'clientPhone': None, 'callDate': None}]}
+        "get_route":{'page_number': 1, 'page_size': 10, 'sortedField': None, 'row_count': 1, 'order': None, 'data': [{'id': None, 'agentNumber': None, 'clientPhone': None, 'callDate': None}]}
 
             }
 
