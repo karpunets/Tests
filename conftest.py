@@ -2,6 +2,7 @@ import json, pytest, requests
 import Data.URLs_MAP as URL
 
 from Data.Make_requests_and_answers import JSON_generator
+
 from Data.Requests_default_map import defaul_request
 
 
@@ -56,7 +57,7 @@ def delete_user():
 
 
 @pytest.fixture(scope='function')
-def clear_result(request):
+def clear_result():
     data = {}
     yield data
     try:
