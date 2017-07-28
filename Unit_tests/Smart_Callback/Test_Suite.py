@@ -6,13 +6,33 @@ from Data.Make_requests_and_answers import JSON_generator as _
 
 
 @pytest.fixture(scope='module')
-def clear_all_from_base():
-    response = requests.get(url=URL.scb_contact, headers=URL.headers)
+def clear_contact(make_request):
+    url = URL.scb_contact
+    #Получаем все что есть в справочнику
+    response = make_request(method = "GET", url=url)
     for i in response.json():
-        response = requests.delete(url=URL.scb_contact, headers=URL.headers, params={'id': i['id']})
-        print(response.json())
+        to_delete = {'id': i['id']}
+        make_request(method = 'DELETE', url=url, params=to_delete)
+
+@pytest.fixture(scope='module')
+def clear_routes(make_request):
+    url = URL.route
+    response = make_request(url = url, method = "GET", params = {'page_number':1, 'page_size':100})
+    for i in response.json()['data']:
+        to_delete = {"id":int(i['id'])}
+        make_request(url=url, method="DELETE", params = to_delete )
+
+@pytest.fixture(scope="class")
+def credential(make_request):
+    url = URL.scb_credentials
+    credential = get.credentials
+    response = make_request(url=url, data = credential)
+    yield response.json()
+    to_delete = {'id':response.json()['id']}
+    make_request(method = 'DELETE', url=url, params = to_delete)
 
 
+@pytest.mark.usefixtures('credential', 'clear_routes')
 class Test_Routes:
 
     @pytest.fixture(scope="function")
@@ -29,8 +49,6 @@ class Test_Routes:
         yield route_response
         clear_result['url']= url
         clear_result['id'].append(route_response['id'])
-
-
 
     @allure.feature('Позитивный тест')
     @allure.story('Добавляем новый роут с валидными данными')
@@ -113,6 +131,43 @@ class Test_Routes:
                                              "clientPhone": "0666666666"})
         assert response.status_code == 200
         assert answer == response.json()
+
+
+    @allure.feature('Позитивный тест')
+    @allure.story('Получаем информацию по роуту')
+    @pytest.mark.xfail
+    def test_get_route(self, add_route, make_request):
+        url = URL.route
+        # Делаем запрос и получаем ответ
+        data =  {"agentNumber": "1022","page_size":10,"page_number":1}
+        response = make_request(method = "GET", url=url, params=data)
+        answer = _.get_JSON_response('get_route', **add_route)
+        assert response.status_code == 200
+        assert answer == response.json()
+
+
+    @allure.feature('Негативный тест')
+    @allure.story('Получаем информацию по роуту (проверяем пагинацию) "page_size"=0,"page_number"0')
+    def test_get_route_with_invalid_pagination(self, add_route, make_request):
+        url = URL.route
+        # Делаем запрос и получаем ответ
+        data =  {"agentNumber": "1022","page_size":0,"page_number":0}
+        response = make_request(method = "GET", url=url, params=data)
+        answer = {"SCB_REQUEST_VALIDATION_EXCEPTION": "SCBRequestValidationException: Page size and page number can't be less then 1!"}
+        assert response.status_code == 500
+        assert answer == response.json()
+
+
+    @allure.feature('Негативный тест')
+    @allure.story('Получаем информацию по роуту с неизвестным номером агента')
+    def test_get_route_with_unknown_agnetnumber(self, add_route, make_request):
+        url = URL.route
+        # Делаем запрос и получаем ответ
+        data =  {"agentNumber": "9379996","page_size":10,"page_number":1}
+        response = make_request(method = "GET", url=url, params=data)
+        answer = []
+        assert response.status_code == 200
+        assert answer == response.json()['data']
 
 
     @allure.feature('Негативный тест')
@@ -198,6 +253,9 @@ class Test_Routes:
 
 
 
+
+
+@pytest.mark.usefixtures('credential')
 class Test_Settings:
 
     @pytest.fixture(scope="function")
@@ -276,9 +334,8 @@ class Test_Settings:
         assert response.json() == answer
 
 
-@pytest.mark.usefixtures("clear_all_from_base")
+@pytest.mark.usefixtures("clear_contact", 'credential')
 class Test_Contact():
-
     @pytest.fixture(scope="function")
     def add_contact(self, make_request, clear_result):
         url = URL.scb_contact
@@ -477,3 +534,47 @@ class Test_Contact():
         assert response.status_code == 200
         assert response.json()['phones'] == answer
 
+
+class Test_Credential:
+    @pytest.fixture(scope='function')
+    def add_credential(self, make_request, clear_result):
+        url = URL.scb_credentials
+        credential = get.credentials
+        response = make_request(url=url, data=credential)
+        credential_id = response.json()['id']
+        yield response.json()
+        clear_result['url'], clear_result['id'] = url, credential_id
+
+
+    @allure.feature('Позитивный тест')
+    @allure.story('Добавляем credential с валидными данными')
+    def test_add_credentials_with_valide_data(self, make_request, clear_result):
+        url = URL.scb_credentials
+        credential = get.credentials
+        response = make_request(url=url, data=credential)
+        credential_id = response.json()['id']
+        credential['id'] = credential_id
+        clear_result['url'], clear_result['id'] = url, credential_id
+        assert response.status_code == 200
+        assert response.json() == credential
+
+
+    @allure.feature('Позитивный тест')
+    @allure.story('Удаляем credential с валидными данными')
+    def test_delete_credentials_with_valide_id(self, make_request, add_credential):
+        url = URL.scb_credentials
+        credential_id = {'id': add_credential['id']}
+        response = make_request(method = 'DELETE', url=url, params=credential_id)
+        assert response.status_code == 200
+        assert response.json() == credential_id['id']
+
+
+    @allure.feature('Негативный тест')
+    @allure.story('Удаляем credential с не валидными данными')
+    def test_delete_credentials_with_unknown_id(self, make_request, add_credential):
+        url = URL.scb_credentials
+        credential_id = {'id':int(add_credential['id'])+999}
+        response = make_request(method = 'DELETE', url=url, params=credential_id)
+        answer = {"SCB_CREDENTIALS_NOT_FOUND_EXCEPTION": "CredentialsNotFoundException: Unable to find credential with id=%s"%credential_id['id']}
+        assert response.status_code == 500
+        assert response.json() == answer

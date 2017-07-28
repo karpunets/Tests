@@ -3,6 +3,7 @@ import random,string
 from Data.Make_requests_and_answers import JSON_generator
 import Data.Requests_default_map as get
 
+# MANAGER(ADM)
 one_user_get_userlist = {"fname": "get_userlist_fName_one",
                 "lname": "get_userlist_lName_one",
                 "pname": "get_userlist_pName_one",
@@ -106,6 +107,7 @@ add_role = {"name":"editing_role",
             "roleTemplateId":None,
             "group":{"id":2}}
 
+#SMART CALLBACK
 scb_manifest = {
     "Build-OS": None,
     "Build-Time": None,
@@ -129,6 +131,11 @@ add_contact = {"fName": "Autotest_fName",
 "phones":[{ "phoneNumber": "06668166550","phoneType": "MOBILE","comment": None},
           {"phoneNumber": "0525731628","phoneType": "HOME","comment": None},
           {"phoneNumber": "0443775578","phoneType": "WORK","comment": None}]}
+credentials =     {
+        "cti": "172.22.2.12",
+        "user": "CallBackUser",
+        "password": "C1scoC1sco",
+        "active": True}
 
 
 
