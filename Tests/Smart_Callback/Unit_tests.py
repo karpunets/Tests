@@ -9,21 +9,6 @@ from Data.Make_requests_and_answers import JSON_generator as _
 @pytest.mark.usefixtures('credential', 'clear_routes')
 class Test_Routes:
 
-    @pytest.fixture(scope="function")
-    def add_route(self, make_request, clear_result):
-        url = URL.route
-        # Подготавливаем данные в JSON для запроса
-        data = _.get_JSON_request('add_route', **{"agentNumber": "1022",
-                                                  "clientPhone": "0666816655"})
-        # Делаем запрос и получаем ответ
-        response = make_request(url=url, data=data)
-        assert response.status_code == 200
-        route_response = response.json()
-        clear_result['id'] = []
-        yield route_response
-        clear_result['url']= url
-        clear_result['id'].append(route_response['id'])
-
     @allure.feature('Позитивный тест')
     @allure.story('Добавляем новый роут с валидными данными')
     def test_add_route(self, make_request, clear_result):
@@ -225,9 +210,6 @@ class Test_Routes:
         assert response.json() == answer
 
 
-
-
-
 @pytest.mark.usefixtures('credential')
 class Test_Settings:
 
@@ -309,15 +291,6 @@ class Test_Settings:
 
 @pytest.mark.usefixtures("clear_contact", 'credential')
 class Test_Contact():
-    @pytest.fixture(scope="function")
-    def add_contact(self, make_request, clear_result):
-        url = URL.scb_contact
-        payload = _.get_JSON_request('add_contact', **get.add_contact)
-        response = make_request(url = url, data=payload)
-        assert response.status_code == 200
-        yield response.json()
-        clear_result['url'], clear_result['id'] = url, response.json()['id']
-
 
     @allure.feature('Позитивный тест')
     @allure.story('Добавляем новый контакт в справочник с валидными данными')
@@ -505,14 +478,7 @@ class Test_Contact():
 
 
 class Test_Credential:
-    @pytest.fixture(scope='function')
-    def add_credential(self, make_request, clear_result):
-        url = URL.scb_credentials
-        credential = get.credentials
-        response = make_request(url=url, data=credential)
-        credential_id = response.json()['id']
-        yield response.json()
-        clear_result['url'], clear_result['id'] = url, credential_id
+
 
 
     @allure.feature('Позитивный тест')
