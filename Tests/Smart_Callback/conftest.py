@@ -24,6 +24,14 @@ def clear_routes(make_request):
         to_delete = {"id":int(i['id'])}
         make_request(url=url, method="DELETE", params = to_delete )
 
+@pytest.fixture(scope='class')
+def clear_credentials(make_request):
+    url = URL.scb_credentials
+    response = make_request(url = url, method = "GET")
+    for i in response.json():
+        to_delete = {"id":int(i['id'])}
+        make_request(url=url, method="DELETE", params = to_delete )
+
 @pytest.fixture(scope="class")
 def credential(make_request):
     url = URL.scb_credentials

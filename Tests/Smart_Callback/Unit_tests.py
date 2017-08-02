@@ -6,7 +6,7 @@ from Data.Make_requests_and_answers import JSON_generator as _
 
 
 
-@pytest.mark.usefixtures('credential', 'clear_routes')
+@pytest.mark.usefixtures('clear_credentials', 'credential', 'clear_routes')
 class Test_Routes:
 
     @allure.feature('Позитивный тест')
@@ -192,10 +192,10 @@ class Test_Routes:
     def test_put_update_statistict_with_correct_agent_number(self, add_route, make_request):
         url = URL.scb_statistic
         agent_phone = add_route['agentNumber']
-        params = {'agentNumber':agent_phone}
-        response = make_request(method = "PUT", data = params, url = url)
+        params = {'agentNumber': agent_phone}
+        response = make_request(method="PUT", data=params, url=url)
         assert response.status_code == 200
-        assert response.json()['startDate'] >  add_route['callDate']
+        assert response.json()['startDate'] > add_route['callDate']
 
 
     @allure.feature('Негативный тест')
@@ -210,7 +210,7 @@ class Test_Routes:
         assert response.json() == answer
 
 
-@pytest.mark.usefixtures('credential')
+@pytest.mark.usefixtures('clear_credentials', 'credential')
 class Test_Settings:
 
     @pytest.fixture(scope="function")
@@ -227,7 +227,7 @@ class Test_Settings:
     @allure.story('Получаем манифест')
     def test_manifest(self, make_request):
         response = make_request(method = "GET", url=URL.scb_manifest)
-        answer = _.get_JSON_response('scb_manifest')
+        answer = _.get_JSON_response('manifest')
         assert response.status_code == 200
         assert response.json().keys()== answer.keys()
 
@@ -236,7 +236,7 @@ class Test_Settings:
     @allure.story('Получаем информацию о лицензиях')
     def test_licenses(self, make_request):
         response = make_request(method = "GET", url=URL.scb_licenses)
-        answer = _.get_JSON_response('scb_licenses')
+        answer = _.get_JSON_response('licenses')
         assert response.status_code == 200
         assert response.json().keys()== answer.keys()
 
@@ -289,7 +289,7 @@ class Test_Settings:
         assert response.json() == answer
 
 
-@pytest.mark.usefixtures("clear_contact", 'credential')
+@pytest.mark.usefixtures('clear_credentials', "clear_contact", 'credential')
 class Test_Contact():
 
     @allure.feature('Позитивный тест')
@@ -305,7 +305,6 @@ class Test_Contact():
         response = make_request(url=url, data=payload)
         clear_result['url'], clear_result['id'] = url, response.json()['id']
         assert response.status_code == 200
-
 
 
     @allure.feature('Негативный тест')
@@ -476,9 +475,8 @@ class Test_Contact():
         assert response.status_code == 200
         assert response.json()['phones'] == answer
 
-
+@pytest.mark.usefixtures('clear_credentials')
 class Test_Credential:
-
 
 
     @allure.feature('Позитивный тест')

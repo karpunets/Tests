@@ -108,7 +108,7 @@ add_role = {"name":"editing_role",
             "group":{"id":2}}
 
 #SMART CALLBACK
-scb_manifest = {
+manifest = {
     "Build-OS": None,
     "Build-Time": None,
     "Build-Commit": None,
@@ -117,7 +117,7 @@ scb_manifest = {
     "Build-By": None,
     "Project-Version": None
 }
-scb_licenses = {
+licenses = {
 "licenses": None,
 "licenseBeginDate": None,
 "licenseElapseDate": None,

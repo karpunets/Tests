@@ -2,6 +2,7 @@ server = 'http://172.22.2.66:8080'
 headers = {
     'content-type': "application/json;charset=UTF-8",
     'authorization': "Basic QVBJX2F1dG90ZXN0OkFQSV9hdXRvdGVzdA=="}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h"  "Basic cm9vdDpyb290"
+authorization = ('API_autotest', 'API_autotest')
 
 # ADMIN
 get_user_list = '%s/SmiddleManager/adm/management/get_user_list' % server
@@ -71,3 +72,11 @@ scb_settings = "%s/SmiddleSmartCallback/scb/settings" % server
 scb_contact = "%s/SmiddleSmartCallback/scb/contact" % server
 scb_statistic = "%s/SmiddleSmartCallback/scb/call/statistic" % server
 scb_credentials = "%s/SmiddleSmartCallback/scb/credentials" % server
+
+#Smart_Proxy
+proxy_list = "%s/SmiddleSIPProxy/ssp/phone/list"%server
+proxy_prefix = '%s/SmiddleSIPProxy/ssp/phone/prefix'%server
+proxy_logs = "%s/SmiddleSIPProxy/ssp/logs"%server
+proxy_manifest = "%s/SmiddleSIPProxy/ssp/manifest" % server
+proxy_licenses = "%s/SmiddleSIPProxy/ssp/licenses" % server
+proxy_settings = "%s/SmiddleSIPProxy/ssp/settings" % server
