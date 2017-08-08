@@ -31,12 +31,13 @@ def defaul_response(response_name):
         'add_map_field':{'id': None, 'name': None, 'fieldImport': None, 'fieldAbonent': None, 'dataType': 'STRING',
                          'phoneType': None, 'phoneNumber': False, 'enabled': True, 'deleted': False, 'forExport': False, 'forFilter': False, 'order': 1},
         #Smart_Callback
-        'add_route':{'id':None, "agentNumber": None, "clientPhone": None, "callDate": 1500292769604},
+        'add_soft_route':{'id':None, "internalNumber": None, "externalNumber": None, "callDate": 1500292769604},
+        'add_route': {'id':None, "internalNumber": None, "externalNumber": None},
         "manifest" : {"Build-OS": None,"Build-Time": None,"Build-Commit": None,"Project-Name": None,"Build-Java": None,"Build-By": None,"Project-Version": None},
         "licenses" : {"licenses": None,"licenseBeginDate": None,"licenseElapseDate": None,"licenseToModule": None,"licensedToCompany": None},
-        "scb_settings":{"id": None,"debugLevel": None,"logLength": None,"monitoring": None, "smartLabel": None, "routing": None},
+        "scb_settings":{"id": None,"debugLevel": None,"logLength": None,"monitoring": None, "smartLabel": None, "routing": None, "routeLifeTime": None, "routeClearingTime": None, "dynamicPeriod": None, 'defaultPeriod':None},
         "add_settings":{'id': None, 'fName': None, 'lName': None, 'pName': None, 'description': None, 'createdDate': None, 'phones': [{'id': None, 'phoneNumber': None, 'phoneType': None, 'comment': None}]},
-        "get_route":{'page_number': 1, 'page_size': 10, 'sortedField': None, 'row_count': 1, 'order': None, 'data': [{'id': None, 'agentNumber': None, 'clientPhone': None, 'callDate': None}]}
+        "get_route":{'page_number': 1, 'page_size': 10, 'sortedField': None, 'row_count': 1, 'order': None, 'data': [{'id': None, 'internalNumber': None, 'externalNumber': None}]}
 
             }
 

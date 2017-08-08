@@ -5,89 +5,88 @@ import Data.Test_data as get
 from Data.Make_requests_and_answers import JSON_generator as _
 
 
-
 @pytest.mark.usefixtures('clear_credentials', 'credential', 'clear_routes')
 class Test_Routes:
 
     @allure.feature('Позитивный тест')
     @allure.story('Добавляем новый роут с валидными данными')
     def test_add_route(self, make_request, clear_result):
-        url = URL.route
+        url = URL.fixed_routes
         # Подготавливаем данные в JSON для запроса
-        data = _.get_JSON_request('add_route', **{"agentNumber": "1111",
-                                                  "clientPhone": "0666816657"})
+        data = _.get_JSON_request('add_route', **{"internalNumber": "1111",
+                                                  "externalNumber": "0666816657"})
         # Делаем запрос и получаем ответ
-        response = make_request(url=url, data=data)
+        response = make_request(url, data)
         route_id = response.json()['id']
         answer = _.get_JSON_response('add_route', **{'id': route_id,
-                                                     "agentNumber": "1111",
-                                                     "clientPhone": "0666816657"})
+                                                     "internalNumber": "1111",
+                                                     "externalNumber": "0666816657"})
         clear_result['url'], clear_result['id'] = url, route_id
         assert response.status_code == 200
         assert answer == response.json()
 
     @allure.feature('Негативный тест')
-    @allure.story('Добавляем новый роут с не существующим agentNumber')
-    def test_add_route_with_unknown_agentNumber(self, make_request):
-        url = URL.route
+    @allure.story('Добавляем новый роут с не существующим internalNumber')
+    def test_add_route_with_unknown_internalNumber(self, make_request):
+        url = URL.fixed_routes
         # Подготавливаем данные в JSON для запроса
-        data = _.get_JSON_request('add_route', **{"agentNumber": "9999999999",
-                                                  "clientPhone": "0666816657"})
+        data = _.get_JSON_request('add_route', **{"internalNumber": "9999999999",
+                                                  "externalNumber": "0666816657"})
         # Делаем запрос и получаем ответ
-        response = make_request(url=url, data=data)
-        answer = {'SCB_VALIDATION_CALL_AGENT_NUMBER_LENGTH': 'Call agent number length must be = 4'}
-        assert response.status_code == 400
+        response = make_request(url, data)
+        answer = {'SCB_CALL_NOT_FOUND_EXCEPTION': 'RouteNotFoundException: Unable to find monitoring number=9999999999'}
+        assert response.status_code == 500
         assert answer == response.json()
 
 
     @allure.feature('Негативный тест')
-    @allure.story('Добавляем новый роут с существующим clientPhone')
-    def test_add_route_with_existing_clientPhone(self, add_route, make_request):
-        url = URL.route
-        exist_phone = add_route['clientPhone']
+    @allure.story('Добавляем новый роут с существующим externalNumber')
+    def test_add_route_with_existing_externalNumber(self, add_route, make_request):
+        url = URL.fixed_routes
+        exist_phone = add_route['externalNumber']
         # Подготавливаем данные в JSON для запроса
-        data = _.get_JSON_request('add_route', **{"agentNumber": "1111",
-                                                  "clientPhone": exist_phone})
+        data = _.get_JSON_request('add_route', **{"internalNumber": "1111",
+                                                  "externalNumber": exist_phone})
         # Делаем запрос и получаем ответ
-        response = make_request(url=url, data=data)
-        answer = {'SCB_CALL_CREATE_EXCEPTION': 'CallCreateException: Unable to add new route cause route for this client number already exist.'}
+        response = make_request(url, data)
+        answer = {'SCB_CALL_CREATE_EXCEPTION': 'RouteCreateException: Unable to add new route cause route for this external number already exist.'}
         assert response.status_code == 500
         assert answer == response.json()
 
 
     @allure.feature('Позитивный тест')
     @allure.story('Удаляем существующий роут')
-    def test_delete_route(self, add_route):
-        url = URL.route
+    def test_delete_route(self, add_route, make_request):
+        url = URL.fixed_routes
         params = {'id':add_route['id']}
         # Делаем запрос и получаем ответ
-        response = requests.delete(url=url, params = params, headers = URL.headers)
+        response = make_request(url, method = 'DELETE', params = params)
         answer = add_route['id']
         assert response.status_code == 200
         assert answer == response.json()
 
     @allure.feature('Негативный тест')
     @allure.story('Удаляем не существующий роут')
-    def test_delete_route_with_unknown_id(self):
-        url = URL.route
+    def test_delete_route_with_unknown_id(self, make_request):
+        url = URL.fixed_routes
         # Делаем запрос и получаем ответ
-        response = requests.delete(url=url, params = {'id':999999999}, headers = URL.headers)
-        answer = {"SCB_CALL_NOT_FOUND_EXCEPTION": "CallNotFoundException: Unable to find call with id=999999999"}
+        response = make_request(url, method = 'DELETE',  params = {'id':999999999})
+        answer = {'SCB_CALL_NOT_FOUND_EXCEPTION': 'RouteNotFoundException: Unable to find fixed route with id=999999999'}
         assert response.status_code == 500
         assert answer == response.json()
 
 
     @allure.feature('Позитивный тест')
     @allure.story('Обновляем ранее созданный роут')
-    def test_put_route_agentNumber_clientPhone_callDate(self, add_route, make_request):
-        url = URL.route
+    def test_put_route_internalNumber_externalNumber_callDate(self, add_route, make_request):
+        url = URL.fixed_routes
         # Делаем запрос и получаем ответ
-        data = _.generate_JSON(add_route, {"agentNumber": "1111",
-                                           "clientPhone": "0666666666",
+        data = _.generate_JSON(add_route, {"internalNumber": "1111",
+                                           "externalNumber": "0666666666",
                                            "callDate": 1500292769604})
-        response = make_request(method = "PUT", url=url, data=data)
-        answer = _.generate_JSON(add_route, {"agentNumber": "1111",
-                                             "clientPhone": "0666666666"})
+        response = make_request(url,  data, method = "PUT")
+        answer = _.generate_JSON(add_route, {"internalNumber": "1111",
+                                             "externalNumber": "0666666666"})
         assert response.status_code == 200
         assert answer == response.json()
 
@@ -95,10 +94,10 @@ class Test_Routes:
     @allure.feature('Позитивный тест')
     @allure.story('Получаем информацию по роуту')
     def test_get_route(self, add_route, make_request):
-        url = URL.route
+        url = URL.fixed_routes
         # Делаем запрос и получаем ответ
-        data =  {"agentNumber": "1022","page_size":10,"page_number":1}
-        response = make_request(method = "GET", url=url, params=data)
+        data =  {"internalNumber": "1022","page_size":10,"page_number":1}
+        response = make_request(url, method = "GET",  params=data)
         answer = _.get_JSON_response('get_route', **add_route)
         assert response.status_code == 200
         assert answer == response.json()
@@ -107,10 +106,10 @@ class Test_Routes:
     @allure.feature('Негативный тест')
     @allure.story('Получаем информацию по роуту (проверяем пагинацию) "page_size"=0,"page_number"0')
     def test_get_route_with_invalid_pagination(self, add_route, make_request):
-        url = URL.route
+        url = URL.fixed_routes
         # Делаем запрос и получаем ответ
-        data =  {"agentNumber": "1022","page_size":0,"page_number":0}
-        response = make_request(method = "GET", url=url, params=data)
+        data =  {"internalNumber": "1022","page_size":0,"page_number":0}
+        response = make_request(url, method = "GET",  params=data)
         answer = {"SCB_REQUEST_VALIDATION_EXCEPTION": "SCBRequestValidationException: Page size and page number can't be less then 1!"}
         assert response.status_code == 500
         assert answer == response.json()
@@ -119,10 +118,10 @@ class Test_Routes:
     @allure.feature('Негативный тест')
     @allure.story('Получаем информацию по роуту с неизвестным номером агента')
     def test_get_route_with_unknown_agnetnumber(self, add_route, make_request):
-        url = URL.route
+        url = URL.fixed_routes
         # Делаем запрос и получаем ответ
-        data =  {"agentNumber": "9379996","page_size":10,"page_number":1}
-        response = make_request(method = "GET", url=url, params=data)
+        data =  {"internalNumber": "9379996","page_size":10,"page_number":1}
+        response = make_request(url, method = "GET",  params=data)
         answer = []
         assert response.status_code == 200
         assert answer == response.json()['data']
@@ -131,83 +130,37 @@ class Test_Routes:
     @allure.feature('Негативный тест')
     @allure.story('Обновляем роут с неизвесным ID')
     def test_put_route_with_unknown_id(self, add_route, make_request):
-        url = URL.route
+        url = URL.fixed_routes
         copy_add_route = add_route.copy()
         # Делаем запрос и получаем ответ
         data = _.generate_JSON(copy_add_route, {"id": 999999999,
-                                           "clientPhone": "0666666666"})
-        response = make_request(method = "PUT", url=url, data=data)
-        answer = {"SCB_CALL_NOT_FOUND_EXCEPTION": "CallNotFoundException: Unable to find call with id=999999999"}
+                                           "externalNumber": "0666666666"})
+        response = make_request(url,data,  method = "PUT")
+        answer = {'SCB_CALL_NOT_FOUND_EXCEPTION': 'RouteNotFoundException: Unable to find fixed route with id=999999999'}
         assert response.status_code == 500
         assert answer == response.json()
 
 
     @allure.feature('Негативный тест')
-    @allure.story('Редактируем clientPhone на уже существующий')
-    def test_put_route_clientPhone_agentNumber_on_existing(self,add_route, make_request, clear_result):
-        url = URL.route
+    @allure.story('Редактируем externalNumber на уже существующий')
+    def test_put_route_externalNumber_internalNumber_on_existing(self,add_route, make_request, clear_result):
+        url = URL.fixed_routes
         # Подготавливаем данные в JSON для запроса
-        data = _.get_JSON_request('add_route', **{"agentNumber": "1111",
-                                                  "clientPhone": "0666816659"})
+        data = _.get_JSON_request('add_route', **{"internalNumber": "1111",
+                                                  "externalNumber": "0666816659"})
         # Делаем запрос и получаем ответ
-        response = make_request(url=url, data=data)
+        response = make_request(url, data)
         assert response.status_code == 200
         route_id = response.json()['id']
         #Добавляем ИД для очистки результата
         clear_result['id'].append(route_id)
-        # Изменяем созданный перед тестом route(agentNumber and clientPhone)на существующий(тот что в созданный в тесте)
-        data = _.generate_JSON(add_route, {"agentNumber": "1111",
-                                           "clientPhone": "0666816659"})
-        response = make_request(method="PUT", url=url, data=data)
-        answer = {"SCB_CALL_UPDATE_EXCEPTION": "CallUpdateException: Unable to update call. Call with such client number already exist"}
+        # Изменяем созданный перед тестом fixed_routes(internalNumber and externalNumber)на существующий(тот что в созданный в тесте)
+        data = _.generate_JSON(add_route, {"internalNumber": "1111",
+                                           "externalNumber": "0666816659"})
+        response = make_request(url, data , method="PUT")
+        answer = {'SCB_CALL_UPDATE_EXCEPTION': 'RouteUpdateException: Unable to update fixed route. Fixed route with such external number already exist'}
         assert response.status_code == 500
         assert answer == response.json()
-
-
-    @allure.feature('Позитивный тест')
-    @allure.story('Получаем статистику по агенту')
-    def test_get_statistict_with_correct_agent_number(self, add_route, make_request):
-        url = URL.scb_statistic
-        agent_phone = add_route['agentNumber']
-        params = {'agentNumber':agent_phone}
-        response = make_request(method = "GET", params = params, url = url)
-        assert response.status_code == 200
-        assert (response.json()['agentNumber'], response.json()['count']) == (agent_phone, 0)
-
-
-    @allure.feature('Негативный тест')
-    @allure.story('Получаем статистику по агенту с неизвестным agentPhone')
-    def test_get_statistict_with_unknown_agent_number(self, add_route, make_request):
-        url = URL.scb_statistic
-        agent_phone = int(add_route['agentNumber']) + 999
-        params = {'agentNumber':agent_phone}
-        response = make_request(method = "GET", params = params, url = url)
-        answer = {'SCB_CALL_NOT_FOUND_EXCEPTION': 'CallNotFoundException: Unable to find number=%s'%agent_phone}
-        assert response.status_code == 500
-        assert response.json() == answer
-
-
-    @allure.feature('Позитивный тест')
-    @allure.story('Обнуляем статистику по агенту (PUT)')
-    def test_put_update_statistict_with_correct_agent_number(self, add_route, make_request):
-        url = URL.scb_statistic
-        agent_phone = add_route['agentNumber']
-        params = {'agentNumber': agent_phone}
-        response = make_request(method="PUT", data=params, url=url)
-        assert response.status_code == 200
-        assert response.json()['startDate'] > add_route['callDate']
-
-
-    @allure.feature('Негативный тест')
-    @allure.story('Обнуляем статистику по агенту (PUT) с не верным agentNumber')
-    def test_put_update_statistict_with_unknown_agent_number(self, add_route, make_request):
-        url = URL.scb_statistic
-        agent_phone = int(add_route['agentNumber'])+999
-        params = {'agentNumber':agent_phone}
-        response = make_request(method = "PUT", data = params, url = url)
-        answer = {'SCB_CALL_NOT_FOUND_EXCEPTION': 'CallNotFoundException: Unable to find call for phone number=StatisticWrapper{agentNumber=%s}'%agent_phone}
-        assert response.status_code == 500
-        assert response.json() == answer
 
 
 @pytest.mark.usefixtures('clear_credentials', 'credential')
@@ -215,18 +168,18 @@ class Test_Settings:
 
     @pytest.fixture(scope="function")
     def get_settings(self, make_request):
-        response = make_request(method="GET", url=URL.scb_settings)
+        response = make_request(URL.scb_settings, method="GET")
         assert response.status_code == 200
         yield response.json()
 
         #Востанавливаем настройки которые были до теста
-        response = make_request(method="PUT", data = response.json(), url=URL.scb_settings)
+        response = make_request(URL.scb_settings, method="PUT", data = response.json())
         assert response.status_code == 200
 
     @allure.feature('Позитивный тест')
     @allure.story('Получаем манифест')
     def test_manifest(self, make_request):
-        response = make_request(method = "GET", url=URL.scb_manifest)
+        response = make_request(URL.scb_manifest, method = "GET")
         answer = _.get_JSON_response('manifest')
         assert response.status_code == 200
         assert response.json().keys()== answer.keys()
@@ -235,7 +188,7 @@ class Test_Settings:
     @allure.feature('Позитивный тест')
     @allure.story('Получаем информацию о лицензиях')
     def test_licenses(self, make_request):
-        response = make_request(method = "GET", url=URL.scb_licenses)
+        response = make_request(URL.scb_licenses, method = "GET")
         answer = _.get_JSON_response('licenses')
         assert response.status_code == 200
         assert response.json().keys()== answer.keys()
@@ -244,17 +197,17 @@ class Test_Settings:
     @allure.feature('Позитивный тест')
     @allure.story('Получаем информацию о количестве лицензий')
     def test_count(self, make_request):
-        response = make_request(method = "GET", url=URL.scb_count)
+        response = make_request(URL.scb_count, method = "GET",)
         assert response.status_code == 200
 
 
     @allure.feature('Позитивный тест')
     @allure.story('Получаем настройки')
     def test_settings(self, make_request):
-        response = make_request(method="GET", url=URL.scb_settings)
+        response = make_request(URL.scb_settings, method="GET")
         answer = _.get_JSON_response('scb_settings')
         assert response.status_code == 200
-        assert response.json().keys() == answer.keys()
+        assert answer.keys() == response.json().keys()
 
 
     @allure.feature('Позитивный тест')
@@ -267,7 +220,7 @@ class Test_Settings:
                                                      "monitoring": monitoring,
                                                      "smartLabel": smartLabel,
                                                      "routing": routing})
-        response = make_request(method="PUT", url=URL.scb_settings, data=data)
+        response = make_request( URL.scb_settings, data, method="PUT")
         answer = data
         assert response.status_code == 200
         assert response.json() == answer
@@ -283,7 +236,7 @@ class Test_Settings:
                                                    "monitoring": True,
                                                    "smartLabel": True,
                                                    "routing": True})
-        response = make_request(method="PUT", url=URL.scb_settings, data=data)
+        response = make_request(URL.scb_settings, data, method="PUT")
         answer = {'SCB_REQUEST_VALIDATION_EXCEPTION': 'SCBRequestValidationException: Incorrect settings id!'}
         assert response.status_code == 500
         assert response.json() == answer
@@ -302,7 +255,7 @@ class Test_Contact():
                                                         "description": "bitbok1",
                                                         "phoneNumber": "06668166551",
                                                         "phoneType": phoneType } )
-        response = make_request(url=url, data=payload)
+        response = make_request(url, data=payload)
         clear_result['url'], clear_result['id'] = url, response.json()['id']
         assert response.status_code == 200
 
@@ -315,7 +268,7 @@ class Test_Contact():
                                                         "lName": None,
                                                         "phoneNumber": "06668166551",
                                                         "phoneType": "MOBILE" } )
-        response = make_request(url=url, data=payload)
+        response = make_request(url, data=payload)
         answer = {"SCB_VALIDATION_CONTACT_FIRST_NAME_EMPTY": "Contact first name is empty",
                   "SCB_VALIDATION_CONTACT_LAST_NAME_EMPTY": "Contact last name is empty"}
         assert response.status_code == 400
@@ -330,7 +283,7 @@ class Test_Contact():
                                                         "lName": "Kliui1",
                                                         "phoneNumber": None,
                                                         "phoneType": "MOBILE" } )
-        response = make_request(url=url, data=payload)
+        response = make_request(url, data=payload)
         answer = {'SCB_VALIDATION_PHONE_NUMBER': 'Phone number is empty'}
         assert response.status_code == 400
         assert response.json() == answer
@@ -344,7 +297,7 @@ class Test_Contact():
                                                         "lName": "Kliui1",
                                                         "phoneNumber": None,
                                                         "phoneType": "HOUSE"})
-        response = make_request(url=url, data=payload)
+        response = make_request(url, data=payload)
         assert response.status_code == 400
 
 
@@ -356,7 +309,7 @@ class Test_Contact():
         payload = _.get_JSON_request('add_contact', **{"fName": "Victor1",
                                                         "lName": "Kliui1",
                                                         "phones":None})
-        response = make_request(url=url, data=payload)
+        response = make_request(url, data=payload)
         answer = []
         clear_result['url'], clear_result['id'] = url, response.json()['id']
         assert response.status_code == 200
@@ -372,7 +325,7 @@ class Test_Contact():
                                                         "phones":[{ "phoneNumber": "06668166551","phoneType": "MOBILE","comment": None},
                                                                   {"phoneNumber": "0525731628","phoneType": "HOME","comment": None},
                                                                   {"phoneNumber": "0443775578","phoneType": "WORK","comment": None}]})
-        response = make_request(url=url, data=payload)
+        response = make_request(url, data=payload)
         clear_result['url'], clear_result['id'] = url, response.json()['id']
         assert response.status_code == 200
         # Количество телефонов добавленных = кол-ву телефонов переданных
@@ -383,7 +336,7 @@ class Test_Contact():
     @allure.story('Получаем контакты из справочника')
     def test_get_contact(self, make_request, add_contact):
         url = URL.scb_contact
-        response = make_request(method = "GET", url=url)
+        response = make_request(url, method = "GET")
         answer = [add_contact]
         assert response.status_code == 200
         assert response.json() == answer
@@ -394,7 +347,7 @@ class Test_Contact():
     def test_delete_contact(self, make_request, add_contact):
         url = URL.scb_contact
         contact_id = add_contact['id']
-        response = make_request(method = "DELETE", url=url, params = {'id':contact_id})
+        response = make_request(url, method = "DELETE",  params = {'id':contact_id})
         answer = contact_id
         assert response.status_code == 200
         assert response.json() == answer
@@ -404,7 +357,7 @@ class Test_Contact():
     @allure.story('Удаляем не существующий контакт(с неизвестным id)')
     def test_delete_contact_with_unknown_id(self, make_request):
         url = URL.scb_contact
-        response = make_request(method = "DELETE", url=url, params = {'id':999999999})
+        response = make_request(url, method = "DELETE",  params = {'id':999999999})
         answer = {'SCB_CONTACT_NOT_FOUND_EXCEPTION': 'ContactNotFoundException: Unable to find contact with id=999999999'}
         assert response.status_code == 500
         assert response.json() == answer
@@ -422,7 +375,7 @@ class Test_Contact():
                                                 "phoneNumber": "0666816651",
                                                 "phoneType": phoneType,
                                                 'comment':'comment'} )
-        response = make_request(method = "PUT", url=url, data=payload)
+        response = make_request(url, method = "PUT",  data=payload)
         answer = payload
         assert response.status_code == 200
         assert response.json() == answer
@@ -436,7 +389,7 @@ class Test_Contact():
                                                 "lName": None,
                                                 "phoneNumber": None,
                                                 "phoneType": "MOBILE"} )
-        response = make_request(method = "PUT", url=url, data=payload)
+        response = make_request(url, method = "PUT",  data=payload)
         answer = {'SCB_VALIDATION_CONTACT_FIRST_NAME_EMPTY': 'Contact first name is empty',
                   'SCB_VALIDATION_CONTACT_LAST_NAME_EMPTY': 'Contact last name is empty',
                   'SCB_VALIDATION_PHONE_NUMBER': 'Phone number is empty'}
@@ -449,7 +402,7 @@ class Test_Contact():
     def test_edit_contact_with_unknown_id(self, make_request, add_contact):
         url = URL.scb_contact
         payload = _.generate_JSON(add_contact, {'id': 999999999})
-        response = make_request(method = "PUT", url=url, data=payload)
+        response = make_request(url, method = "PUT",  data=payload)
         answer = {'SCB_CONTACT_NOT_FOUND_EXCEPTION': 'ContactNotFoundException: Unable to find contact with id=999999999'}
         assert response.status_code == 500
         assert response.json() == answer
@@ -461,7 +414,7 @@ class Test_Contact():
         url = URL.scb_contact
         #Изменяем id телефона
         add_contact['phones'][0]['id'] = 999999999
-        response = make_request(method = "PUT", url=url, data=add_contact)
+        response = make_request(url, method = "PUT",  data=add_contact)
         assert response.status_code == 500
 
 
@@ -470,7 +423,7 @@ class Test_Contact():
     def test_edit_contact_with_phone_us_null(self, make_request, add_contact):
         url = URL.scb_contact
         payload = _.generate_JSON(add_contact, {'phones':None})
-        response = make_request(method = "PUT", url=url, data=payload)
+        response = make_request( url, method = "PUT", data=payload)
         answer = []
         assert response.status_code == 200
         assert response.json()['phones'] == answer
@@ -484,7 +437,7 @@ class Test_Credential:
     def test_add_credentials_with_valide_data(self, make_request, clear_result):
         url = URL.scb_credentials
         credential = get.credentials
-        response = make_request(url=url, data=credential)
+        response = make_request(url, data=credential)
         credential_id = response.json()['id']
         credential['id'] = credential_id
         clear_result['url'], clear_result['id'] = url, credential_id
@@ -497,7 +450,7 @@ class Test_Credential:
     def test_delete_credentials_with_valide_id(self, make_request, add_credential):
         url = URL.scb_credentials
         credential_id = {'id': add_credential['id']}
-        response = make_request(method = 'DELETE', url=url, params=credential_id)
+        response = make_request(url, method = 'DELETE',  params=credential_id)
         assert response.status_code == 200
         assert response.json() == credential_id['id']
 
@@ -507,7 +460,7 @@ class Test_Credential:
     def test_delete_credentials_with_unknown_id(self, make_request, add_credential):
         url = URL.scb_credentials
         credential_id = {'id':int(add_credential['id'])+999}
-        response = make_request(method = 'DELETE', url=url, params=credential_id)
+        response = make_request(url, method = 'DELETE',  params=credential_id)
         answer = {"SCB_CREDENTIALS_NOT_FOUND_EXCEPTION": "CredentialsNotFoundException: Unable to find credential with id=%s"%credential_id['id']}
         assert response.status_code == 500
         assert response.json() == answer

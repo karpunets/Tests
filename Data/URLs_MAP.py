@@ -1,9 +1,13 @@
 server = 'http://172.22.2.66:8080'
 headers = {
     'content-type': "application/json;charset=UTF-8",
-    'authorization': "Basic QVBJX2F1dG90ZXN0OkFQSV9hdXRvdGVzdA=="}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h"  "Basic cm9vdDpyb290"
-authorization = ('API_autotest', 'API_autotest')
+    'authorization': "Basic QVBJX2F1dG90ZXN0X1JPT1Q6QVBJX2F1dG90ZXN0X1JPT1Q="}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h"  "Basic cm9vdDpyb290"
+authorization = ('API_autotest_ROOT', 'API_autotest_ROOT')
 
+ROOT = "Basic QVBJX2F1dG90ZXN0X1JPT1Q6QVBJX2F1dG90ZXN0X1JPT1Q="
+ADMINISTRATOR = "Basic QVBJX2F1dG90ZXN0X0FETUlOSVNUUkFUT1I6QVBJX2F1dG90ZXN0X0FETUlOSVNUUkFUT1I="
+USER = "Basic QVBJX2F1dG90ZXN0X1VTRVI6QVBJX2F1dG90ZXN0X1VTRVI="
+SUPERVISOR = "Basic QVBJX2F1dG90ZXN0X1NVUEVSVklTT1I6QVBJX2F1dG90ZXN0X1NVUEVSVklTT1I="
 # ADMIN
 get_user_list = '%s/SmiddleManager/adm/management/get_user_list' % server
 add_user = '%s/SmiddleManager/adm/management/add_user' % server
@@ -63,7 +67,8 @@ delete_campaign = '%s/SmiddleCampaignManager/cm/manager/delete_campaign' % serve
 remove_result_variant = '%s/SmiddleCampaignManager/cm/manager/remove_result_variant' % server
 
 # SMART_CALL_BACK
-route = "%s/SmiddleSmartCallback/scb/call" % server
+fixed_routes = "%s/SmiddleSmartCallback/scb/route/fixed" % server
+soft_routes = "%s/SmiddleSmartCallback/scb/route/soft" % server
 route_filter = "%s/SmiddleSmartCallback/scb/call/filter" % server
 scb_manifest = "%s/SmiddleSmartCallback/scb/manifest" % server
 scb_licenses = "%s/SmiddleSmartCallback/scb/licenses" % server

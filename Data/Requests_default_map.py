@@ -52,8 +52,9 @@ def defaul_request(request_name):
         'add_map_field':{'id':None, "order":"1","forExport":False,"forFilter":False,"phoneNumber":False, "phoneType":None, "enabled":True,"deleted":False,"name":None,
                          "fieldImport":None,"dataType":"STRING","fieldAbonent":None,"campaign":{"id":None}},
         #Smart_Callback
-        'add_route':{"agentNumber": None, "clientPhone": None, "callDate": 1500292769604},
-        'scb_settings':{"id": scb_settings_id,"debugLevel": 2,"logLength": 200,"monitoring": True,"smartLabel": True, "routing": True},
+        'add_soft_route':{"internalNumber": None, "externalNumber": None, "callDate": 1500292769604},
+        'add_route': {"internalNumber": None, "externalNumber": None},
+        'scb_settings':{"id": scb_settings_id,"debugLevel": 2,"logLength": 200,"monitoring": True,"smartLabel": True, "routing": True, 'defaultPeriod':None},
         'add_contact': {"fName": None,"lName": None, "pName":None, "description": None, "phones": [ {"phoneNumber": None,"phoneType": None }]},
         'edit_contact': {'id':None, "fName": None,"lName": None, "pName":None, "description": None, "phones": [ {'id':None, "phoneNumber": None,"phoneType": None }]}
 

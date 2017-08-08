@@ -2,26 +2,8 @@ import pytest, allure, json, requests
 import Data.URLs_MAP as URL
 
 from Data.Make_requests_and_answers import JSON_generator as _
-from Data.Test_data import make_50_users_for_get_user_list as take_user_list
 
 
-@pytest.fixture(scope="module")
-def setup_get_user_list():
-    user_id_list = {}
-    # Получаем список пользователей для добавления
-    user_list = take_user_list()
-    for i in user_list:
-        # Запрос на добавление пользователя
-        response = requests.post(URL.add_user, data = json.dumps(user_list[i]), headers=URL.headers)
-        # Записываем ID добавленных пользователей
-        user_id_list[i] = response.json()['id']
-    one_user_user_id = user_id_list['one_user_get_userlist']
-    deleted_user_user_id = user_id_list['deleted_user_get_user_list']
-    yield one_user_user_id, deleted_user_user_id
-    #Отправляем ИД юзера для удаления
-    for i in user_id_list:
-        payload = json.dumps({'userId':user_id_list[i]})
-        response = requests.post(URL.delete_user, data=payload, headers=URL.headers)
 name = 'get_user_list'
 
 

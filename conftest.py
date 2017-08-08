@@ -1,58 +1,36 @@
-import json, pytest, requests
+import json, pytest, requests, os
 import Data.URLs_MAP as URL
 
-from Data.Make_requests_and_answers import JSON_generator
-from Data.Requests_default_map import defaul_request
 
-
-headers = URL.headers
+@pytest.fixture(scope='session')
+def get_role():
+    try:
+        role_name_from_jenkins = os.environ['role_for_test']
+    except KeyError:
+        role_name_from_jenkins = 'ROOT'
+    roles = {'ROOT' : "Basic QVBJX2F1dG90ZXN0X1JPT1Q6QVBJX2F1dG90ZXN0X1JPT1Q=",
+            'ADMINISTRATOR' : "Basic QVBJX2F1dG90ZXN0X0FETUlOSVNUUkFUT1I6QVBJX2F1dG90ZXN0X0FETUlOSVNUUkFUT1I=",
+            'USER' : "Basic QVBJX2F1dG90ZXN0X1VTRVI6QVBJX2F1dG90ZXN0X1VTRVI=",
+            'SUPERVISOR' : "Basic QVBJX2F1dG90ZXN0X1NVUEVSVklTT1I6QVBJX2F1dG90ZXN0X1NVUEVSVklTT1I="}
+    auth = roles[role_name_from_jenkins]
+    headers = {
+        'content-type': "application/json;charset=UTF-8",
+        'authorization': auth}
+    data = {'headers': headers, 'role' : role_name_from_jenkins}
+    return data
 
 
 @pytest.fixture(scope="session")
 #Формирование запроса и получение результата по полученным данным
-def make_request():
+def make_request(get_role):
 
     def some_request(url, data=None, method='POST', params = None):
+        headers = get_role['headers']
         payload = json.dumps(data)
         response = requests.request(method, url, data=payload, headers=headers, params=params)
         return response
 
     return some_request
-
-@pytest.fixture(scope="function")
-def add_delete_user(request):
-    users_id = []
-    # Добавляем пользователя с переданными данными
-    def add_user(*args):
-        for user in args:
-            payload = json.dumps(JSON_generator.get_JSON_request('add_user', **user))
-            # Делаем запрос
-            response = requests.post(URL.add_user, data=payload, headers=headers)
-            assert response.status_code == 200
-            # Наполняем список ІД добавленных пользователей
-            users_id.append(response.json()['id'])
-        # Удаляем добавленных ранее пользователей
-        def user_delete():
-            for id in users_id:
-                data = JSON_generator.get_JSON_request('delete_user', **{'userId': id})
-                payload = json.dumps(data)
-                response = requests.post(URL.delete_user, data=payload, headers=headers)
-                assert response.status_code == 200
-
-        request.addfinalizer(user_delete)
-        return users_id
-    return add_user
-
-@pytest.fixture(scope="function")
-def delete_user():
-    # Создаем словарь для возможности добавления ІД польщователя с теста
-    user_id = {}
-    yield user_id
-    for i in user_id:
-        data = JSON_generator.get_JSON_request('delete_user', **{'userId': user_id[i]})
-        payload = json.dumps(data)
-        response = requests.post(URL.delete_user, data=payload, headers=headers)
-        assert response.status_code == 200
 
 
 @pytest.fixture(scope='function')

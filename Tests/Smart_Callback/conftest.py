@@ -18,7 +18,7 @@ def clear_contact(make_request):
 
 @pytest.fixture(scope='module')
 def clear_routes(make_request):
-    url = URL.route
+    url = URL.fixed_routes
     response = make_request(url = url, method = "GET", params = {'page_number':1, 'page_size':100})
     for i in response.json()['data']:
         to_delete = {"id":int(i['id'])}
@@ -43,10 +43,10 @@ def credential(make_request):
 
 @pytest.fixture(scope="function")
 def add_route(make_request, clear_result):
-    url = URL.route
+    url = URL.fixed_routes
     # Подготавливаем данные в JSON для запроса
-    data = _.get_JSON_request('add_route', **{"agentNumber": "1022",
-                                              "clientPhone": "0666816655"})
+    data = _.get_JSON_request('add_route', **{"internalNumber": "1022",
+                                              "externalNumber": "0666816655"})
     # Делаем запрос и получаем ответ
     response = make_request(url=url, data=data)
     assert response.status_code == 200

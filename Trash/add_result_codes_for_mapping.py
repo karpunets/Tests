@@ -4,18 +4,17 @@ import pytest, json, requests
 headers ={'content-type': "application/json;charset=UTF-8",
            'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h
 
-server = "http://10.10.27.32:8080"
+server = "http://172.22.2.63:8080"
 
 url = "%s/SmiddleCampaignManager/cm/manager/get_result_code"%server
 get_campaign_url = "%s/SmiddleCampaignManager/cm/manager/get_campaign"%server
 edit_result_code_url = '%s/SmiddleCampaignManager/cm/manager/edit_result_code'%server
 get_result_code_url = '%s/SmiddleCampaignManager/cm/manager/get_result_code'%server
 
-add_result = [  {'name':'Type', 'comment': 'Тип подключения'},
-                {'name':'Service' , 'comment': 'Сервис'},
-                {'name':'ActivityFeed' , 'comment': 'Канал активности'},
-                {'name':'ResultKontact' , 'comment': 'Результат контакта'},
-                {'name':'OutboundContactTypeOfContact' , 'comment': 'Направление активности'}
+add_result = [  {'name':'workDate', 'comment': 'Дата завершения работы',"dataType":"DATE"},
+                {'name':'completionDate' , 'comment': 'Дата выполнения',"dataType":"DATE"},
+                {'name':'inquiryTime' , 'comment': 'Время выполнения' ,"dataType":"STRING"},
+                {'name':'OutboundContactSubtotalConversa' , 'comment': 'Результат обзвона',"dataType":"STRING"}
                 ]
 
 
@@ -48,6 +47,7 @@ for i in campaign_list:
         edit_result_code["comment"] = j["comment"]
         edit_result_code["name"] = j['name']
         edit_result_code["code"] = j['name']
+        edit_result_code["dataType"] = j["dataType"]
         edit_result_code["campaign"] = {"id":i['id']}
         print(edit_result_code)
         payload = json.dumps(edit_result_code)
