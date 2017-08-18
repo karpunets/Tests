@@ -5,6 +5,9 @@ headers = {'content-type': "application/json;charset=UTF-8",
                      'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}
 
 server = "http://172.22.2.63:8080"
+settings_id = 140533237
+# server = "http://172.22.2.63:8080"
+
 
 # user_list = {
 #              '2':{'fieldContract':'contractCode','fieldImport':'ContractCode'},
@@ -29,9 +32,6 @@ server = "http://172.22.2.63:8080"
 #              '21':{'fieldContract':'type','fieldImport':'type'}}
 #              #'22':{'fieldContract':'authorID','fieldImport':'Smiddle Login'}
 
-
-
-settings_id = 139967687
 user_list = {
              '2':{"settings":{"id":settings_id},'fieldContract':'contractCode','fieldImport':'ContractCode'},
              '3':{"settings":{"id":settings_id},'fieldContract':'OutboundContactTypeOfContact','fieldImport':'OutboundContactTypeOfContact'},
@@ -53,51 +53,72 @@ user_list = {
              '20':{"settings":{"id":settings_id},'fieldContract':'service', 'fieldImport':'Service'},
              '21':{"settings":{"id":settings_id},'fieldContract':'type','fieldImport':'Type'},
              '22': {"settings": {"id": settings_id}, 'fieldContract': 'activityFeed', 'fieldImport': 'ActivityFeed'},
-             '23': {"settings": {"id": settings_id}, 'fieldContract': 'resultKontact', 'fieldImport': 'ResultKontact'},
-             '24': {"settings": {"id": settings_id}, 'fieldContract': 'authorID', 'fieldImport': 'SmiddleLogin'},
-            '25': {"settings": {"id": settings_id}, 'fieldContract': 'OutboundContactSubtotalConversa', 'fieldImport': 'OutboundContactSubtotalConversa'},
+
+             '24': {"settings": {"id": settings_id}, 'fieldContract': 'authorID', 'fieldImport': 'AgentName'},
             '26': {"settings": {"id": settings_id}, 'fieldContract': 'description', 'fieldImport': 'OfferName'},
             '27': {"settings": {"id": settings_id}, 'fieldContract': 'workDate', 'fieldImport': 'workDate'},
             '28': {"settings": {"id": settings_id}, 'fieldContract': 'completionDate', 'fieldImport': 'completionDate'},
-            '29': {"settings": {"id": settings_id}, 'fieldContract': 'inquiryTime', 'fieldImport': 'inquiryTime'}}
+            '29': {"settings": {"id": settings_id}, 'fieldContract': 'inquiryTime', 'fieldImport': 'inquiryTime'},
+    '25': {"settings": {"id": settings_id}, 'fieldContract': 'OutboundContactSubtotalConversa',
+           'fieldImport': 'OtkazValue'},
+    '23': {"settings": {"id": settings_id}, 'fieldContract': 'resultKontact', 'fieldImport': 'ResultKontact'}
+}
 
 
-outbound = {'Бросили трубку во время презентации':'6',	'Дорого (оборудование, доп. точки)':'49',
-            'Дорого (текущие условия дешевле, не готов платить за лучшее качество услуг).':'50',
-            'Заявка уже в работе':'9',	'Контракт с другим провайдером (проплачен наперед другой провайдер/контакт)':'51',
-            'Не конкурентное предложение':'10',	'Нет ПК/ нет ТВ':'11',	'Нет технической возможности':'57',
+outbound = {'Бросили трубку во время презентации':'6',
+            'Заявка зарегистрирована': '27',
+            'Дорого (оборудование, доп точки)':'49',
+            'Дорого (текущие условия дешевле, не готов платить за лучшее качество услуг)':'50',
+            'Заявка уже в работе':'9',
+            'Контракт с другим провайдером (проплачен наперед другой провайдер/контакт)':'51',
+            'Не конкурентное предложение':'10',
+            'Нет ПК/ нет ТВ':'11',
+            'Нет технической возможности':'57',
             'Номер не принадлежит клиенту':'52',
-            'Отказ от общения':'13',	'Пожилые люди':'14',	'Абонент вне зоны покрытия':'48',
+            'Отказ от общения':'13',
+            'Пожилые люди':'14',
+            'Абонент вне зоны покрытия':'48',
             'Пользовались услугой - негативный опыт/не довольны качеством':'16',
             'Посмотрю на сайте/сам обращусь в компанию':'17',
-            'Просьба больше не беспокоить (добавить в черный список) ':'19',
+            'Просьба больше не беспокоить (добавить в черный список)':'19',
             'Уже является пользователем услуг от компании "Воля"':'21',
             'Уже звонили в этом месяце/с этим предложением':'7',
-            'Юр. Лицо':'46'}
+            'Юр лицо':'46'}
 
+result_contact = {'Успешный':1, "Не Успешный": 2, 'Просьба больше не звонить': 4}
 
 data = {"id":None,"settings":{"id":settings_id},"fieldMap":{"id":None},"scmValue":"original","contractValue":"zamena"}
 
 
 url = "%s/SmiddleCampaignManager/cm/integration/contract/fieldmap"%server
+valmap_url = '%s/SmiddleCampaignManager/cm/integration/contract/valmapping' % server
 
 def setup_get_user_list():
     for i in user_list:
         payload = json.dumps(user_list[i])
         # Запрос на добавление пользователя
         response = requests.post(url=url, data = payload, headers = headers)
+        print(response.json())
+        fieldmap_id = response.json()['id']
         # Записываем ID добавленных пользователей
         if response.json()['fieldContract'] == 'OutboundContactSubtotalConversa':
-            fieldmap_id = response.json()['id']
-    return fieldmap_id
+            for j in outbound:
+                out_payload = json.dumps(
+                    {"id": None, "settings": {"id": settings_id}, "fieldMap": {"id": fieldmap_id}, "scmValue": j,
+                     "contractValue": outbound[j]})
+                response = requests.post(url=valmap_url, data=out_payload, headers=headers)
+                print(response.status_code, response.json())
+        try:
+            if response.json()['fieldContract'] == 'resultKontact':
+                for j in result_contact:
+                    res_payload = json.dumps(
+                        {"id": None, "settings": {"id": settings_id}, "fieldMap": {"id": fieldmap_id}, "scmValue": j,
+                         "contractValue": result_contact[j]})
+                    response = requests.post(url=valmap_url, data=res_payload, headers=headers)
+                    print(response.status_code, response.json())
+        except KeyError:
+            continue
 
-fieldmap_id = setup_get_user_list()
 
-def add_outbound():
-    url ='%s/SmiddleCampaignManager/cm/integration/contract/valmapping'%server
-    for i in outbound:
-        payload = json.dumps({"id":None,"settings":{"id":settings_id},"fieldMap":{"id":fieldmap_id},"scmValue":i,"contractValue":outbound[i]})
-        response = requests.post(url=url, data=payload, headers=headers)
-        print(response.status_code)
+setup_get_user_list()
 
-add_outbound()

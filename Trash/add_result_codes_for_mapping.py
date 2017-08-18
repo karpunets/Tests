@@ -4,17 +4,18 @@ import pytest, json, requests
 headers ={'content-type': "application/json;charset=UTF-8",
            'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h
 
-server = "http://172.22.2.63:8080"
+server = "http://10.10.27.32:8080"
 
 url = "%s/SmiddleCampaignManager/cm/manager/get_result_code"%server
 get_campaign_url = "%s/SmiddleCampaignManager/cm/manager/get_campaign"%server
 edit_result_code_url = '%s/SmiddleCampaignManager/cm/manager/edit_result_code'%server
 get_result_code_url = '%s/SmiddleCampaignManager/cm/manager/get_result_code'%server
+edit_result_variant = '%s/SmiddleCampaignManager/cm/manager/edit_result_variant'%server
 
-add_result = [  {'name':'workDate', 'comment': 'Дата завершения работы',"dataType":"DATE"},
-                {'name':'completionDate' , 'comment': 'Дата выполнения',"dataType":"DATE"},
-                {'name':'inquiryTime' , 'comment': 'Время выполнения' ,"dataType":"STRING"},
-                {'name':'OutboundContactSubtotalConversa' , 'comment': 'Результат обзвона',"dataType":"STRING"}
+add_result = [  {'name':'workDate', 'comment': 'workDate for SD',"dataType":"DATE"},
+                {'name':'completionDate' , 'comment': 'completionDate for SD',"dataType":"DATE"},
+                {'name':'inquiryTime' , 'comment': 'completionDate for SD' ,"dataType":"STRING"},
+                {'name':'OutboundContactSubtotalConversa' , 'comment': 'OtkazValue for SD',"dataType":"STRING"}
                 ]
 
 
@@ -27,6 +28,7 @@ def get_campaign():
     payload = json.dumps(get_campaign_json)
     # Запрос на добавление пользователя
     response = requests.post(url=get_campaign_url, data=payload, headers=headers)
+    print(response.status_code)
     return response.json()
 
 campaign_list = get_campaign()
@@ -52,4 +54,13 @@ for i in campaign_list:
         print(edit_result_code)
         payload = json.dumps(edit_result_code)
         response = requests.post(url=edit_result_code_url, data=payload, headers=headers)
-        print(response.status_code)
+        print(response.status_code, response.json())
+
+
+for j in campaign_list:
+    payload = json.dumps({"campaignCode":j['code'], "resultCode":"inquiryTime","resultVariant":{"value":"27316628","forInit":True}})
+    response = requests.post(url=edit_result_variant, data=payload, headers=headers)
+    print(response.status_code, response.json())
+    payload = json.dumps({"campaignCode":j['code'],"resultCode":"activityFeed","resultVariant":{"value":"1","forInit":True}})
+    response = requests.post(url=edit_result_variant, data=payload, headers=headers)
+    print(response.status_code, response.json())

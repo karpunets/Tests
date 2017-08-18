@@ -85,3 +85,8 @@ proxy_logs = "%s/SmiddleSIPProxy/ssp/logs"%server
 proxy_manifest = "%s/SmiddleSIPProxy/ssp/manifest" % server
 proxy_licenses = "%s/SmiddleSIPProxy/ssp/licenses" % server
 proxy_settings = "%s/SmiddleSIPProxy/ssp/settings" % server
+
+
+#QOS
+criteria_group = "%s/SmiddleQualityService/qos/template/criteria_group"%server
+criteria = "%s/SmiddleQualityService/qos/template/criteria"%server

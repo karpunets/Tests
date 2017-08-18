@@ -4,8 +4,10 @@ import Data.URLs_MAP as URL
 
 @pytest.fixture(scope='session')
 def get_role():
+    #Получаем роль из параметро теста
     try:
         role_name_from_jenkins = os.environ['role_for_test']
+    # Если не передали используем рут роль
     except KeyError:
         role_name_from_jenkins = 'ROOT'
     roles = {'ROOT' : "Basic QVBJX2F1dG90ZXN0X1JPT1Q6QVBJX2F1dG90ZXN0X1JPT1Q=",
