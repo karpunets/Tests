@@ -1,0 +1,13 @@
+{"name": "for_CA_test",
+  "templateId": "$templateId",
+  "url": "http://172.22.2.36:9080/qualityout",
+  "active": true,
+  "mentor": 68,
+  "group": 2,
+  "criterias": [ {
+  "qosCriteriaId": "$first_criteria_id",
+  "questionNumber": 1}, {
+  "qosCriteriaId": "$second_criteria_id",
+  "questionNumber": 2}, {
+  "qosCriteriaId": "$third_criteria_id",
+  "questionNumber": 3}]}

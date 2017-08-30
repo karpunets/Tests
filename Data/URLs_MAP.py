@@ -90,3 +90,10 @@ proxy_settings = "%s/SmiddleSIPProxy/ssp/settings" % server
 #QOS
 criteria_group = "%s/SmiddleQualityService/qos/template/criteria_group"%server
 criteria = "%s/SmiddleQualityService/qos/template/criteria"%server
+
+
+#QOS_CA
+questioner = "%s/SmiddleQualityService_CA/qos/ca/questioner"%server
+filter = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter"%server
+abonent = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter/phone/import"%server
+agent = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter/agent"%server
