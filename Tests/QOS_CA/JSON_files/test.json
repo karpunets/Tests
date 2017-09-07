@@ -1,2 +1,19 @@
-{"id":99999, "fName": null,"lName": null, "pName":null, "description": "$desk",
-  "phones": [ {"id":null, "phoneNumber": null,"phoneType": {"Home":"$homephone"}}]}
+{"dateCreate":1504526486176,"supervisor": {"fname":"Root","lname":"Initiate","pname":"User","id":68},
+  "name":"name_1","description":"desc","groups":[{"id":2}],"version":"1",
+  "templateSections":[{"templateCriterias":[{"templateCriteria":
+                                                                {"id":140530162,"criteriaGroup":{"id":140530159}},"weight":"10","position":1},
+                                            {"templateCriteria":
+                                                                {"id":140530165,"criteriaGroup":{"id":140530159}},"weight":"15","position":2},
+                                            {"templateCriteria":
+                                                                {"id":140530177,"criteriaGroup":{"id":140530173}},"weight":"20","position":3}],
+                      "name":"section_name_1","position":1},
+
+                      {"templateCriterias":[{"templateCriteria":
+                                                                {"id":140530240,"criteriaGroup":{"id":140530234}},"weight":"20","position":1},
+                                            {"templateCriteria":
+                                                                {"id":140530237,"criteriaGroup":{"id":140530234}},"weight":"10","position":2},
+                                            {"templateCriteria":
+                                                                {"id":140530228,"criteriaGroup":{"id":140530222}},"weight":"15","position":3},
+                                            {"templateCriteria":
+                                                                {"id":140530216,"criteriaGroup":{"id":140530213}},"weight":"10","position":4}],
+                        "name":"section_name_2","position":2}]}

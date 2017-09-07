@@ -90,6 +90,7 @@ proxy_settings = "%s/SmiddleSIPProxy/ssp/settings" % server
 #QOS
 criteria_group = "%s/SmiddleQualityService/qos/template/criteria_group"%server
 criteria = "%s/SmiddleQualityService/qos/template/criteria"%server
+delete_criteria_group = "%s/SmiddleQualityService/qos/template//delete_criteria_group"%server
 
 
 #QOS_CA

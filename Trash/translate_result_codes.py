@@ -2,7 +2,7 @@ import pytest, allure, json, requests
 import Data.URLs_MAP as URL
 
 from Data.Make_requests_and_answers import JSON_generator as _
-from Data.Test_data import make_50_users_for_get_user_list as take_user_list
+
 
 headers ={'content-type': "application/json;charset=UTF-8",
            'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h

@@ -5,18 +5,37 @@ import random
 
 
 
+
+
+
 a = {
-"identifier": 116099818,
+"identifier": 142017415,
 "data": [{
-"CAMPAIGN": "campaign",
-"ACCOUNT_NUMBER": "accountNumber",
-"ABONENT_FIO": "fio",
-"RESULT_DATE": "2017-01-01 15:00",
-"OPERATOR_ID": "id",
-"OPERATOR_LOGIN": "login",
-"SUCCESS": "success",
-"CALLBACK_USED": 1}]
+"ACCOUNT_NUMBER": "ContractCode",
+"ABONENT_FIO": "FIO",
+"RESULT_DATE": "dateCreated",
+"OPERATOR_LOGIN": "AgentName",
+"SUCCESS": "SUCCESS",
+"CAMPAIGN": "Campaign",
+"OPERATOR_ID": "Operator_id",
+"CALLBACK_USED": "Callback_used"
+}]
 }
+
+
+
+# a = {
+# "identifier": 116099818,
+# "data": [{
+# "CAMPAIGN": "campaign",
+# "ACCOUNT_NUMBER": "ContractCode",
+# "ABONENT_FIO": "fio",
+# "RESULT_DATE": "2017-01-01 15:00",
+# "OPERATOR_ID": "id",
+# "OPERATOR_LOGIN": "login",
+# "SUCCESS": "success",
+# "CALLBACK_USED": 1}]
+# }
 
 url = "http://172.22.2.63:8080/SCM-MSSQL-Connector/scmmssql/data"
 

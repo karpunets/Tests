@@ -1,0 +1,16 @@
+{"name": "for_CA_autotest",
+  "templateId": "$templateId",
+  "url": "http://172.22.2.36:9080/qualityout",
+  "active": true,
+  "mentor": 68,
+  "group": 2,
+  "criterias": [{
+    "criteriaAnswers": "$first_criteria_answer",
+    "qosCriteriaId": "$first_criteria_id",
+    "questionNumber": 1}, {
+    "qosCriteriaId": "$second_criteria_id",
+    "criteriaAnswers": "$second_criteria_answer",
+    "questionNumber": 2}, {
+    "qosCriteriaId": "$third_criteria_id",
+    "criteriaAnswers": "$third_criteria_answer",
+    "questionNumber": 3}]}

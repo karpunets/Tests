@@ -12,6 +12,9 @@ headers = {
 with open("template_ids.txt", "r") as file:
     id_to_delete = file.read().split()
 
+# url_get_ids = "http://172.22.2.63:8080/SmiddleQualityService/qos/result/get_result_list"
+# response = requests.post(url_get_ids,data = json.dumps({}), headers=headers, params = {'page_number':1, "page_size":9999})
+
 
 for i in id_to_delete:
     response = requests.post(url_delete_result, data = json.dumps({'resultId':i}), headers=headers)
