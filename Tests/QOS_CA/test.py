@@ -1,4 +1,4 @@
-import pytest, allure, json, requests, random
+import pytest, allure, json, requests, random, string
 import Data.URLs_MAP as URL
 from Data.Make_requests_and_answers import JSON_generator as _
 
@@ -35,12 +35,7 @@ a = {"ПРАВИЛЬНОСТЬ ПРЕДОСТАВЛЕНИЯ ИНФОРМАЦИИ
 
 b = {"dateCreate":1504526486176,"supervisor": {"fname":"Root","lname":"Initiate","pname":"User","id":68},
   "name":"name_1","description":"desc","groups":[{"id":2}],"version":"1",
-  "templateSections":[{"name":"section_name_1","position":1, "templateCriterias":[{"templateCriteria":
-                                                                {"id":140530162,"criteriaGroup":{"id":140530159}},"weight":"10","position":1},
-                                            {"templateCriteria":
-                                                                {"id":140530165,"criteriaGroup":{"id":140530159}},"weight":"15","position":2},
-                                            {"templateCriteria":
-                                                                {"id":140530177,"criteriaGroup":{"id":140530173}},"weight":"20","position":3}]}]}
+  "templateSections":[]}
 max_criterias_number = 0
 for i in a:
      max_criterias_number+=len(a[i])
@@ -48,8 +43,33 @@ c = [1,2,3,4,5,6,7,8,9,10]
 
 number_of_sections = random.randint(1,5)
 number_of_criterias = random.choice(range(number_of_sections, max_criterias_number, number_of_sections))
-qq = random.sample(a, k=8)
-print(qq)
+
+group_criteria_id = [[group, criteria] for group in a.keys() for criteria in a[group]]
+
+
+randomed_criterias = random.sample(group_criteria_id, k=number_of_criterias)
+random.shuffle(randomed_criterias)
+
+templateCriterias = []
+what_append_1 = {"name":"section_name_1","position":1, "templateCriterias":[]}
+what_append_2 = {"templateCriteria":{"id":140530162,"criteriaGroup":{"id":140530159}},"weight":"10","position":1}
+for i in range(1, number_of_sections+1):
+    random_name = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(8))
+    what_append_1['name'] =random_name
+    what_append_1['position'] = i
+    templateCriterias.append(what_append_1)
+    count = 1
+    if count != number_of_sections:
+        randomed_criterias_number = random.randint(1,number_of_criterias - number_of_sections)
+        for j in range(1,randomed_criterias_number):
+            what_append_2[]
+            templateCriterias["templateCriterias"].append()
+        number_of_criterias = number_of_criterias - randomed_criterias_number
+        count += 1
+    else:
+        for j in range(1, number_of_criterias):
+
+
 
 
 print(number_of_sections, number_of_criterias)

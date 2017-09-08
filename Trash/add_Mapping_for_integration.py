@@ -115,7 +115,7 @@ def setup_get_user_list():
         # Запрос на добавление пользователя
         response = requests.post(url=url, data = payload, headers = headers)
         print(response.json())
-        fieldmap_id = response.json()['id']
+        # fieldmap_id = response.json()['id']
         # Записываем ID добавленных пользователей
         # if response.json()['fieldContract'] == 'OutboundContactSubtotalConversa':
         #     for j in outbound:
