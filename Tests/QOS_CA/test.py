@@ -58,7 +58,6 @@ randomed_criterias = random.sample(group_criteria_id, k=number_of_criterias)
 templateSections = []
 weight = 100
 count = 1
-print(number_of_sections)
 for i in range(1, number_of_sections+1):
     what_append_1 = {"name":"section_name_1","position":1, "templateCriterias":[]}
     # what_append_2 = {"templateCriteria":{"id":140530162,"criteriaGroup":{"id":140530159}},"weight":"10","position":1}
@@ -69,9 +68,7 @@ for i in range(1, number_of_sections+1):
     # Если не последняя секция
     if count != number_of_sections:
         # Количество критериев в секции (макс кол-во - кол-во секций)
-        max_randomed = number_of_criterias - (number_of_sections - i)
-        randomed_criterias_number = random.randint(1,max_randomed)
-        print('criterias', randomed_criterias_number)
+        randomed_criterias_number = random.randint(1,number_of_criterias - (number_of_sections - i))
         for j in range(1,randomed_criterias_number+1):
             # Выбираем из списка критерия и удаляем его из списка
             random_criteria_and_group = random.choice(randomed_criterias)
@@ -89,7 +86,6 @@ for i in range(1, number_of_sections+1):
         number_of_criterias = number_of_criterias - randomed_criterias_number
         count += 1
     else:
-        print('criterias_last', number_of_criterias)
         for j in range(1,number_of_criterias+1):
             #Если не последний критерий
             if j !=number_of_criterias:
@@ -110,7 +106,7 @@ for i in range(1, number_of_sections+1):
 
 
 b["templateSections"] = templateSections
-print(b)
+
 
 
 
