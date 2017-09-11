@@ -48,10 +48,14 @@ class JSON_generator(object):
             for key, val in iter(data.items()):
                 try:
                     json_file = json_file.replace(key, val)
-                # Возникает если передать None(null)
-                except TypeError: continue
+                # Возникает если передать None(null) или int
+                except TypeError:
+                    if type(val) == int:
+                        int_value = '(\%s)'%key
+                        json_file = re.sub(r'%s'%int_value, str(val), json_file)
+                    else: continue
         # Вместо не переданных параметров подставляем null
-        json_file = re.sub(r'(\"\$[\w]+\")', "null", json_file)
+        json_file = re.sub(r'(\$[\w])', "null", json_file)
         # Преобразуем в dict для удобства
         return json.loads(json_file)
 

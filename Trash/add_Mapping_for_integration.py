@@ -93,7 +93,7 @@ settings_id = 142017415
 
 user_list = {
              '2':{"settings":{"id":settings_id},'fieldContract':'ACCOUNT_NUMBER','fieldImport':'ContractCode'},
-             '3':{"settings":{"id":settings_id},'fieldContract':'RESULT_DATE','fieldImport':'dateCall'},
+             '3':{"settings":{"id":settings_id},'fieldContract':'RESULT_DATE','fieldImport':'DateCall'},
              '4':{"settings":{"id":settings_id},'fieldContract':'ABONENT_FIO','fieldImport':'FIO'},
              '5':{"settings":{"id":settings_id},'fieldContract':'OPERATOR_LOGIN','fieldImport':'AgentName'},
              '6':{"settings":{"id":settings_id},'fieldContract':'SUCCESS','fieldImport':'SUCCESS'},

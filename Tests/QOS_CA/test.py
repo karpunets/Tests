@@ -36,40 +36,75 @@ a = {"ПРАВИЛЬНОСТЬ ПРЕДОСТАВЛЕНИЯ ИНФОРМАЦИИ
 b = {"dateCreate":1504526486176,"supervisor": {"fname":"Root","lname":"Initiate","pname":"User","id":68},
   "name":"name_1","description":"desc","groups":[{"id":2}],"version":"1",
   "templateSections":[]}
+
+example_id = {11111:[1,2,3,4,5], 22222:[6,7,8], 33333:[9,10,11,12]}
 max_criterias_number = 0
-for i in a:
-     max_criterias_number+=len(a[i])
-c = [1,2,3,4,5,6,7,8,9,10]
+for i in example_id:
+     max_criterias_number+=len(example_id[i])
+
+
+
 
 number_of_sections = random.randint(1,5)
 number_of_criterias = random.choice(range(number_of_sections, max_criterias_number, number_of_sections))
 
-group_criteria_id = [[group, criteria] for group in a.keys() for criteria in a[group]]
+group_criteria_id = [[group, criteria] for group in example_id.keys() for criteria in example_id[group]]
 
 
 randomed_criterias = random.sample(group_criteria_id, k=number_of_criterias)
-random.shuffle(randomed_criterias)
+
 
 templateCriterias = []
 what_append_1 = {"name":"section_name_1","position":1, "templateCriterias":[]}
 what_append_2 = {"templateCriteria":{"id":140530162,"criteriaGroup":{"id":140530159}},"weight":"10","position":1}
+weight = 100
 for i in range(1, number_of_sections+1):
     random_name = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(8))
     what_append_1['name'] =random_name
     what_append_1['position'] = i
     templateCriterias.append(what_append_1)
     count = 1
+    # Если не последняя секция
     if count != number_of_sections:
-        randomed_criterias_number = random.randint(1,number_of_criterias - number_of_sections)
-        for j in range(1,randomed_criterias_number):
-            what_append_2[]
-            templateCriterias["templateCriterias"].append()
-        number_of_criterias = number_of_criterias - randomed_criterias_number
+        # Количество критериев в секции (макс кол-во - кол-во секций)
+        randomed_criterias_number = random.randint(1,number_of_criterias - number_of_sections - i+1)
+        for j in range(1,randomed_criterias_number+1):
+            # Выбираем из списка критерия и удаляем его из списка
+            random_criteria_and_group = random.choice(randomed_criterias)
+            randomed_criterias.remove(random_criteria_and_group)
+            # Рандомим вес (вес - колво критериев минус превыдущие критерии)
+            random_weight = random.randint(1,weight-number_of_criterias-i)
+            #Остаточный вес
+            weight = weight - random_weight
+            new_criteria = {'$criteria_id':random_criteria_and_group[1],
+                            '$criteria_group_id':random_criteria_and_group[0],
+                            '$weight':weight,
+                            '$position':j}
+            data = _.make_data('template_criteria',new_criteria)
+            templateCriterias["templateCriterias"].append(data)
+            number_of_criterias = number_of_criterias - randomed_criterias_number
         count += 1
     else:
-        for j in range(1, number_of_criterias):
+        for j in range(1,number_of_criterias+1):
+            #Если не последний критерий
+            if j !=number_of_criterias:
+                random_criteria_and_group = random.choice(randomed_criterias)
+                randomed_criterias.remove(random_criteria_and_group)
+                random_weight = random.randint(1,weight-number_of_criterias-i)
+                weight = weight - random_weight
+            else:
+                random_criteria_and_group = randomed_criterias[0]
+                random_weight = weight
+            new_criteria = {'$criteria_id': random_criteria_and_group[1],
+                            '$criteria_group_id': random_criteria_and_group[0],
+                            '$weight': weight,
+                            '$position': j}
+            data = _.make_data('template_criteria', new_criteria)
+            templateCriterias["templateCriterias"].append(data)
+print(templateCriterias)
 
 
 
 
-print(number_of_sections, number_of_criterias)
+
+

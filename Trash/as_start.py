@@ -38,6 +38,8 @@ abonents = f.read().split()
 f.close()
 count = 0
 for i in abonents:
-    script(i, random.randint(1,99999999))
-    count+=1
-    print(count)
+    if count < 101:
+        script(i, random.randint(1,99999999))
+        count+=1
+        print(count)
+    else: break
