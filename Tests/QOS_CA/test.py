@@ -67,7 +67,7 @@ for i in range(1, number_of_sections+1):
     # Если не последняя секция
     if count != number_of_sections:
         # Количество критериев в секции (макс кол-во - кол-во секций)
-        randomed_criterias_number = random.randint(1,number_of_criterias - number_of_sections - i+1)
+        randomed_criterias_number = random.randint(1,(number_of_criterias - number_of_sections - i+1))
         for j in range(1,randomed_criterias_number+1):
             # Выбираем из списка критерия и удаляем его из списка
             random_criteria_and_group = random.choice(randomed_criterias)
@@ -81,6 +81,8 @@ for i in range(1, number_of_sections+1):
                             '$weight':weight,
                             '$position':j}
             data = _.make_data('template_criteria',new_criteria)
+            print("84 line", data)
+            print("84 line tamplate criteria", templateCriterias["templateCriterias"])
             templateCriterias["templateCriterias"].append(data)
             number_of_criterias = number_of_criterias - randomed_criterias_number
         count += 1
@@ -90,7 +92,7 @@ for i in range(1, number_of_sections+1):
             if j !=number_of_criterias:
                 random_criteria_and_group = random.choice(randomed_criterias)
                 randomed_criterias.remove(random_criteria_and_group)
-                random_weight = random.randint(1,weight-number_of_criterias-i)
+                random_weight = random.randint(1,(weight-number_of_criterias-i))
                 weight = weight - random_weight
             else:
                 random_criteria_and_group = randomed_criterias[0]
@@ -99,7 +101,11 @@ for i in range(1, number_of_sections+1):
                             '$criteria_group_id': random_criteria_and_group[0],
                             '$weight': weight,
                             '$position': j}
+
+
             data = _.make_data('template_criteria', new_criteria)
+            print("104 line data", data)
+            print("104 line tamplate criteria", templateCriterias["templateCriterias"])
             templateCriterias["templateCriterias"].append(data)
 print(templateCriterias)
 
