@@ -19,5 +19,6 @@ with open("template_ids.txt", "r") as file:
 for i in id_to_delete:
     response = requests.post(url_delete_result, data = json.dumps({'resultId':i}), headers=headers)
     print(response.status_code)
+    print(response.json())
 
 file.close()

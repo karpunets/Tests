@@ -38,12 +38,13 @@ b = {"dateCreate":1504526486176,"supervisor": {"fname":"Root","lname":"Initiate"
   "templateSections":[]}
 
 example_id = {11111:[1,2,3,4,5], 22222:[6,7,8], 33333:[9,10,11,12]}
+
+
+
+
 max_criterias_number = 0
 for i in example_id:
      max_criterias_number+=len(example_id[i])
-
-
-
 
 number_of_sections = random.randint(1,5)
 number_of_criterias = random.choice(range(number_of_sections, max_criterias_number, number_of_sections))

@@ -12,7 +12,11 @@ url_edit_result = "http://172.22.2.63:8080/SmiddleQualityService/qos/result/edit
 url_result_approve = "http://172.22.2.63:8080/SmiddleQualityService/qos/result/result_approve"
 
 
-data_calls = json.dumps({"dateFrom":1501880400000,"showUnmappedCalls":False,"pagination":{"page_number":"1","page_size":20,"sortedField":"dateStart","order":"ASC"}})
+
+count_of_results =30
+
+
+data_calls = json.dumps({"dateFrom":1501880400000,"showUnmappedCalls":False,"pagination":{"page_number":"1","page_size":count_of_results,"sortedField":"dateStart","order":"ASC"}})
 data_empty_result = {"templateId":141389096,"userId":2,"callIds":[141385835]}
 
 calls_id = []
@@ -45,11 +49,11 @@ for j in calls_id:
 file.close()
 
 
-# with open("template_ids.txt", "r") as file:
-#     id_to_approve = file.read().split()
-#
-# for i in id_to_approve:
-#     response = requests.post(url_result_approve, data=json.dumps({"resultId":i}), headers=headers)
-#     print("approve", response.status_code)
-#
-# file.close()
+with open("template_ids.txt", "r") as file:
+    id_to_approve = file.read().split()
+
+for i in id_to_approve:
+    response = requests.post(url_result_approve, data=json.dumps({"resultId":i}), headers=headers)
+    print("approve", response.status_code)
+
+file.close()

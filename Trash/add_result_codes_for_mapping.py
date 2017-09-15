@@ -4,7 +4,7 @@ import pytest, json, requests
 headers ={'content-type': "application/json;charset=UTF-8",
            'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h
 
-server = "http://172.22.2.63:8080"
+server = "http://172.22.2.66:8080"
 
 url = "%s/SmiddleCampaignManager/cm/manager/get_result_code"%server
 get_campaign_url = "%s/SmiddleCampaignManager/cm/manager/get_campaign"%server

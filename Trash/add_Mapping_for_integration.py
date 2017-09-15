@@ -4,8 +4,8 @@ import json, requests
 headers = {'content-type': "application/json;charset=UTF-8",
                      'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}
 
-server = "http://172.22.2.63:8080"
-settings_id = 142017415
+server = "http://172.22.2.66:8080"
+settings_id = 148962447
 # server = "http://172.22.2.63:8080"
 
 
