@@ -7,13 +7,13 @@ from Data.Make_requests_and_answers import JSON_generator as _
 headers = {'content-type': "application/json;charset=UTF-8",
                      'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}
 
-server = 'http://172.22.2.63:8080'
+server = 'http://172.22.8.102:8080'
 criteria_group = "%s/SmiddleQualityService/qos/template/criteria_group"%server
 criteria = "%s/SmiddleQualityService/qos/template/criteria"%server
 
 
-def test_add_criteria():
-    criteria_names = {'ПРАВИЛЬНОСТЬ ПРЕДОСТАВЛЕНИЯ ИНФОРМАЦИИ И РАБОТА С ВОЗРАЖЕНИЯМИ':
+
+criteria_names = {'ПРАВИЛЬНОСТЬ ПРЕДОСТАВЛЕНИЯ ИНФОРМАЦИИ И РАБОТА С ВОЗРАЖЕНИЯМИ':
                           [['аргументация','Использование правильной, действенной аргументации на основе действующих правил и процедур при работе с возражениями, исключающее повторное обращение к другому сотруднику с тем же вопросом.'],
                            ['корректность информации','Специалист предоставил корректную информацию'],
                            ['доп.информация по запросу','Специалист предоставил сопутствующую информацию для решения запроса, чтобы исключить повторные звонки'],
@@ -44,12 +44,12 @@ def test_add_criteria():
                            ['безоценочная консультация','Специалист консультировал без личностной оценки абонента/его действий/решений'],
                            ['формы вежливости','Специалист уместно использовал вежливые формы при обращении к абоненту или при побуждении его к действию ("будьте добры", "пожалуйста" и п.р.']]}
 
-    for i in criteria_names:
-        payload = json.dumps({"groups":[{"id":2}],"name":i})
-        response = requests.post(url=criteria_group, data=payload, headers = headers)
-        print(response.status_code)
-        for j in criteria_names[i]:
-            criteria_data = json.dumps({"name": j[0], "description": j[1], "criteriaGroup": {"id": response.json()['id']}})
-            response_criteria = requests.post(url=criteria, data=criteria_data, headers=headers)
-            print(response_criteria.status_code)
+for i in criteria_names:
+    payload = json.dumps({"groups": [{"id": 2}], "name": i})
+    response = requests.post(url=criteria_group, data=payload, headers=headers)
+    print(response.json())
+    for j in criteria_names[i]:
+        criteria_data = json.dumps({"name": j[0], "description": j[1], "criteriaGroup": {"id": response.json()['id']}})
+        response_criteria = requests.post(url=criteria, data=criteria_data, headers=headers)
+        print(response_criteria.status_code)
 

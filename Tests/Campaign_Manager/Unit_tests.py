@@ -5,19 +5,8 @@ import Data.Test_data as get
 from Data.Make_requests_and_answers import JSON_generator as _
 
 
-@pytest.fixture(scope='module')
-def add_campaign(make_request):
-    payload = _.get_JSON_request('add_campaign')
-    response = make_request(url=URL.edit_campaign, data=payload)
-    assert response.status_code == 200
-    campaign_id = response.json()['id']
-    yield response.json()
-    response = requests.delete(url=URL.delete_campaign, params = {'id':campaign_id}, headers = URL.headers)
-    assert response.status_code == 200
-
 
 class Tests_add_campaign_and_result_codes:
-
     @pytest.fixture(scope='function')
     def delete_result_code(request):
         result_codes_id = {}
@@ -32,7 +21,6 @@ class Tests_add_campaign_and_result_codes:
         response = requests.delete(url=URL.remove_result_code, params=result_codes_id, headers=URL.headers)
         assert response.status_code == 200
 
-
     @allure.feature('Негативный тест')
     @allure.story('Добавляем кампанию без груп')
     def test_add_campaign_without_any_groups(self, make_request):
@@ -42,26 +30,25 @@ class Tests_add_campaign_and_result_codes:
         assert response.status_code == 400
         assert response.json() == answer
 
-    #Нет валидации на не существующую группу
+    # Нет валидации на не существующую группу
     @allure.feature('Негативный тест')
     @allure.story('Добавляем кампанию с не существующй групой')
     @pytest.mark.xfail
     def test_add_campaign_with_unknown_group(self, make_request):
-        payload = _.get_JSON_request('add_campaign', **{'groups': [{"id":99999999999}]})
+        payload = _.get_JSON_request('add_campaign', **{'groups': [{"id": 99999999999}]})
         response = make_request(url=URL.edit_campaign, data=payload)
         answer = {'SCM_VALIDATION_CAMPAIGN_GROUPS': 'No such group'}
         print(response.json())
         assert response.status_code == 500
         assert response.json() == answer
 
-
-
     @allure.feature('Негативный тест')
     @allure.story('Добавляем кампанию с существующей скилгрупой')
     def test_add_campaign_with_existing_skillgroup(self, add_campaign, make_request):
         payload = _.get_JSON_request('add_campaign')
         response = make_request(url=URL.edit_campaign, data=payload)
-        answer = {'SCM_DIALER_EXCEPTION': "DialerException: ApiException{errors=[\n{errorData='skillGroup', errorMessage='Each Skill Group can only be assigned to one Campaign.'}]}"}
+        answer = {
+            'SCM_DIALER_EXCEPTION': "DialerException: ApiException{errors=[\n{errorData='skillGroup', errorMessage='Each Skill Group can only be assigned to one Campaign.'}]}"}
         assert response.status_code == 500
         assert response.json() == answer
 
@@ -70,34 +57,33 @@ class Tests_add_campaign_and_result_codes:
     @allure.story('Добавляем кампанию с существующим кодом')
     def test_add_campaign_with_existing_code(self, add_campaign, make_request):
         campaign_code = add_campaign['code']
-        payload = _.get_JSON_request('add_campaign', **{'code':campaign_code})
+        payload = _.get_JSON_request('add_campaign', **{'code': campaign_code})
         response = make_request(url=URL.edit_campaign, data=payload)
-        answer = {"SCM_ENTITY_WITH_SUCH_FIELD_EXISTS":"SCMEntityWithSuchFieldExists: CODE"}
+        answer = {"SCM_ENTITY_WITH_SUCH_FIELD_EXISTS": "SCMEntityWithSuchFieldExists: CODE"}
         assert response.status_code == 500
         assert response.json() == answer
 
-
     @allure.feature('Негативный тест')
     @allure.story('Добавляем кампанию с удаленным кодом')
-    def test_add_campaign_with_deleted_code(self,  make_request):
+    def test_add_campaign_with_deleted_code(self, make_request):
         payload = _.get_JSON_request('add_campaign', **{'code': 'deleted_code'})
         response = make_request(url=URL.edit_campaign, data=payload)
         answer = "errorData='name', errorMessage='A deleted item exists with the specified value.  The names of deleted items cannot be reused unless they are permanently deleted via the Deleted Objects tool.'"
         assert response.status_code == 500
         assert answer in response.json()['SCM_DIALER_EXCEPTION']
 
-
-
     @allure.feature('Позитивный тест')
     @allure.story('Получаем список кампаний')
-    def test_get_campaign(self,  add_campaign, make_request):
+    def test_get_campaign(self, add_campaign, make_request):
         # Подготавливаем данные в JSON для запроса
         campaign_id = add_campaign['id']
         code = add_campaign['code']
         data = {}
         # Делаем запрос и получаем ответ
         response = make_request(url=URL.get_campaign, data=data)
-        answer = [{'id': campaign_id, 'code': code, 'name': 'auto_test_campaign', 'comment': 'auto_test', 'deleted': False, 'groups': [{'id': 2}]}]
+        answer = [
+            {'id': campaign_id, 'code': code, 'name': 'auto_test_campaign', 'comment': 'auto_test', 'deleted': False,
+             'groups': [{'id': 2}]}]
         assert response.status_code == 200
         assert answer == response.json()
 
@@ -106,7 +92,7 @@ class Tests_add_campaign_and_result_codes:
     def test_get_result_code(self, add_campaign, make_request):
         # Подготавливаем данные в JSON для запроса
         campaign_id = add_campaign['id']
-        data = {"campaignId":campaign_id}
+        data = {"campaignId": campaign_id}
         # Делаем запрос и получаем ответ
         response = make_request(url=URL.get_result_code, data=data)
         assert response.status_code == 200
@@ -130,45 +116,46 @@ class Tests_add_campaign_and_result_codes:
     @allure.feature('Позитивный тест')
     @allure.story('Добавляем код результата')
     @pytest.mark.parametrize('dataType', ['INTEGER', 'FLOAT', 'STRING', 'TEXT', 'DATE'])
-    @pytest.mark.parametrize('code', [ 123123123, 1232.22, 'string'])
+    @pytest.mark.parametrize('code', [123123123, 1232.22, 'string'])
     def test_add_result_codes(self, add_campaign, make_request, delete_result_code, dataType, code):
         # Подготавливаем данные в JSON для запроса
         campaign_id = add_campaign['id']
 
-        data = _.get_JSON_request('add_result_code',**{"campaign":{"id":campaign_id},
-                                                  "dataType": dataType,
-                                                       'code': code})
+        data = _.get_JSON_request('add_result_code', **{"campaign": {"id": campaign_id},
+                                                        "dataType": dataType,
+                                                        'code': code})
         # Делаем запрос и получаем ответ
         response = make_request(url=URL.edit_result_code, data=data)
         result_code_id = response.json()['id']
-        delete_result_code['id']=result_code_id
-        answer = _.get_JSON_response('add_result_code', **{'id':result_code_id,
-                                                           'dataType':dataType,
-                                                           'code':str(code)})
+        delete_result_code['id'] = result_code_id
+        answer = _.get_JSON_response('add_result_code', **{'id': result_code_id,
+                                                           'dataType': dataType,
+                                                           'code': str(code)})
         assert response.status_code == 200
         assert answer == response.json()
 
     @allure.feature('Негативный тест')
     @allure.story('Добавляем код результата с строкой 256 символов')
     @pytest.mark.parametrize('dataType', ['INTEGER', 'FLOAT', 'STRING', 'TEXT', 'DATE'])
-    def test_add_result_codes_with_256(self, add_campaign, make_request,  dataType):
+    def test_add_result_codes_with_256(self, add_campaign, make_request, dataType):
         # Подготавливаем данные в JSON для запроса
         campaign_id = add_campaign['id']
         data = _.get_JSON_request('add_result_code', **{"campaign": {"id": campaign_id},
                                                         "dataType": dataType,
-                                                        'code': "q"*256,
-                                                        'name':'q'*256})
+                                                        'code': "q" * 256,
+                                                        'name': 'q' * 256})
         # Делаем запрос и получаем ответ
         response = make_request(url=URL.edit_result_code, data=data)
-        answer ={ "SCM_VALIDATION_OVERALL_NAME_LENGTH": "Name is to long, max length = 255 characters",
+        answer = {"SCM_VALIDATION_OVERALL_NAME_LENGTH": "Name is to long, max length = 255 characters",
                   "SCM_VALIDATION_OVERALL_CODE_LENGTH": "Code is to long, max length = 255 characters"}
         assert response.status_code == 400
         assert answer == response.json()
 
-
     @allure.feature('Позитивный тест')
     @allure.story('Добавляем варианты значений для кодов результатов')
-    @pytest.mark.parametrize(('dataType','value'), [('INTEGER', 123321), ('FLOAT', 123.25), ('STRING','string'), ('TEXT', 'some_text'), ('DATE',132213123213)])
+    @pytest.mark.parametrize(('dataType', 'value'),
+                             [('INTEGER', 123321), ('FLOAT', 123.25), ('STRING', 'string'), ('TEXT', 'some_text'),
+                              ('DATE', 132213123213)])
     def test_add_result_variants(self, add_campaign, make_request, delete_result_code, dataType, value):
         # Подготавливаем данные в JSON для запроса
         campaign_id = add_campaign['id']
@@ -180,8 +167,8 @@ class Tests_add_campaign_and_result_codes:
         result_code_id = response.json()['id']
         delete_result_code['id'] = result_code_id
         assert response.status_code == 200
-        data = _.get_JSON_request('edit_result_variant', **{"campaignCode":campaign_code,
-                                                            "resultVariant":{"value":value,"forInit":False}})
+        data = _.get_JSON_request('edit_result_variant', **{"campaignCode": campaign_code,
+                                                            "resultVariant": {"value": value, "forInit": False}})
         response = make_request(url=URL.edit_result_variant, data=data)
         assert response.status_code == 200
 
@@ -203,17 +190,18 @@ class Tests_add_campaign_and_result_codes:
         data = _.get_JSON_request('edit_result_variant', **{"campaignCode": campaign_code,
                                                             "resultVariant": {"value": value, "forInit": False}})
         response = make_request(url=URL.edit_result_variant, data=data)
-        answer = {"SCM_EDIT_RESULT_VARIANT_EXCEPTION":"SCMEditResultVariantException: Wrong result variant format for dataType '%s'"%dataType}
+        answer = {
+            "SCM_EDIT_RESULT_VARIANT_EXCEPTION": "SCMEditResultVariantException: Wrong result variant format for dataType '%s'" % dataType}
         assert response.status_code == 500
         assert answer == response.json()
-
 
     @allure.feature('Негативный тест')
     @allure.story('Добавляем варианты значений с однаковыми результатами')
     @pytest.mark.parametrize(('dataType', 'value'),
                              [('INTEGER', 123321), ('FLOAT', 123.25), ('STRING', 'string'), ('TEXT', 'some_text'),
                               ('DATE', 132213123213)])
-    def test_add_result_variant_with_existing_variant(self, add_campaign, make_request, delete_result_code, dataType, value):
+    def test_add_result_variant_with_existing_variant(self, add_campaign, make_request, delete_result_code, dataType,
+                                                      value):
         # Подготавливаем данные в JSON для запроса
         campaign_id = add_campaign['id']
         campaign_code = add_campaign['code']
@@ -231,7 +219,8 @@ class Tests_add_campaign_and_result_codes:
         data = _.get_JSON_request('edit_result_variant', **{"campaignCode": campaign_code,
                                                             "resultVariant": {"value": value, "forInit": False}})
         response = make_request(url=URL.edit_result_variant, data=data)
-        answer = {'SCM_ENTITY_WITH_SUCH_FIELD_EXISTS': 'SCMEntityWithSuchFieldExists: ResultVariant with such field exists: VALUE'}
+        answer = {
+            'SCM_ENTITY_WITH_SUCH_FIELD_EXISTS': 'SCMEntityWithSuchFieldExists: ResultVariant with such field exists: VALUE'}
         assert response.status_code == 500
         assert answer == response.json()
 
@@ -263,11 +252,11 @@ class Tests_add_campaign_and_result_codes:
         assert response.status_code == 500
         assert answer == response.json()
 
-
     @allure.feature('Негативный тест')
     @allure.story('Добавляем варианты значения для кодов результатов с неизвесным "resultCode"')
-    @pytest.mark.parametrize(('dataType', 'value'),[('STRING', 'string')])
-    def test_add_result_variants_with_unknown_resultCode(self, add_campaign, make_request, delete_result_code, dataType, value):
+    @pytest.mark.parametrize(('dataType', 'value'), [('STRING', 'string')])
+    def test_add_result_variants_with_unknown_resultCode(self, add_campaign, make_request, delete_result_code, dataType,
+                                                         value):
         # Подготавливаем данные в JSON для запроса
         campaign_id = add_campaign['id']
         campaign_code = add_campaign['code']
@@ -279,13 +268,13 @@ class Tests_add_campaign_and_result_codes:
         delete_result_code['id'] = result_code_id
         assert response.status_code == 200
         data = _.get_JSON_request('edit_result_variant', **{"campaignCode": campaign_code,
-                                                            "resultCode":"UNKNOWN_result_code",
+                                                            "resultCode": "UNKNOWN_result_code",
                                                             "resultVariant": {"value": value, "forInit": False}})
         response = make_request(url=URL.edit_result_variant, data=data)
-        answer = {'SCM_REQUESTED_RESOURCE_NOT_FOUND': "SCMRequestedResourceNotFoundException: Unable to find result code 'UNKNOWN_result_code' for campaign '%s'"%campaign_code}
+        answer = {
+            'SCM_REQUESTED_RESOURCE_NOT_FOUND': "SCMRequestedResourceNotFoundException: Unable to find result code 'UNKNOWN_result_code' for campaign '%s'" % campaign_code}
         assert response.status_code == 500
         assert response.json() == answer
-
 
     @allure.feature('Негативный тест')
     @allure.story('Пытаемся удалить стандартные значения кодов результатов(от дайлера)')
@@ -298,12 +287,12 @@ class Tests_add_campaign_and_result_codes:
         response = make_request(url=URL.get_result_code, data=data)
         assert response.status_code == 200
         for i in response.json():
-            if i['code']== dialer_result_code:
-                response = requests.delete(url=URL.remove_result_code, params = {'id':i['id']}, headers = URL.headers)
-                answer  ={"SCM_DELETE_RESULT_CODE_EXCEPTION":"SCMDeleteResultCodeException: Unable to delete CISCO dialer result code '%s'"%dialer_result_code}
+            if i['code'] == dialer_result_code:
+                response = requests.delete(url=URL.remove_result_code, params={'id': i['id']}, headers=URL.headers)
+                answer = {
+                    "SCM_DELETE_RESULT_CODE_EXCEPTION": "SCMDeleteResultCodeException: Unable to delete CISCO dialer result code '%s'" % dialer_result_code}
                 assert response.status_code == 500
                 assert response.json() == answer
-
 
     @allure.feature('Негативный тест')
     @allure.story('Пытаемся удалить стандартные варианты значений кодов результатов(от дайлера)')
@@ -315,38 +304,38 @@ class Tests_add_campaign_and_result_codes:
         response = make_request(url=URL.get_result_code, data={"campaignId": campaign_id})
         assert response.status_code == 200
         for i in response.json():
-            if i['code']== dialer_result_code:
-                    for j in i['resultVariants']:
-                        params = {'id':j['id'], 'campaignCode':campaign_code, 'resultCode':dialer_result_code}
-                        response = requests.delete(url=URL.remove_result_variant, params = params, headers = URL.headers)
-                        answer  ={"SCM_DELETE_RESULT_VARIANT_EXCEPTION":"SCMDeleteResultVariantException: Unable to delete CISCO dialer result variant for result code '%s'"%dialer_result_code}
-                        assert response.status_code == 500
-                        assert response.json() == answer
+            if i['code'] == dialer_result_code:
+                for j in i['resultVariants']:
+                    params = {'id': j['id'], 'campaignCode': campaign_code, 'resultCode': dialer_result_code}
+                    response = requests.delete(url=URL.remove_result_variant, params=params, headers=URL.headers)
+                    answer = {
+                        "SCM_DELETE_RESULT_VARIANT_EXCEPTION": "SCMDeleteResultVariantException: Unable to delete CISCO dialer result variant for result code '%s'" % dialer_result_code}
+                    assert response.status_code == 500
+                    assert response.json() == answer
 
 
 class TestMapping:
-
     # Получаем списко фиксированных полей для маппинга
     @pytest.fixture(scope='module')
     def fixed_fields(self):
         # Словарь для добавления Ufieldov
-        result = {'INTEGER':[], 'FLOAT':[], 'STRING':[], 'TEXT':[]}
-        response = requests.get(URL.get_fixed_fields, headers = URL.headers)
+        result = {'INTEGER': [], 'FLOAT': [], 'STRING': [], 'TEXT': []}
+        response = requests.get(URL.get_fixed_fields, headers=URL.headers)
         for i in response.json():
             if i['dataType'] in result.keys():
                 result[i['dataType']].append(i['field'])
         return result
 
     @pytest.fixture(scope='function')
-    def add_map_field(self, add_campaign, fixed_fields, make_request, clear_result ):
+    def add_map_field(self, add_campaign, fixed_fields, make_request, clear_result):
         fieldAbonent = random.choice(fixed_fields["STRING"])
         campaign_id = add_campaign['id']
-        maps_json=[]
+        maps_json = []
         data = _.get_JSON_request('add_map_field', **{"name": "Mapping_test",
                                                       "fieldImport": "Mapping_test",
                                                       "fieldAbonent": fieldAbonent,
                                                       "campaign": {"id": campaign_id}})
-        response = make_request(url=URL.map_field, data = data)
+        response = make_request(url=URL.map_field, data=data)
         assert response.status_code == 200
         maps_json.append(response.json())
         data = _.get_JSON_request('add_map_field', **{"name": "Mapping_test",
@@ -354,7 +343,7 @@ class TestMapping:
                                                       "phoneNumber": True,
                                                       "phoneType": "MOBILE",
                                                       "campaign": {"id": campaign_id}})
-        response = make_request(url=URL.map_field, data = data)
+        response = make_request(url=URL.map_field, data=data)
         assert response.status_code == 200
         maps_json.append(response.json())
         yield maps_json
@@ -364,15 +353,13 @@ class TestMapping:
         except IndexError:
             pass
 
-
-
     @allure.feature('Позитивный тест')
     @allure.story('Добавляем мапинг полей(не телефоны)')
     @pytest.mark.parametrize('dataType', ['INTEGER', 'FLOAT', 'STRING', 'TEXT'])
     def test_add_map_fields(self, add_campaign, make_request, dataType, fixed_fields, clear_result):
         # Подготавливаем данные в JSON для запроса
         campaign_id = add_campaign['id']
-        #SAMPLE
+        # SAMPLE
         fieldAbonent = random.choice(fixed_fields[dataType])
         data = _.get_JSON_request('add_map_field', **{"name": "Mapping_test",
                                                       "fieldImport": "Mapping_test",
@@ -462,13 +449,14 @@ class TestMapping:
         response = make_request(url=URL.map_field, data=data)
         answer = {
             "SCM_FIELD_MAPPING_EXCEPTION": "SCMFieldMappingException: Field map=%s already exists for campaignId=%s" % (
-            fieldAbonent, campaign_id)}
+                fieldAbonent, campaign_id)}
         assert response.status_code == 500
         assert answer == response.json()
 
     @allure.feature('Позитивный тест')
     @allure.story('Добавляем 2 раза мапинг полей с одинаковыми полями fieldImport и name')
-    def test_add_map_fields_with_existing_name_and_fieldImport(self, add_campaign, make_request, fixed_fields, clear_result):
+    def test_add_map_fields_with_existing_name_and_fieldImport(self, add_campaign, make_request, fixed_fields,
+                                                               clear_result):
         # Подготавливаем данные в JSON для запроса
         dataType = "STRING"
         campaign_id = add_campaign['id']
@@ -501,12 +489,12 @@ class TestMapping:
         assert response.status_code == 200
         assert answer == response.json()
 
-
-    #Не должно пропускать "forExport": True,"forFilter": True,"fieldAbonent":Ufield
+    # Не должно пропускать "forExport": True,"forFilter": True,"fieldAbonent":Ufield
     @allure.feature('Негативный тест')
     @allure.story('Добавляем 2 раза мапинг полей с одинаковыми полями fieldImport и name')
     @pytest.mark.xfail
-    def test_add_map_field_with_fieldAbonent_forExport_forFilter_for_phones(self, add_campaign, make_request, fixed_fields):
+    def test_add_map_field_with_fieldAbonent_forExport_forFilter_for_phones(self, add_campaign, make_request,
+                                                                            fixed_fields):
         # Подготавливаем данные в JSON для запроса
         campaign_id = add_campaign['id']
         fieldAbonent = random.choice(fixed_fields["STRING"])
@@ -522,10 +510,9 @@ class TestMapping:
         # Делаем запрос и получаем ответ
         response = make_request(url=URL.map_field, data=data)
         print(response.json())
-        assert response.status_code==500
+        assert response.status_code == 500
 
-
-    #Неудобочитаемая ошибка
+    # Неудобочитаемая ошибка
     @allure.feature('Негативный тест')
     @allure.story('Добавляем не корекктный phoneType')
     @pytest.mark.xfail
@@ -547,14 +534,15 @@ class TestMapping:
     @allure.feature('Негативный тест')
     @allure.story('Добавляем мапинг полей с неправильным dataType для fieldAbonent')
     @pytest.mark.parametrize('dataType', ['INTEGER', 'FLOAT', 'STRING', 'TEXT'])
-    def test_add_map_field_with_incorrect_dataType_for_fieldAbonent(self, add_campaign, make_request, fixed_fields, dataType):
+    def test_add_map_field_with_incorrect_dataType_for_fieldAbonent(self, add_campaign, make_request, fixed_fields,
+                                                                    dataType):
         # Подготавливаем данные в JSON для запроса
         campaign_id = add_campaign['id']
         fieldAbonent = random.choice(fixed_fields[dataType])
         dataType_values = ['INTEGER', 'FLOAT', 'STRING', 'TEXT']
-        #Удаляем корректное значение dataType для конкретного fieldAbonent
+        # Удаляем корректное значение dataType для конкретного fieldAbonent
         dataType_values.remove(dataType)
-        #Выбираем рандомное значение из оставшихся елементов
+        # Выбираем рандомное значение из оставшихся елементов
         incorrect_dataType = random.choice(dataType_values)
         data = _.get_JSON_request('add_map_field', **{"name": "Mapping_test",
                                                       "fieldImport": "Mapping_test",
@@ -563,8 +551,10 @@ class TestMapping:
                                                       "campaign": {"id": campaign_id}})
         # Делаем запрос и получаем ответ
         response = make_request(url=URL.map_field, data=data)
-        answer = {"SCM_FIELD_MAPPING_EXCEPTION": "SCMFieldMappingException: Incorrect mapping for=%s correct type=%s"%(fieldAbonent, dataType)}
-        assert response.status_code==500
+        answer = {
+            "SCM_FIELD_MAPPING_EXCEPTION": "SCMFieldMappingException: Incorrect mapping for=%s correct type=%s" % (
+                fieldAbonent, dataType)}
+        assert response.status_code == 500
         assert response.json() == answer
 
     # Не должно давать добавлять  phoneType для phoneNumber = False
@@ -587,10 +577,9 @@ class TestMapping:
         clear_result['url'], clear_result['id'] = URL.delete_mapfield, mapfield_id
         assert response.status_code == 500
 
-
     @allure.feature('Негативный тест')
     @allure.story('Добавляем мапинг полей с не существующим campaignID')
-    def test_add_map_fields_with_wrong_campaignID(self, add_campaign, make_request,  fixed_fields):
+    def test_add_map_fields_with_wrong_campaignID(self, add_campaign, make_request, fixed_fields):
         # Подготавливаем данные в JSON для запроса
         fieldAbonent = random.choice(fixed_fields["STRING"])
         data = _.get_JSON_request('add_map_field', **{"name": "Mapping_test",
@@ -602,17 +591,16 @@ class TestMapping:
         response = make_request(url=URL.map_field, data=data)
         assert response.status_code == 500
 
-
     @allure.feature('Позитивный тест')
     @allure.story('Удаляем маппинг полей')
     def test_delete_map_fields(self, add_campaign, add_map_field):
 
-        mapfield_id_no_phone, mapfield_id_phone  = add_map_field[0]['id'], add_map_field[1]['id']
+        mapfield_id_no_phone, mapfield_id_phone = add_map_field[0]['id'], add_map_field[1]['id']
         add_map_field.pop(1), add_map_field.pop(0)
-        response_no_phone = requests.delete(url=URL.delete_mapfield, params={'id': mapfield_id_no_phone}, headers = URL.headers)
+        response_no_phone = requests.delete(url=URL.delete_mapfield, params={'id': mapfield_id_no_phone},
+                                            headers=URL.headers)
         response_phone = requests.delete(url=URL.delete_mapfield, params={'id': mapfield_id_phone}, headers=URL.headers)
         assert response_no_phone.status_code, response_phone.status_code == 200
-
 
     @allure.feature('Позитивный тест')
     @allure.story('Редактируем в маппинге(не телефон) след поля: "name", "fieldImport", "forExport", "forFilter"')
@@ -620,9 +608,9 @@ class TestMapping:
         # Подготавливаем данные в JSON для запроса
         campaign_id = add_campaign['id']
         data = _.generate_JSON(add_map_field[0], {"name": "eddited_map_field",
-                                                 "fieldImport": "eddited_map_field",
-                                                 "forExport": True,
-                                                 "forFilter": True,
+                                                  "fieldImport": "eddited_map_field",
+                                                  "forExport": True,
+                                                  "forFilter": True,
                                                   })
         data['campaign'] = {"id": campaign_id}
         response = make_request(url=URL.map_field, data=data)
@@ -630,15 +618,14 @@ class TestMapping:
         assert response.json()['name'] and response.json()["fieldImport"] == "eddited_map_field"
         assert response.json()["forExport"] and response.json()["forFilter"] == True
 
-
-    #Не существует такой кампании
+    # Не существует такой кампании
     @allure.feature('Негативный тест')
     @allure.story('Удаляем маппинг не существующих полей')
     @pytest.mark.xfail
     def test_delete_map_fields_with_unknown_id(self, add_campaign):
-        response = requests.delete(url=URL.delete_mapfield, params={'id': 99999999999}, headers = URL.headers)
-        assert  response.status_code == 500
+        response = requests.delete(url=URL.delete_mapfield, params={'id': 99999999999}, headers=URL.headers)
+        assert response.status_code == 500
         print(response.json())
 
 
-#Нужно дописать такие же тесты как и на добавление пользователей после фикса багов в валидации с телефонами
+        # Нужно дописать такие же тесты как и на добавление пользователей после фикса багов в валидации с телефонами

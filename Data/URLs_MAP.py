@@ -38,7 +38,7 @@ Manager_manifest = '%s/SmiddleManager/adm/admin/manifest' % server
 add_role_access = '%s/SmiddleManager/adm/management/add_role_access' % server
 delete_role_access = '%s/SmiddleManager/adm/management/delete_role_access' % server
 
-# CAMPAIGN MANAGER
+# CAMPAIGN MANAGER UCCE
 get_campaign = '%s/SmiddleCampaignManager/cm/manager/get_campaign' % server
 get_batch = '%s/SmiddleCampaignManager/cm/manager/get_batch' % server
 get_dial_list = '%s/SmiddleCampaignManager/cm/dialer/get_dial_lists' % server
@@ -66,6 +66,10 @@ delete_dial_list = '%s/SmiddleCampaignManager/cm/dialer/delete_dial_list' % serv
 delete_campaign = '%s/SmiddleCampaignManager/cm/manager/delete_campaign' % server
 remove_result_variant = '%s/SmiddleCampaignManager/cm/manager/remove_result_variant' % server
 
+
+# CAMPAIGN MANAGER UCCX
+
+
 # SMART_CALL_BACK
 fixed_routes = "%s/SmiddleSmartCallback/scb/route/fixed" % server
 soft_routes = "%s/SmiddleSmartCallback/scb/route/soft" % server
@@ -78,23 +82,21 @@ scb_contact = "%s/SmiddleSmartCallback/scb/contact" % server
 scb_statistic = "%s/SmiddleSmartCallback/scb/call/statistic" % server
 scb_credentials = "%s/SmiddleSmartCallback/scb/credentials" % server
 
-#Smart_Proxy
-proxy_list = "%s/SmiddleSIPProxy/ssp/phone/list"%server
-proxy_prefix = '%s/SmiddleSIPProxy/ssp/phone/prefix'%server
-proxy_logs = "%s/SmiddleSIPProxy/ssp/logs"%server
+# Smart_Proxy
+proxy_list = "%s/SmiddleSIPProxy/ssp/phone/list" % server
+proxy_prefix = '%s/SmiddleSIPProxy/ssp/phone/prefix' % server
+proxy_logs = "%s/SmiddleSIPProxy/ssp/logs" % server
 proxy_manifest = "%s/SmiddleSIPProxy/ssp/manifest" % server
 proxy_licenses = "%s/SmiddleSIPProxy/ssp/licenses" % server
 proxy_settings = "%s/SmiddleSIPProxy/ssp/settings" % server
 
+# QOS
+criteria_group = "%s/SmiddleQualityService/qos/template/criteria_group" % server
+criteria = "%s/SmiddleQualityService/qos/template/criteria" % server
+delete_criteria_group = "%s/SmiddleQualityService/qos/template//delete_criteria_group" % server
 
-#QOS
-criteria_group = "%s/SmiddleQualityService/qos/template/criteria_group"%server
-criteria = "%s/SmiddleQualityService/qos/template/criteria"%server
-delete_criteria_group = "%s/SmiddleQualityService/qos/template//delete_criteria_group"%server
-
-
-#QOS_CA
-questioner = "%s/SmiddleQualityService_CA/qos/ca/questioner"%server
-filter = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter"%server
-abonent = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter/phone/import"%server
-agent = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter/agent"%server
+# QOS_CA
+questioner = "%s/SmiddleQualityService_CA/qos/ca/questioner" % server
+filter = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter" % server
+abonent = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter/phone/import" % server
+agent = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter/agent" % server

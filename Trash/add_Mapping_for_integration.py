@@ -1,8 +1,7 @@
 import json, requests
 
-
 headers = {'content-type': "application/json;charset=UTF-8",
-                     'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}
+           'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}
 
 server = "http://172.22.2.66:8080"
 settings_id = 148962447
@@ -92,28 +91,29 @@ settings_id = 148962447
 
 
 user_list = {
-             '2':{"settings":{"id":settings_id},'fieldContract':'ACCOUNT_NUMBER','fieldImport':'ContractCode'},
-             '3':{"settings":{"id":settings_id},'fieldContract':'RESULT_DATE','fieldImport':'DateCall'},
-             '4':{"settings":{"id":settings_id},'fieldContract':'ABONENT_FIO','fieldImport':'FIO'},
-             '5':{"settings":{"id":settings_id},'fieldContract':'OPERATOR_LOGIN','fieldImport':'AgentName'},
-             '6':{"settings":{"id":settings_id},'fieldContract':'SUCCESS','fieldImport':'SUCCESS'},
-             '7':{"settings":{"id":settings_id},'fieldContract':'CAMPAIGN','fieldImport':'Campaign'},
-             '8':{"settings":{"id":settings_id},'fieldContract':'OPERATOR_ID','fieldImport':'Operator_id'},
-             '9':{"settings":{"id":settings_id},'fieldContract':'CALLBACK_USED','fieldImport':'Callback_used'}}
+    '2': {"settings": {"id": settings_id}, 'fieldContract': 'ACCOUNT_NUMBER', 'fieldImport': 'ContractCode'},
+    '3': {"settings": {"id": settings_id}, 'fieldContract': 'RESULT_DATE', 'fieldImport': 'DateCall'},
+    '4': {"settings": {"id": settings_id}, 'fieldContract': 'ABONENT_FIO', 'fieldImport': 'FIO'},
+    '5': {"settings": {"id": settings_id}, 'fieldContract': 'OPERATOR_LOGIN', 'fieldImport': 'AgentName'},
+    '6': {"settings": {"id": settings_id}, 'fieldContract': 'SUCCESS', 'fieldImport': 'SUCCESS'},
+    '7': {"settings": {"id": settings_id}, 'fieldContract': 'CAMPAIGN', 'fieldImport': 'Campaign'},
+    '8': {"settings": {"id": settings_id}, 'fieldContract': 'OPERATOR_ID', 'fieldImport': 'Operator_id'},
+    '9': {"settings": {"id": settings_id}, 'fieldContract': 'CALLBACK_USED', 'fieldImport': 'Callback_used'}}
 
-result_contact = {'Успешный':1, "Не Успешный": 2, 'Просьба больше не звонить': 4}
+result_contact = {'Успешный': 1, "Не Успешный": 2, 'Просьба больше не звонить': 4}
 
-data = {"id":None,"settings":{"id":settings_id},"fieldMap":{"id":None},"scmValue":"original","contractValue":"zamena"}
+data = {"id": None, "settings": {"id": settings_id}, "fieldMap": {"id": None}, "scmValue": "original",
+        "contractValue": "zamena"}
 
-
-url = "%s/SmiddleCampaignManager/cm/integration/contract/fieldmap"%server
+url = "%s/SmiddleCampaignManager/cm/integration/contract/fieldmap" % server
 valmap_url = '%s/SmiddleCampaignManager/cm/integration/contract/valmapping' % server
+
 
 def setup_get_user_list():
     for i in user_list:
         payload = json.dumps(user_list[i])
         # Запрос на добавление пользователя
-        response = requests.post(url=url, data = payload, headers = headers)
+        response = requests.post(url=url, data=payload, headers=headers)
         print(response.json())
         # fieldmap_id = response.json()['id']
         # Записываем ID добавленных пользователей
@@ -137,4 +137,3 @@ def setup_get_user_list():
 
 
 setup_get_user_list()
-

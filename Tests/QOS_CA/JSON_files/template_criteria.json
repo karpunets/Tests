@@ -1,1 +1,10 @@
-{"templateCriteria":{"id":"$criteria_id","criteriaGroup":{"id":"$criteria_group_id"}},"weight":"$weight","position":"$position"}
+{
+  "templateCriteria": {
+    "id": "$criteria_id",
+    "criteriaGroup": {
+      "id": "$criteria_group_id"
+    }
+  },
+  "weight": "$weight",
+  "position": "$position"
+}

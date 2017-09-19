@@ -34,16 +34,14 @@ class JSON_generator(object):
         request = defaul_response(response_name)
         return JSON_generator.generate_JSON(request, data)
 
-
-
     # Получаем и преобразуем JSON файл, согласно переданным параметрам
-    def make_data(json_name, data={}, default = False):
-        #Определяем откуда брать json файл
+    def make_data(json_name, data={}, default=False):
+        # Определяем откуда брать json файл
         if default == False:
-            json_file = open('JSON_files/%s.json'%json_name, encoding="utf8").read()
+            json_file = open('JSON_files/%s.json' % json_name, encoding="utf8").read()
         else:
             json_file = open('JSON_files/default_data/%s.json' % json_name, encoding="utf8").read()
-        #Если передали параметры для изменения, заменяем их
+        # Если передали параметры для изменения, заменяем их
         if len(data) > 0:
             for key, val in iter(data.items()):
                 try:
@@ -51,11 +49,11 @@ class JSON_generator(object):
                 # Возникает если передать None(null) или int
                 except TypeError:
                     if type(val) == int:
-                        int_value = '(\%s)'%key
-                        json_file = re.sub(r'%s'%int_value, str(val), json_file)
-                    else: continue
+                        int_value = '(\%s)' % key
+                        json_file = re.sub(r'%s' % int_value, str(val), json_file)
+                    else:
+                        continue
         # Вместо не переданных параметров подставляем null
         json_file = re.sub(r'(\$[\w])', "null", json_file)
         # Преобразуем в dict для удобства
         return json.loads(json_file)
-
