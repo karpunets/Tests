@@ -7,7 +7,7 @@ from Data.Make_requests_and_answers import JSON_generator as _
 headers = {'content-type': "application/json;charset=UTF-8",
                      'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}
 
-server = 'http://172.22.8.102:8080'
+server = 'http://172.22.2.66:8080'
 criteria_group = "%s/SmiddleQualityService/qos/template/criteria_group"%server
 criteria = "%s/SmiddleQualityService/qos/template/criteria"%server
 

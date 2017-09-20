@@ -1,8 +1,14 @@
 server = 'http://172.22.2.66:8080'
+# headers = {
+#     'content-type': "application/json;charset=UTF-8",
+#     'authorization': "Basic QVBJX2F1dG90ZXN0X1JPT1Q6QVBJX2F1dG90ZXN0X1JPT1Q="}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h"  "Basic cm9vdDpyb290"
+# authorization = ('API_autotest_ROOT', 'API_autotest_ROOT')
+
 headers = {
     'content-type': "application/json;charset=UTF-8",
-    'authorization': "Basic QVBJX2F1dG90ZXN0X1JPT1Q6QVBJX2F1dG90ZXN0X1JPT1Q="}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h"  "Basic cm9vdDpyb290"
-authorization = ('API_autotest_ROOT', 'API_autotest_ROOT')
+    'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h"  "Basic cm9vdDpyb290"
+authorization = ('Root', 'Smidle098adm!')
+
 
 ROOT = "Basic QVBJX2F1dG90ZXN0X1JPT1Q6QVBJX2F1dG90ZXN0X1JPT1Q="
 ADMINISTRATOR = "Basic QVBJX2F1dG90ZXN0X0FETUlOSVNUUkFUT1I6QVBJX2F1dG90ZXN0X0FETUlOSVNUUkFUT1I="
@@ -94,6 +100,7 @@ proxy_settings = "%s/SmiddleSIPProxy/ssp/settings" % server
 criteria_group = "%s/SmiddleQualityService/qos/template/criteria_group" % server
 criteria = "%s/SmiddleQualityService/qos/template/criteria" % server
 delete_criteria_group = "%s/SmiddleQualityService/qos/template//delete_criteria_group" % server
+edit_template = "%s/SmiddleQualityService/qos/template/edit_template"%server
 
 # QOS_CA
 questioner = "%s/SmiddleQualityService_CA/qos/ca/questioner" % server

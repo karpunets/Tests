@@ -3,7 +3,7 @@ import Data.URLs_MAP as URL
 from Data.Make_requests_and_answers import JSON_generator as _
 
 
-url_delete_result = "http://172.22.2.63:8080/SmiddleQualityService/qos/result/delete_result"
+url_delete_result = "http://172.22.8.102:8080/SmiddleQualityService/qos/result/delete_result"
 headers = {
     'content-type': "application/json;charset=UTF-8",
     'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h"  "Basic cm9vdDpyb290"

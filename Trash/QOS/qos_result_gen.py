@@ -6,17 +6,20 @@ headers = {
     'content-type': "application/json;charset=UTF-8",
     'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h"  "Basic cm9vdDpyb290" "Basic Yml0Ym9rOmJpdGJvaw=="
 
-url_calls = "http://172.22.2.63:8080/SmiddleRecording/rec/reporter/calls"
-url_empty_result = "http://172.22.2.63:8080/SmiddleQualityService/qos/result/build_empty_result"
-url_edit_result = "http://172.22.2.63:8080/SmiddleQualityService/qos/result/edit_result"
-url_result_approve = "http://172.22.2.63:8080/SmiddleQualityService/qos/result/result_approve"
+server = "http://172.22.8.102:8080"
 
-count_of_results = 13
 
-data_calls = json.dumps({"dateFrom": 1501880400000, "showUnmappedCalls": False,
+url_calls = "%s/SmiddleRecording/rec/reporter/calls"%server
+url_empty_result = "%s/SmiddleQualityService/qos/result/build_empty_result"%server
+url_edit_result = "%s/SmiddleQualityService/qos/result/edit_result"%server
+url_result_approve = "%s/SmiddleQualityService/qos/result/result_approve"%server
+
+count_of_results = 70
+
+data_calls = json.dumps({"dateFrom": 1505124625000, "showUnmappedCalls": False,
                          "pagination": {"page_number": "1", "page_size": count_of_results, "sortedField": "dateStart",
                                         "order": "ASC"}})
-data_empty_result = {"templateId": 141389096, "userId": 2, "callIds": [141385835]}
+data_empty_result = {"templateId": 812188, "userId": 2, "callIds": [141385835]}
 
 calls_id = []
 response_calls = requests.post(url_calls, data=data_calls, headers=headers)
@@ -29,7 +32,7 @@ for i in response_calls.json()['data']:
             id_and_userid.append(user['user']['id'])
     calls_id.append(id_and_userid)
 
-estimate = 100
+# estimate = 100
 for j in calls_id:
     count = 0
     data_empty_result["callIds"] = [j[0]]
@@ -38,8 +41,8 @@ for j in calls_id:
     response_empty_res = response_empty_res.json()
     for sections in response_empty_res['sectionContainers']:
         for criterias in sections["criteriaList"]:
-            # criterias["score"] = random.randint(0, 100)
-            criterias["score"] = estimate
+            criterias["score"] = random.randint(0, 100)
+            # criterias["score"] = estimate
             count += 1
     response_edit_result = requests.post(url_edit_result, data=json.dumps(response_empty_res), headers=headers)
     print("result", response_edit_result.status_code)
