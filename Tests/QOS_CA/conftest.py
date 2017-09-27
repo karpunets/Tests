@@ -1,4 +1,4 @@
-import json, pytest, requests, random, string
+import json, pytest, requests, random, string, time
 import Data.URLs_MAP as URL
 
 from Data.Make_requests_and_answers import JSON_generator as _
@@ -12,8 +12,7 @@ def setup_add_criterias(make_request):
     for criteria_groups in criteria_names:
         payload = {"groups": [{"id": 2}], "name": criteria_groups}
         response = make_request(url=URL.criteria_group, data=payload)
-        print(response.json())
-        criteria_group_id  = response.json()['id']
+        criteria_group_id = response.json()['id']
         group_and_criteria_id[criteria_group_id] = []
         for names in criteria_names[criteria_groups]:
             criteria_data = {"name": names[0], "description": names[1], "criteriaGroup": {"id": response.json()['id']}}
@@ -22,32 +21,44 @@ def setup_add_criterias(make_request):
     yield group_and_criteria_id
     for group in group_and_criteria_id:
         for criteria in group_and_criteria_id[group]:
-            data = {'id':criteria}
-            make_request(URL.criteria, method='DELETE', params = data)
-        data = {"criteriaGroupId":group}
+            data = {'id': criteria}
+            make_request(URL.criteria, method='DELETE', params=data)
+        data = {"criteriaGroupId": group}
         make_request(URL.delete_criteria_group, data)
 
 
-
-@pytest.fixture()
-def setup_add_template(add_criterias, make_request):
-    #
-    template = _.make_data('template')
-    group_and_criteria_id = add_criterias
+@pytest.fixture(scope="module")
+def setup_add_template(setup_add_criterias, make_request):
+    random_name = lambda: ''.join(random.choice(string.ascii_letters + string.digits) for list in range(8))
+    date_now = lambda: round(time.time() * 1000)
+    payload = {"$name": random_name(),
+               "$description": random_name(),
+               "$dateCreate": date_now(),
+               "$version": str(random.randint(1, 255))}
+    # Получаем сущность template
+    template = _.make_data('template', payload)
+    # Получаем ID и групы критериев
+    group_and_criteria_id = setup_add_criterias
     max_criterias_number = 0
+    # Определяем максимальное кол-во критериев, в зависимости от ранее созданных критериев
     for i in group_and_criteria_id:
         max_criterias_number += len(group_and_criteria_id[i])
     number_of_sections = random.randint(1, 8)
+    # Рандомим кол-во критериев минимум - кол-во секций, кратно - кол-ву секций
     number_of_criterias = random.choice(range(number_of_sections, max_criterias_number, number_of_sections))
-    group_criteria_id = [[group, criteria] for group in group_and_criteria_id.keys() for criteria in group_and_criteria_id[group]]
+    # Преобразуем из {group:[criterias]} в [group, criteria],[group, criteria]
+    group_criteria_id = [[group, criteria] for group in group_and_criteria_id.keys() for criteria in
+                         group_and_criteria_id[group]]
+    # Рандомим критерии
     randomed_criterias = random.sample(group_criteria_id, k=number_of_criterias)
     templateSections = []
     weight = 100
     count = 1
+    # Добавлем секции и наполняем их
     for i in range(1, number_of_sections + 1):
+        # Сущность секции
         what_append_1 = {"name": "section_name_1", "position": 1, "templateCriterias": []}
-        random_name = ''.join(random.choice(string.ascii_letters + string.digits) for list in range(8))
-        what_append_1['name'] = random_name
+        what_append_1['name'] = random_name()
         what_append_1['position'] = i
         templateSections.append(what_append_1)
         # Если не последняя секция
