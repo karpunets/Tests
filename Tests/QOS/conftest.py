@@ -102,6 +102,14 @@ def setup_add_template(setup_add_criterias, make_request):
     response = make_request(URL.edit_template, template)
     yield response.json()['id']
 
+@pytest.fixture(scope="function")
+def delete_group(make_request):
+    for_delete = []
+    yield for_delete
+    for id in for_delete:
+        payload = json.dumps({"criteriaGroupId":id})
+        make_request(URL.delete_criteria_group, payload)
+
 # @pytest.fixture(scope="function")
 # def add_questioner():
 #     IDs = get_template()
