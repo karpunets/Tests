@@ -44,14 +44,18 @@ class JSON_generator(object):
         # Если передали параметры для изменения, заменяем их
         if len(data) > 0:
             for key, val in iter(data.items()):
+                # if type(val) == int:
+                #     key = '"%s"'%key
+                #     val = str(val)
+                #     json_file = json_file.replace(key, val)
+                # json_file = json_file.replace(key, val)
                 try:
+                    if type(val) == int:
+                        key = '"%s"' % key
+                        val = str(val)
                     json_file = json_file.replace(key, val)
                 # Возникает если передать None(null) или int
                 except TypeError:
-                    if type(val) == int:
-                        int_value = '(\%s)' % key
-                        json_file = re.sub(r'%s' % int_value, str(val), json_file)
-                    else:
                         continue
         # Вместо не переданных параметров подставляем null
         json_file = re.sub(r'(\$[\w])', "null", json_file)
