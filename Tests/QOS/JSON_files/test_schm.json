@@ -1,0 +1,3 @@
+{"type":"object", "properties":{"id":{"type": "number"},"dateCreate":{"type": "number"},"supervisor": {"type": "object"},
+  "name":{"type": "string"},"description":{"type": "string"},"groups":{"type": "array"},"version":{"type": "number"},
+  "templateSections":{"type": "array"}}}
