@@ -3,8 +3,8 @@ import json, requests, random
 from locust import HttpLocust, TaskSet, task
 
 
-campaign_name = "test_qqw"
-campaign_id = 146331078
+campaign_name = "O_Tele_Cross_1"
+campaign_id = 66515342
 
 headers = {
     'content-type': "application/json;charset=UTF-8",
@@ -27,8 +27,8 @@ class UserBehavior(TaskSet):
     @task(200)
     def as_script(self):
         agent_id = random.choice(agentIDs)
-        url_script_start = "http://172.22.2.63:8080/SmiddleAgentScripting/as/script_executor/script_start"
-        url_next = "http://172.22.2.63:8080/SmiddleAgentScripting/as/script_executor/script_next"
+        url_script_start = "http://172.22.2.66:8080/SmiddleAgentScripting/as/script_executor/script_start"
+        url_next = "http://172.22.2.66:8080/SmiddleAgentScripting/as/script_executor/script_next"
 
         data_start = {"clientId": "2620631", "ani": "1115", "agentId": "%s"%agent_id, "scriptId": "1635",
                       "campaignName": "%s"%campaign_name}
@@ -62,10 +62,10 @@ class UserBehavior(TaskSet):
         self.client.post(url_next, data=json.dumps(data_next_finish), headers=headers)
 
 
-    @task(35)
-    def add_excel(self):
-        files = {'file': open('C:\\Users\\Victor\\PycharmProjects\\Smiddle_API\\Trash\\for_load.xlsx', 'rb')}
-        self.client.post(excel_url, params=add_excel_params, files=files, auth=authorization)
+    # @task(35)
+    # def add_excel(self):
+    #     files = {'file': open('C:\\Users\\Victor\\PycharmProjects\\Smiddle_API\\Trash\\for_load.xlsx', 'rb')}
+    #     self.client.post(excel_url, params=add_excel_params, files=files, auth=authorization)
 
     # @task(3)
     # def add_excel(self):

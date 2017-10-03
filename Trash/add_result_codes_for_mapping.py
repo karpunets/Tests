@@ -1,18 +1,20 @@
 import pytest, json, requests
 
 headers = {'content-type': "application/json;charset=UTF-8",
-           'authorization': "Basic di5rbGl1aTp1Zmtmcm5icmY="}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h
+           'authorization': "Basic di5rbGl1aTp1Zmtmcm5icmY="}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h  di5rbGl1aTp1Zmtmcm5icmY=
 
 server = "http://172.22.8.103:8080"
 
-campaign_code = "qwrasd"
-campaign_id = 868159
+campaign_code = "qwe"
+campaign_id = 886126
 
 # url = "%s/SmiddleCampaignManager/cm/manager/get_result_code"%server
 # get_campaign_url = "%s/SmiddleCampaignManager/cm/manager/get_campaign"%server
 # edit_result_code_url = '%s/SmiddleCampaignManager/cm/manager/edit_result_code'%server
 # get_result_code_url = '%s/SmiddleCampaignManager/cm/manager/get_result_code'%server
 # edit_result_variant = '%s/SmiddleCampaignManager/cm/manager/edit_result_variant'%server
+
+
 
 # add_result = [  {'name':'Campaign', 'comment': 'Campaign_code for MSSQL',"dataType":"STRING"},
 #                 {'name':'Operator_id' , 'comment': 'Agent_id for MSSQL',"dataType":"STRING"},
@@ -46,7 +48,7 @@ def get_campaign():
 campaign_list = [{id: campaign_id, "code": campaign_code, "name": "qqweqqwr", "comment": "11231", "deleted": False,
                   "groups": [{id: 2}]}]
 #Для всех кампаний
-campaign_list = get_campaign()
+# campaign_list = get_campaign()
 
 for i in campaign_list:
 
