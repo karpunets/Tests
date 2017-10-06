@@ -18,7 +18,9 @@ a = {
 "SUCCESS": "SUCCESS",
 "CAMPAIGN": "Campaign",
 "OPERATOR_ID": "Operator_id",
-"CALLBACK_USED": "Callback_used"
+"CALLBACK_USED": "Callback_used",
+"CALL_STATUS":"call_status",
+"CALL_RESULT":"result",
 }]
 }
 
@@ -48,11 +50,16 @@ for i in range(0,100):
         "CAMPAIGN": "campaign%s"%i,
         "ACCOUNT_NUMBER": "accountNumber%s"%i,
         "ABONENT_FIO": "f",
-        "RESULT_DATE": "2017-41-41 9999:00",
+        "RESULT_DATE": "2017-41-41 19:00",
         "OPERATOR_ID": "id%s"%i,
         "OPERATOR_LOGIN": "login%s"%i,
         "SUCCESS": "success%s"%i,
-        "CALLBACK_USED": random.randint(0,2)}
+        "CALLBACK_USED": random.randint(0,2),
+        "CALL_STATUS": "status%s"%i,
+        "CALL_RESULT": "result%s"%i,
+        "CALLS_MADE":random.randint(0,9999),
+        "RESULT_DATE_END": "2017-41-41 19:00",
+    }
     a['data'].append(b)
 
 payload = json.dumps(a)
