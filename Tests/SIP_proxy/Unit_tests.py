@@ -23,7 +23,7 @@ def delete_results():
 
 # @allure.feature('Позитивный тест')
 # @allure.story('Добавляем новый роут с валидными данными')
-# def test_add_phones_with_prefix(self, make_request, delete_results):
+# def test_add_phones_with_prefix(self, send_request, delete_results):
 
 # def test_qq(create_txt_file, delete_results):
 #     prefix = '066'
@@ -36,8 +36,8 @@ def delete_results():
 #     assert response.status_code == 200
 
 
-def test_get_licenses(make_request):
+def test_get_licenses(send_request):
     url=URL.proxy_licenses
-    response = make_request(method='GET', url=url)
+    response = send_request(method='GET', url=url)
     print(response.json())
     assert response.status_code == 200

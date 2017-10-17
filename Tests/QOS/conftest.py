@@ -2,33 +2,34 @@ import json, pytest, requests, random, string, time
 import Data.URLs_MAP as URL
 
 from Data.Make_requests_and_answers import JSON_generator as _
+from Data.Test_data import random_name
 import Data.Test_data as get
 
 
 @pytest.fixture(scope="module")
-def setup_add_criterias(make_request):
+def setup_add_criterias(send_request):
     criteria_names = _.make_data('criteria_names', default=True)
     group_and_criteria_id = {}
     for criteria_groups in criteria_names:
         payload = {"groups": [{"id": 2}], "name": criteria_groups}
-        response = make_request(url=URL.criteria_group, data=payload)
+        response = send_request(url=URL.criteria_group, data=payload)
         criteria_group_id = response.json()['id']
         group_and_criteria_id[criteria_group_id] = []
         for names in criteria_names[criteria_groups]:
             criteria_data = {"name": names[0], "description": names[1], "criteriaGroup": {"id": response.json()['id']}}
-            response_criteria = make_request(url=URL.criteria, data=criteria_data)
+            response_criteria = send_request(url=URL.criteria, data=criteria_data)
             group_and_criteria_id[criteria_group_id].append(response_criteria.json()['id'])
     yield group_and_criteria_id
     for group in group_and_criteria_id:
         for criteria in group_and_criteria_id[group]:
             data = {'id': criteria}
-            make_request(URL.criteria, method='DELETE', params=data)
+            send_request(URL.criteria, method='DELETE', params=data)
         data = {"criteriaGroupId": group}
-        make_request(URL.delete_criteria_group, data)
+        send_request(URL.delete_criteria_group, data)
 
 
 @pytest.fixture(scope="module")
-def setup_add_template(setup_add_criterias, make_request):
+def setup_add_template(setup_add_criterias, send_request):
     random_name = lambda: ''.join(random.choice(string.ascii_letters + string.digits) for list in range(8))
     date_now = lambda: round(time.time() * 1000)
     payload = {"$name": random_name(),
@@ -99,16 +100,26 @@ def setup_add_template(setup_add_criterias, make_request):
                 data = _.make_data('template_criteria', new_criteria)
                 templateSections[i - 1]["templateCriterias"].append(data)
     template["templateSections"] = templateSections
-    response = make_request(URL.edit_template, template)
+    response = send_request(URL.edit_template, template)
     yield response.json()['id']
 
+
+@pytest.fixture()
+def add_group(send_request):
+    payload = json.dumps({"groups": [{"id": 2}], "name": random_name()})
+    response = send_request(URL.criteria_group, payload)
+    group_id_name = {'id':response.json()['id'], 'name':response.json()['name']}
+    yield group_id_name
+    send_request(URL.delete_criteria_group,{"criteriaGroupId": group_id_name['id']})
+
+
 @pytest.fixture(scope="function")
-def delete_group(make_request):
+def delete_group(send_request):
     for_delete = []
     yield for_delete
     for id in for_delete:
         payload = json.dumps({"criteriaGroupId":id})
-        make_request(URL.delete_criteria_group, payload)
+        send_request(URL.delete_criteria_group, payload)
 
 # @pytest.fixture(scope="function")
 # def add_questioner():

@@ -38,7 +38,7 @@ def script(client_id, ani):
     print('finish', response_finish.status_code)
 
 
-f = open("qq.txt", 'r')
+f = open("C:\\Users\\Victor\\PycharmProjects\\Smiddle_API\\Tests\\Load\\qq.txt", 'r')
 abonents = f.read().split()
 f.close()
 count = 0

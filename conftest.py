@@ -10,7 +10,8 @@ def get_role():
     # Если не передали используем рут роль
     except KeyError:
         role_name_from_jenkins = 'ROOT'
-    roles = {'ROOT': "Basic QVBJX2F1dG90ZXN0X1JPT1Q6QVBJX2F1dG90ZXN0X1JPT1Q=", #"Basic QVBJX2F1dG90ZXN0X1JPT1Q6QVBJX2F1dG90ZXN0X1JPT1Q="
+    roles = {'ROOT': "Basic QVBJX2F1dG90ZXN0X1JPT1Q6QVBJX2F1dG90ZXN0X1JPT1Q=",
+             # "Basic QVBJX2F1dG90ZXN0X1JPT1Q6QVBJX2F1dG90ZXN0X1JPT1Q="
              'ADMINISTRATOR': "Basic QVBJX2F1dG90ZXN0X0FETUlOSVNUUkFUT1I6QVBJX2F1dG90ZXN0X0FETUlOSVNUUkFUT1I=",
              'USER': "Basic QVBJX2F1dG90ZXN0X1VTRVI6QVBJX2F1dG90ZXN0X1VTRVI=",
              'SUPERVISOR': "Basic QVBJX2F1dG90ZXN0X1NVUEVSVklTT1I6QVBJX2F1dG90ZXN0X1NVUEVSVklTT1I="}
@@ -24,7 +25,7 @@ def get_role():
 
 @pytest.fixture(scope="session")
 # Формирование запроса и получение результата по полученным данным
-def make_request(get_role):
+def send_request(get_role):
     def some_request(url, data=None, method='POST', params=None):
         headers = get_role['headers']
         payload = json.dumps(data)

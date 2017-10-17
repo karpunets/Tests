@@ -8,7 +8,7 @@ name = 'edit_user'
 
 @allure.feature('Позитивный тест')
 @allure.story('Редактируем ФИО')
-def test_f_l_p_names_edit(add_delete_user, make_request):
+def test_f_l_p_names_edit(add_delete_user, send_request):
 
     user_id =add_delete_user(get.edit_user)
     # Подготавливаем данные в JSON для запроса
@@ -25,7 +25,7 @@ def test_f_l_p_names_edit(add_delete_user, make_request):
                                        })
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.edit_user, data=data)
+    response = send_request(url=URL.edit_user, data=data)
     # Данные которые должны быть в ответе
     answer = _.get_JSON_response(name, **{'id': user_id[0],
                                           "fname": "edit_user_fName_one_edited",
@@ -45,7 +45,7 @@ def test_f_l_p_names_edit(add_delete_user, make_request):
 
 @allure.feature('Позитивный тест')
 @allure.story('Редактируем e-mail, факс, agentId')
-def test_email_fax_agentId_edit(add_delete_user, make_request):
+def test_email_fax_agentId_edit(add_delete_user, send_request):
     user_id = add_delete_user(get.edit_user)
     # Подготавливаем данные в JSON для запроса
     data = _.get_JSON_request(name, **{'id': user_id[0],
@@ -62,7 +62,7 @@ def test_email_fax_agentId_edit(add_delete_user, make_request):
                                        })
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.edit_user, data=data)
+    response = send_request(url=URL.edit_user, data=data)
     # Данные которые должны быть в ответе
     answer = _.get_JSON_response(name, **{'id': user_id[0],
                                           "fname": "edit_user_fName_one",
@@ -82,7 +82,7 @@ def test_email_fax_agentId_edit(add_delete_user, make_request):
 
 @allure.feature('Позитивный тест')
 @allure.story('Редактируем login, loginAD, номер телефона')
-def test_login_loginAD_phone_edit(add_delete_user, make_request):
+def test_login_loginAD_phone_edit(add_delete_user, send_request):
     user_id = add_delete_user(get.edit_user)
     # Подготавливаем данные в JSON для запроса
     data = _.get_JSON_request(name, **{'id': user_id[0],
@@ -99,7 +99,7 @@ def test_login_loginAD_phone_edit(add_delete_user, make_request):
                                        })
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.edit_user, data=data)
+    response = send_request(url=URL.edit_user, data=data)
     # Данные которые должны быть в ответе
     answer = _.get_JSON_response(name, **{'id': user_id[0],
                                           "fname": "edit_user_fName_one",
@@ -120,7 +120,7 @@ def test_login_loginAD_phone_edit(add_delete_user, make_request):
 
 @allure.feature('Позитивный тест')
 @allure.story('Редактируем ФИО на уже существующую')
-def test_f_l_p_names_edit_for_already_exsisting_name(add_delete_user, make_request):
+def test_f_l_p_names_edit_for_already_exsisting_name(add_delete_user, send_request):
     user_id = add_delete_user(get.edit_user, get.edit_user_existing)
     # Подготавливаем данные в JSON для запроса
     data = _.get_JSON_request(name, **{'id': user_id[0],
@@ -136,7 +136,7 @@ def test_f_l_p_names_edit_for_already_exsisting_name(add_delete_user, make_reque
                                        })
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.edit_user, data=data)
+    response = send_request(url=URL.edit_user, data=data)
     # Данные которые должны быть в ответе
     answer = _.get_JSON_response(name, **{'id': user_id[0],
                                           "fname": "edit_user_fName_one_existing",
@@ -156,7 +156,7 @@ def test_f_l_p_names_edit_for_already_exsisting_name(add_delete_user, make_reque
 
 @allure.feature('Позитивный тест')
 @allure.story('Редактируем ФИО удаленного пользователя')
-def test_f_l_p_names_edit_deleted_user(add_delete_user, make_request):
+def test_f_l_p_names_edit_deleted_user(add_delete_user, send_request):
 
     user_id =add_delete_user(get.edit_user_deleted)
     # Подготавливаем данные в JSON для запроса
@@ -174,7 +174,7 @@ def test_f_l_p_names_edit_deleted_user(add_delete_user, make_request):
                                                          })
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.edit_user, data=data)
+    response = send_request(url=URL.edit_user, data=data)
     # Данные которые должны быть в ответе
     answer = _.get_JSON_response(name, ** {'id': user_id[0],
                                                         "fname": "edit_user_fName_one_edited",
@@ -194,7 +194,7 @@ def test_f_l_p_names_edit_deleted_user(add_delete_user, make_request):
 
 @allure.feature('Позитивный тест')
 @allure.story('Редактируем e-mail, факс, agentId удаленного пользователя')
-def test_email_fax_agentId_edit_deleted_user(add_delete_user, make_request):
+def test_email_fax_agentId_edit_deleted_user(add_delete_user, send_request):
 
     user_id =add_delete_user(get.edit_user_deleted)
     # Подготавливаем данные в JSON для запроса
@@ -213,7 +213,7 @@ def test_email_fax_agentId_edit_deleted_user(add_delete_user, make_request):
                                                      })
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.edit_user, data=data)
+    response = send_request(url=URL.edit_user, data=data)
     # Данные которые должны быть в ответе
     answer = _.get_JSON_response(name, ** {'id': user_id[0],
                                                         "fname": "edit_user_fName_one",
@@ -233,7 +233,7 @@ def test_email_fax_agentId_edit_deleted_user(add_delete_user, make_request):
 
 @allure.feature('Позитивный тест')
 @allure.story('Редактируем login, loginAD, номер телефона удаленного пользователя')
-def test_login_loginAD_phone_edit_deleted_user(add_delete_user, make_request):
+def test_login_loginAD_phone_edit_deleted_user(add_delete_user, send_request):
     user_id =add_delete_user(get.edit_user_deleted)
     # Подготавливаем данные в JSON для запроса
     data = _.get_JSON_request(name, **{ 'id': user_id[0],
@@ -251,7 +251,7 @@ def test_login_loginAD_phone_edit_deleted_user(add_delete_user, make_request):
                                                      })
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.edit_user, data=data)
+    response = send_request(url=URL.edit_user, data=data)
     # Данные которые должны быть в ответе
     answer = _.get_JSON_response(name, ** {'id': user_id[0],
                                                         "fname": "edit_user_fName_one",
@@ -274,7 +274,7 @@ def test_login_loginAD_phone_edit_deleted_user(add_delete_user, make_request):
 @allure.feature('Негативный тест')
 @allure.story('Изменяем логин на уже существующий')
 @pytest.mark.xfail
-def test_edit_login_for_existing(add_delete_user, make_request):
+def test_edit_login_for_existing(add_delete_user, send_request):
     user_id = add_delete_user(get.edit_user, get.edit_user_existing)
     # Подготавливаем данные в JSON для запроса
     data = _.get_JSON_request(name, **{'id': user_id[0],
@@ -291,7 +291,7 @@ def test_edit_login_for_existing(add_delete_user, make_request):
                                        })
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.edit_user, data=data)
+    response = send_request(url=URL.edit_user, data=data)
     # Данные которые должны быть в ответе
     answer = {"COMMON_ENTITY_WITH_SUCH_FIELD_EXISTS":"CommonEntityWithSuchFieldExists: login =edit_user_agentId_existing already exists"}
     print(response.text)
@@ -301,7 +301,7 @@ def test_edit_login_for_existing(add_delete_user, make_request):
 
 @allure.feature('Негативный тест')
 @allure.story('Изменяем agentId(Cisco AgentId) на уже существующий')
-def test_edit_agentId_for_existing(add_delete_user, make_request):
+def test_edit_agentId_for_existing(add_delete_user, send_request):
     user_id = add_delete_user(get.edit_user, get.edit_user_existing)
     # Подготавливаем данные в JSON для запроса
     data = _.get_JSON_request(name, **{'id': user_id[0],
@@ -318,7 +318,7 @@ def test_edit_agentId_for_existing(add_delete_user, make_request):
                                        })
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.edit_user, data=data)
+    response = send_request(url=URL.edit_user, data=data)
     # Данные которые должны быть в ответе
     answer = {"COMMON_ENTITY_WITH_SUCH_FIELD_EXISTS":"CommonEntityWithSuchFieldExists: AGENT ID =edit_user_agentId_existing already exists"}
     assert response.status_code == 500
@@ -327,7 +327,7 @@ def test_edit_agentId_for_existing(add_delete_user, make_request):
 
 @allure.feature('Негативный тест')
 @allure.story('Изменяем телефон на уже существующий')
-def test_edit_phone_for_existing(add_delete_user, make_request):
+def test_edit_phone_for_existing(add_delete_user, send_request):
     user_id = add_delete_user(get.edit_user, get.edit_user_existing)
     # Подготавливаем данные в JSON для запроса
     data = _.get_JSON_request(name, **{'id': user_id[0],
@@ -344,7 +344,7 @@ def test_edit_phone_for_existing(add_delete_user, make_request):
                                        })
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.edit_user, data=data)
+    response = send_request(url=URL.edit_user, data=data)
     # Данные которые должны быть в ответе
     answer = {"COMMON_EXCEPTION":"CommonException: Not deleted user with phone = 6668163333 already exist!"}
     print(response.text)
@@ -355,7 +355,7 @@ def test_edit_phone_for_existing(add_delete_user, make_request):
 @allure.feature('Негативный тест')
 @allure.story('Изменяем логин удаленного пользователя на уже существующий НЕ удаленный')
 @pytest.mark.xfail
-def test_edit_login_deleted_on_existing_not_deleted(add_delete_user, make_request):
+def test_edit_login_deleted_on_existing_not_deleted(add_delete_user, send_request):
     user_id = add_delete_user(get.edit_user_deleted, get.edit_user_existing)
     # Подготавливаем данные в JSON для запроса
     data = _.get_JSON_request(name, **{  'id': user_id[0],
@@ -373,7 +373,7 @@ def test_edit_login_deleted_on_existing_not_deleted(add_delete_user, make_reques
                                        })
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.edit_user, data=data)
+    response = send_request(url=URL.edit_user, data=data)
     # Данные которые должны быть в ответе
     answer ={"COMMON_ENTITY_WITH_SUCH_FIELD_EXISTS":"CommonEntityWithSuchFieldExists: login =edit_user_agentId_existing already exists"}
     print(response.text)
@@ -384,7 +384,7 @@ def test_edit_login_deleted_on_existing_not_deleted(add_delete_user, make_reques
 @allure.feature('Позитивный тест')
 @allure.story('Изменяем телефон удаленного пользователя на уже существующие')
 @pytest.mark.parametrize("users", [(get.edit_user_deleted, get.edit_user_existing),(get.edit_user_deleted, get.edit_user_deleted_existing) ])
-def test_login_loginAD_phone_edit(add_delete_user, make_request, users):
+def test_login_loginAD_phone_edit(add_delete_user, send_request, users):
     user_id = add_delete_user(users[0], users[1])
     # Подготавливаем данные в JSON для запроса
     data = _.get_JSON_request(name, **{"id":user_id[0],
@@ -402,7 +402,7 @@ def test_login_loginAD_phone_edit(add_delete_user, make_request, users):
                                          })
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.edit_user, data=data)
+    response = send_request(url=URL.edit_user, data=data)
     # Данные которые должны быть в ответе
     answer = {"id":user_id[0],
                                           "fname": "edit_user_fName_deleted",

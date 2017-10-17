@@ -9,7 +9,7 @@ name = "add_user"
 
 @allure.feature('Позитивный тест')
 @allure.story('Добавляем пользователя')
-def test_Positive_add_one_user(make_request,delete_user):
+def test_Positive_add_one_user(send_request,delete_user):
     # Подготавливаем данные в JSON для запроса
     data = _.get_JSON_request(name, **{"fname": "add_user_fName_one",
                                         "lname": "add_user_lName_one",
@@ -24,7 +24,7 @@ def test_Positive_add_one_user(make_request,delete_user):
     })
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.add_user, data=data)
+    response = send_request(url=URL.add_user, data=data)
     user_id = response.json()['id']
     # Данные которые должны быть в ответе
     answer = _.get_JSON_response(name, **{'id': user_id,
@@ -45,7 +45,7 @@ def test_Positive_add_one_user(make_request,delete_user):
 
 @allure.feature('Позитивный тест')
 @allure.story('Добавляем пользователя  с существующей ФИО')
-def test_add_user_with_existing_FIO(make_request,delete_user, add_delete_user):
+def test_add_user_with_existing_FIO(send_request,delete_user, add_delete_user):
     # Подготавливаем данные в JSON для запроса
     add_delete_user(get.add_user_existing)
     data = _.get_JSON_request(name, **{"fname": "add_user_fName_existing",
@@ -58,7 +58,7 @@ def test_add_user_with_existing_FIO(make_request,delete_user, add_delete_user):
                                         "agentId": "add_user_agentId_one"})
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.add_user, data=data)
+    response = send_request(url=URL.add_user, data=data)
     user_id = response.json()['id']
     # Данные которые должны быть в ответе
     answer = _.get_JSON_response(name, **{'id': user_id,
@@ -78,7 +78,7 @@ def test_add_user_with_existing_FIO(make_request,delete_user, add_delete_user):
 
 @allure.feature('Позитивный тест')
 @allure.story('Добавляем пользователя с существующим факсом, loginAD, email')
-def test_add_user_with_existing_email_fax_loginAD(make_request,delete_user, add_delete_user):
+def test_add_user_with_existing_email_fax_loginAD(send_request,delete_user, add_delete_user):
     # Подготавливаем данные в JSON для запроса
     add_delete_user(get.add_user_existing)
     data = _.get_JSON_request(name, **{"fname": "add_user_fName_one",
@@ -93,7 +93,7 @@ def test_add_user_with_existing_email_fax_loginAD(make_request,delete_user, add_
                                         "fax": "add_user_fax_existing"})
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.add_user, data=data)
+    response = send_request(url=URL.add_user, data=data)
     user_id = response.json()['id']
     # Данные которые должны быть в ответе
     answer = _.get_JSON_response(name, **{'id': user_id,
@@ -116,7 +116,7 @@ def test_add_user_with_existing_email_fax_loginAD(make_request,delete_user, add_
 @allure.feature('Негативный тест')
 @allure.story('Добавляем пользователя с существующим login')
 @pytest.mark.xfail
-def test_add_user_with_existing_login(make_request, add_delete_user):
+def test_add_user_with_existing_login(send_request, add_delete_user):
     # Подготавливаем данные в JSON для запроса
     add_delete_user(get.add_user_existing)
     data = _.get_JSON_request(name, **{"fname": "add_user_fName_one",
@@ -131,7 +131,7 @@ def test_add_user_with_existing_login(make_request, add_delete_user):
                                         "fax": "add_user_fax_one"})
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.add_user, data=data)
+    response = send_request(url=URL.add_user, data=data)
     # Данные которые должны быть в ответе
     # answer =
     print(response.text)
@@ -140,7 +140,7 @@ def test_add_user_with_existing_login(make_request, add_delete_user):
 
 @allure.feature('Негативный тест')
 @allure.story('Добавляем пользователя с существующим loginId')
-def test_add_user_with_existing_loginId(make_request, add_delete_user):
+def test_add_user_with_existing_loginId(send_request, add_delete_user):
     # Подготавливаем данные в JSON для запроса
     add_delete_user(get.add_user_existing)
     data = _.get_JSON_request(name, **{"fname": "add_user_fName_one",
@@ -155,7 +155,7 @@ def test_add_user_with_existing_loginId(make_request, add_delete_user):
                                         "fax": "add_user_fax_one"})
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.add_user, data=data)
+    response = send_request(url=URL.add_user, data=data)
     # Данные которые должны быть в ответе
     answer = {"COMMON_ENTITY_WITH_SUCH_FIELD_EXISTS":"CommonEntityWithSuchFieldExists: AGENT ID =add_user_agentId_existing already exists"}
     assert response.status_code == 500
@@ -163,7 +163,7 @@ def test_add_user_with_existing_loginId(make_request, add_delete_user):
 
 @allure.feature('Негативный тест')
 @allure.story('Добавляем пользователя с существующим phone')
-def test_add_user_with_existing_phone(make_request, add_delete_user):
+def test_add_user_with_existing_phone(send_request, add_delete_user):
     # Подготавливаем данные в JSON для запроса
     add_delete_user(get.add_user_existing)
     data = _.get_JSON_request(name, **{"fname": "add_user_fName_one",
@@ -178,7 +178,7 @@ def test_add_user_with_existing_phone(make_request, add_delete_user):
                                         "fax": "add_user_fax_one"})
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.add_user, data=data)
+    response = send_request(url=URL.add_user, data=data)
     # Данные которые должны быть в ответе
     answer = {'COMMON_ENTITY_WITH_SUCH_FIELD_EXISTS': 'CommonEntityWithSuchFieldExists: AGENT ID =add_user_agentId_existing already exists'}
     assert response.status_code == 500
@@ -187,7 +187,7 @@ def test_add_user_with_existing_phone(make_request, add_delete_user):
 
 @allure.feature('Позитивный тест')
 @allure.story('Добавляем пользователя с существующей ФИО, телефон, loginAD, agentId')
-def test_add_user_with_existing_FIO_phone_loginAD_agentId_deleted_user(make_request,delete_user, add_delete_user):
+def test_add_user_with_existing_FIO_phone_loginAD_agentId_deleted_user(send_request,delete_user, add_delete_user):
     # Подготавливаем данные в JSON для запроса
     add_delete_user(get.add_user_deleted_existing)
     data = _.get_JSON_request(name, **{"fname": "add_user_fName_deleted_existing",
@@ -203,7 +203,7 @@ def test_add_user_with_existing_FIO_phone_loginAD_agentId_deleted_user(make_requ
                                        })
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.add_user, data=data)
+    response = send_request(url=URL.add_user, data=data)
     user_id = response.json()['id']
     # Данные которые должны быть в ответе
     answer = _.get_JSON_response(name, **{'id': user_id,
@@ -224,14 +224,14 @@ def test_add_user_with_existing_FIO_phone_loginAD_agentId_deleted_user(make_requ
 
 @allure.feature('Негативный тест')
 @allure.story('Пробуем добавить пользователя с пустыми полями и не верным e-mail')
-def test_add_one_user_without_data(make_request):
+def test_add_one_user_without_data(send_request):
     # Подготавливаем данные в JSON для запроса
     data = _.get_JSON_request(name, **{ "groups":None,
                                         "roles":None,
                                         "email": "aaaaaaaaaaaaa"})
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.add_user, data=data)
+    response = send_request(url=URL.add_user, data=data)
     # Данные которые должны быть в ответе
     answer ={"ADM_VALIDATION_USER_LAST_NAME_LENGTH":"LNAME length from 1 to 256",
              "ADM_VALIDATION_USER_GROUP_EMPTY":"GROUP not specified for user",
@@ -248,7 +248,7 @@ def test_add_one_user_without_data(make_request):
 @allure.feature('Негативный тест')
 @allure.story('Пробуем добавить пользователя без логина')
 @pytest.mark.xfail
-def test_add_one_user_without_login(make_request):
+def test_add_one_user_without_login(send_request):
     # Подготавливаем данные в JSON для запроса
     data = _.get_JSON_request(name, **{ "fname": "add_user_fName_deleted_existing",
                                         "lname": "add_user_lName_deleted_existing",
@@ -261,7 +261,7 @@ def test_add_one_user_without_login(make_request):
                                         "fax": "add_user_fax_deleted_existing"})
 
     # Делаем запрос и получаем ответ
-    response = make_request(url=URL.add_user, data=data)
+    response = send_request(url=URL.add_user, data=data)
     # Данные которые должны быть в ответе
     answer ={"ADM_VALIDATION_USER_LOGIN_LENGTH":"LOGIN length from 1 to 256"}
     assert response.status_code == 400

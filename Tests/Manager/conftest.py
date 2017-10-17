@@ -9,14 +9,14 @@ from Data.Requests_default_map import defaul_request
 
 
 @pytest.fixture(scope="function")
-def add_delete_user(request, make_request):
+def add_delete_user(request, send_request):
     users_id = []
     # Добавляем пользователя с переданными данными
     def add_user(*args):
         for user in args:
             payload = json.dumps(JSON_generator.get_JSON_request('add_user', **user))
             # Делаем запрос
-            response = make_request(URL.add_user, data=payload)
+            response = send_request(URL.add_user, data=payload)
             assert response.status_code == 200
             # Наполняем список ІД добавленных пользователей
             users_id.append(response.json()['id'])
@@ -25,7 +25,7 @@ def add_delete_user(request, make_request):
             for id in users_id:
                 data = JSON_generator.get_JSON_request('delete_user', **{'userId': id})
                 payload = json.dumps(data)
-                response = make_request(url = URL.delete_user, data=payload)
+                response = send_request(url = URL.delete_user, data=payload)
                 assert response.status_code == 200
 
         request.addfinalizer(user_delete)
@@ -33,14 +33,14 @@ def add_delete_user(request, make_request):
     return add_user
 
 @pytest.fixture(scope="function")
-def delete_user(make_request):
+def delete_user(send_request):
     # Создаем словарь для возможности добавления ІД польщователя с теста
     user_id = {}
     yield user_id
     for i in user_id:
         data = JSON_generator.get_JSON_request('delete_user', **{'userId': user_id[i]})
         payload = json.dumps(data)
-        response = make_request(url = URL.delete_user, data=payload)
+        response = send_request(url = URL.delete_user, data=payload)
         assert response.status_code == 200
 
 

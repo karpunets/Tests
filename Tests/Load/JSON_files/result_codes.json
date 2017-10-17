@@ -1,0 +1,818 @@
+[
+  {
+    "id": 149286791,
+    "code": "SUCCESS",
+    "forPhone": false,
+    "name": "Успех",
+    "comment": "Успех от агента",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": true,
+    "fieldOrder": 3,
+    "deleted": false,
+    "resultVariants": [
+      {
+        "id": 149287090,
+        "value": "Не звонили",
+        "code": null,
+        "forInit": true
+      },
+      {
+        "id": 149287091,
+        "value": "Заявка зарегистрирована",
+        "code": null,
+        "forInit": false
+      },
+      {
+        "id": 149287092,
+        "value": "Личный перезвон",
+        "code": null,
+        "forInit": false
+      },
+      {
+        "id": 149287093,
+        "value": "Незаполненая форма",
+        "code": null,
+        "forInit": false
+      },
+      {
+        "id": 149287094,
+        "value": "Общий перезвон",
+        "code": null,
+        "forInit": false
+      },
+      {
+        "id": 149287095,
+        "value": "Отказ от заявки",
+        "code": null,
+        "forInit": false
+      },
+      {
+        "id": 149287096,
+        "value": "Ошибочный перевод",
+        "code": null,
+        "forInit": false
+      }
+    ]
+  },
+  {
+    "id": 149286792,
+    "code": "CD_callResult",
+    "forPhone": false,
+    "name": "Результат",
+    "comment": "Результат звонка от Cisco Dialer",
+    "cdRes": true,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": true,
+    "fieldOrder": 1,
+    "deleted": false,
+    "resultVariants": [
+      {
+        "id": 149287097,
+        "value": "Dialer еще не пытался связаться с этим клиентом",
+        "code": "0",
+        "forInit": true
+      },
+      {
+        "id": 149287098,
+        "value": "Callback Machine",
+        "code": "15",
+        "forInit": false
+      },
+      {
+        "id": 149287099,
+        "value": "Dialer остановил попытку звонка к абоненту по причине нехватки операторов",
+        "code": "13",
+        "forInit": false
+      },
+      {
+        "id": 149287100,
+        "value": "Абонент был потерян на IVR",
+        "code": "20",
+        "forInit": false
+      },
+      {
+        "id": 149287101,
+        "value": "Абонент был потерян согласно сконфиг-ному времени",
+        "code": "21",
+        "forInit": false
+      },
+      {
+        "id": 149287102,
+        "value": "Абонент запросил перезвон",
+        "code": "14",
+        "forInit": false
+      },
+      {
+        "id": 149287103,
+        "value": "Абонент ответил и был соединен с операт-ом или IVR",
+        "code": "10",
+        "forInit": false
+      },
+      {
+        "id": 149287104,
+        "value": "Абонентский номер не отвечает",
+        "code": "8",
+        "forInit": false
+      },
+      {
+        "id": 149287105,
+        "value": "Агент проп./отклонил вызов (Preview +опц. Закрыт.)",
+        "code": "19",
+        "forInit": false
+      },
+      {
+        "id": 149287106,
+        "value": "Агент проп./отклонил вызов (Preview/перс.перезвон)",
+        "code": "18",
+        "forInit": false
+      },
+      {
+        "id": 149287107,
+        "value": "Запись пропущена-изменения в скиллгруппе /кампании",
+        "code": "25",
+        "forInit": false
+      },
+      {
+        "id": 149287108,
+        "value": "Звонок был остановлен - нехватка операторов",
+        "code": "16",
+        "forInit": false
+      },
+      {
+        "id": 149287109,
+        "value": "Не в сети обслуживания",
+        "code": "3",
+        "forInit": false
+      },
+      {
+        "id": 149287110,
+        "value": "Не удалось зарезер-вать оператора для перс.отзвона",
+        "code": "17",
+        "forInit": false
+      },
+      {
+        "id": 149287111,
+        "value": "Недопуст.сообщ-ие, отпр-е dialer на голосовой шлюз",
+        "code": "31",
+        "forInit": false
+      },
+      {
+        "id": 149287112,
+        "value": "Нет гудка от сети при снятии трубки",
+        "code": "6",
+        "forInit": false
+      },
+      {
+        "id": 149287113,
+        "value": "Нет обратного вызова от сети при попытке набора",
+        "code": "4",
+        "forInit": false
+      },
+      {
+        "id": 149287114,
+        "value": "Низк. громк. или плох. слышимость, обнаруж-ая СРА",
+        "code": "28",
+        "forInit": false
+      },
+      {
+        "id": 149287115,
+        "value": "Номер абонента занят",
+        "code": "9",
+        "forInit": false
+      },
+      {
+        "id": 149287116,
+        "value": "Номер в \"стоп листе\", по которым нельзя звонить",
+        "code": "26",
+        "forInit": false
+      },
+      {
+        "id": 149287117,
+        "value": "Номер не действительный (Invalid)",
+        "code": "7",
+        "forInit": false
+      },
+      {
+        "id": 149287118,
+        "value": "Обнаружен FAX",
+        "code": "11",
+        "forInit": false
+      },
+      {
+        "id": 149287119,
+        "value": "Обнаружен автоответчик",
+        "code": "12",
+        "forInit": false
+      },
+      {
+        "id": 149287120,
+        "value": "Обычно исп-ся с TDM: сетевой автоответчик.",
+        "code": "22",
+        "forInit": false
+      },
+      {
+        "id": 149287121,
+        "value": "Получ. SIP сооб-е, не авторизовано голос. шлюзом",
+        "code": "30",
+        "forInit": false
+      },
+      {
+        "id": 149287122,
+        "value": "Получ. SIP сооб-е, не поддерживается голос. шлюзом",
+        "code": "29",
+        "forInit": false
+      },
+      {
+        "id": 149287123,
+        "value": "При попытке дозвона опер-р получил возврат из ТФОП",
+        "code": "5",
+        "forInit": false
+      },
+      {
+        "id": 149287124,
+        "value": "С абон-том соединились, но персона оказалась ошиб.",
+        "code": "24",
+        "forInit": false
+      },
+      {
+        "id": 149287125,
+        "value": "С абонентом соединились, но номер оказался ошиб.",
+        "code": "23",
+        "forInit": false
+      },
+      {
+        "id": 149287126,
+        "value": "Состояние ошибки при наборе номера",
+        "code": "2",
+        "forInit": false
+      },
+      {
+        "id": 149287127,
+        "value": "Телефонная сеть отключена в момент звонка",
+        "code": "27",
+        "forInit": false
+      }
+    ]
+  },
+  {
+    "id": 149286824,
+    "code": "CD_callStatus",
+    "forPhone": false,
+    "name": "Статус",
+    "comment": "Статус звонка от Cisco Dialer",
+    "cdRes": true,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": true,
+    "fieldOrder": 0,
+    "deleted": false,
+    "resultVariants": [
+      {
+        "id": 149287128,
+        "value": "Неизвестно",
+        "code": "unknown",
+        "forInit": true
+      },
+      {
+        "id": 149287129,
+        "value": "Активен",
+        "code": "active",
+        "forInit": false
+      },
+      {
+        "id": 149287130,
+        "value": "Закрыт",
+        "code": "closed",
+        "forInit": false
+      },
+      {
+        "id": 149287131,
+        "value": "Макс кол-во попыток",
+        "code": "maxAttemptsReached",
+        "forInit": false
+      },
+      {
+        "id": 149287132,
+        "value": "Нет агента",
+        "code": "agentNotAvailable",
+        "forInit": false
+      },
+      {
+        "id": 149287133,
+        "value": "Общий перезвон",
+        "code": "callbackRequested",
+        "forInit": false
+      },
+      {
+        "id": 149287134,
+        "value": "Ожидание",
+        "code": "pending",
+        "forInit": false
+      },
+      {
+        "id": 149287135,
+        "value": "Отклонено агентом",
+        "code": "agentRejected",
+        "forInit": false
+      },
+      {
+        "id": 149287136,
+        "value": "Персональный перезвон",
+        "code": "personalCallbackRequested",
+        "forInit": false
+      },
+      {
+        "id": 149287137,
+        "value": "Повтор",
+        "code": "retry",
+        "forInit": false
+      }
+    ]
+  },
+  {
+    "id": 149286835,
+    "code": "CD_callsMade",
+    "forPhone": false,
+    "name": "Количество звонков",
+    "comment": "Количество звонков сделаных Cisco Dialer'ом",
+    "cdRes": true,
+    "dataType": "INTEGER",
+    "forExport": true,
+    "forFilter": true,
+    "fieldOrder": 2,
+    "deleted": false,
+    "resultVariants": [
+      {
+        "id": 149287138,
+        "value": "0",
+        "code": null,
+        "forInit": true
+      }
+    ]
+  },
+  {
+    "id": 149287139,
+    "code": "COMENT",
+    "forPhone": false,
+    "name": "Коментарий",
+    "comment": "Указаный при перезвоне",
+    "cdRes": false,
+    "dataType": "TEXT",
+    "forExport": true,
+    "forFilter": false,
+    "fieldOrder": 4,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287140,
+    "code": "OtkazValue",
+    "forPhone": false,
+    "name": "Значение отказа",
+    "comment": "Указано при отказе от заявки",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": false,
+    "fieldOrder": 5,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287141,
+    "code": "typeTV",
+    "forPhone": false,
+    "name": "typeTV",
+    "comment": "Тип подключения ТВ",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": false,
+    "fieldOrder": 6,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287142,
+    "code": "SabjectTV",
+    "forPhone": false,
+    "name": "SabjectTV",
+    "comment": "Тематика ТВ",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": false,
+    "fieldOrder": 7,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287143,
+    "code": "Provider",
+    "forPhone": false,
+    "name": "Provider",
+    "comment": "Название провайдера",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": false,
+    "fieldOrder": 9,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287144,
+    "code": "ProviderOther",
+    "forPhone": false,
+    "name": "ProviderOther",
+    "comment": "Другой провайдер",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": false,
+    "fieldOrder": 10,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287145,
+    "code": "SpeedInet",
+    "forPhone": false,
+    "name": "SpeedInet",
+    "comment": "Текущая скорость интернета",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": false,
+    "fieldOrder": 11,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287146,
+    "code": "CostService",
+    "forPhone": false,
+    "name": "CostService",
+    "comment": "Текущая цена за услуги",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": false,
+    "fieldOrder": 12,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287147,
+    "code": "QualityInet",
+    "forPhone": false,
+    "name": "QualityInet",
+    "comment": "Качество интернета",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": false,
+    "fieldOrder": 13,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287148,
+    "code": "PurposeInet",
+    "forPhone": false,
+    "name": "PurposeInet",
+    "comment": "Для каких целей используется интернет",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": false,
+    "fieldOrder": 14,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287149,
+    "code": "ValuationService",
+    "forPhone": false,
+    "name": "ValuationService",
+    "comment": "Оценить качество предоставляемых услуг",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": false,
+    "fieldOrder": 15,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287150,
+    "code": "UpgradeService",
+    "forPhone": false,
+    "name": "UpgradeService",
+    "comment": "Что хотелось бы улучшить в предоставляемых услугах",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": false,
+    "fieldOrder": 16,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287151,
+    "code": "QualityTV",
+    "forPhone": false,
+    "name": "QualityTV",
+    "comment": "Качество ТВ",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": false,
+    "fieldOrder": 17,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287152,
+    "code": "DeviceInet",
+    "forPhone": false,
+    "name": "DeviceInet",
+    "comment": "Есть пк или нет",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": false,
+    "fieldOrder": 20,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287153,
+    "code": "TypeInet",
+    "forPhone": false,
+    "name": "TypeInet",
+    "comment": "Тип подключения к интернету",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": false,
+    "fieldOrder": 21,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287154,
+    "code": "RedialNumber",
+    "forPhone": false,
+    "name": "RedialNumber",
+    "comment": "Номер перезвона",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": false,
+    "fieldOrder": 22,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287155,
+    "code": "RedialDate",
+    "forPhone": false,
+    "name": "RedialDate",
+    "comment": "Дата перезвона",
+    "cdRes": false,
+    "dataType": "DATE",
+    "forExport": true,
+    "forFilter": false,
+    "fieldOrder": 23,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287156,
+    "code": "Contact_phone",
+    "forPhone": false,
+    "name": "Contact_phone",
+    "comment": null,
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": false,
+    "fieldOrder": 24,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287157,
+    "code": "DateCall",
+    "forPhone": false,
+    "name": "DateCall",
+    "comment": "Дата звонка",
+    "cdRes": false,
+    "dataType": "DATE",
+    "forExport": true,
+    "forFilter": false,
+    "fieldOrder": 25,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287158,
+    "code": "AgentName",
+    "forPhone": false,
+    "name": "AgentName",
+    "comment": "Имя агента",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": false,
+    "fieldOrder": 26,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287159,
+    "code": "Type",
+    "forPhone": false,
+    "name": "Type",
+    "comment": "Тип подключения",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": true,
+    "fieldOrder": 27,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287160,
+    "code": "Service",
+    "forPhone": false,
+    "name": "Service",
+    "comment": "Сервис",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": true,
+    "fieldOrder": 28,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287161,
+    "code": "activityFeed",
+    "forPhone": false,
+    "name": "activityFeed",
+    "comment": "Канал активности",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": true,
+    "fieldOrder": 29,
+    "deleted": false,
+    "resultVariants": [
+      {
+        "id": 149287162,
+        "value": "1",
+        "code": null,
+        "forInit": true
+      }
+    ]
+  },
+  {
+    "id": 149287163,
+    "code": "resultKontact",
+    "forPhone": false,
+    "name": "resultKontact",
+    "comment": "Результат контакта",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": true,
+    "fieldOrder": 30,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287164,
+    "code": "OutboundContactTypeOfContact",
+    "forPhone": false,
+    "name": "OutboundContactTypeOfContact",
+    "comment": "Направление активности",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": true,
+    "forFilter": true,
+    "fieldOrder": 31,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287165,
+    "code": "workDate",
+    "forPhone": false,
+    "name": "workDate",
+    "comment": "Тип подключения",
+    "cdRes": false,
+    "dataType": "DATE",
+    "forExport": false,
+    "forFilter": false,
+    "fieldOrder": 32,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287166,
+    "code": "completionDate",
+    "forPhone": false,
+    "name": "completionDate",
+    "comment": "Дата выполнения",
+    "cdRes": false,
+    "dataType": "DATE",
+    "forExport": false,
+    "forFilter": false,
+    "fieldOrder": 33,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287167,
+    "code": "inquiryTime",
+    "forPhone": false,
+    "name": "inquiryTime",
+    "comment": "Время выполнения",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": false,
+    "forFilter": false,
+    "fieldOrder": 34,
+    "deleted": false,
+    "resultVariants": [
+      {
+        "id": 149287168,
+        "value": "27316628",
+        "code": null,
+        "forInit": true
+      }
+    ]
+  },
+  {
+    "id": 149287169,
+    "code": "OutboundContactSubtotalConversa",
+    "forPhone": false,
+    "name": "OutboundContactSubtotalConversa",
+    "comment": "Результат обзвона",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": false,
+    "forFilter": false,
+    "fieldOrder": 35,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287170,
+    "code": "Campaign",
+    "forPhone": false,
+    "name": "Campaign",
+    "comment": "Campaign_code for MSSQL",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": false,
+    "forFilter": false,
+    "fieldOrder": 36,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287171,
+    "code": "Operator_id",
+    "forPhone": false,
+    "name": "Operator_id",
+    "comment": "Agent_id for MSSQL",
+    "cdRes": false,
+    "dataType": "STRING",
+    "forExport": false,
+    "forFilter": false,
+    "fieldOrder": 37,
+    "deleted": false,
+    "resultVariants": []
+  },
+  {
+    "id": 149287172,
+    "code": "Callback_used",
+    "forPhone": false,
+    "name": "Callback_used",
+    "comment": "Callback_used for MSSQL",
+    "cdRes": false,
+    "dataType": "INTEGER",
+    "forExport": false,
+    "forFilter": false,
+    "fieldOrder": 38,
+    "deleted": false,
+    "resultVariants": []
+  }
+]

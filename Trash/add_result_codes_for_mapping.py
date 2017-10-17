@@ -1,18 +1,20 @@
 import pytest, json, requests
 
 headers = {'content-type': "application/json;charset=UTF-8",
-           'authorization': "Basic di5rbGl1aTp1Zmtmcm5icmY="}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h  di5rbGl1aTp1Zmtmcm5icmY=
+           'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h  di5rbGl1aTp1Zmtmcm5icmY=
 
-server = "http://172.22.8.103:8080"
+server = "http://10.10.27.32:8080"
 
-campaign_code = "qwe"
-campaign_id = 886126
+# campaign_code = "qwe"
+# campaign_id = 886126
 
-# url = "%s/SmiddleCampaignManager/cm/manager/get_result_code"%server
-# get_campaign_url = "%s/SmiddleCampaignManager/cm/manager/get_campaign"%server
-# edit_result_code_url = '%s/SmiddleCampaignManager/cm/manager/edit_result_code'%server
-# get_result_code_url = '%s/SmiddleCampaignManager/cm/manager/get_result_code'%server
-# edit_result_variant = '%s/SmiddleCampaignManager/cm/manager/edit_result_variant'%server
+
+#Старый
+url = "%s/SmiddleCampaignManager/cm/manager/get_result_code"%server
+get_campaign_url = "%s/SmiddleCampaignManager/cm/manager/get_campaign"%server
+edit_result_code_url = '%s/SmiddleCampaignManager/cm/manager/edit_result_code'%server
+get_result_code_url = '%s/SmiddleCampaignManager/cm/manager/get_result_code'%server
+edit_result_variant = '%s/SmiddleCampaignManager/cm/manager/edit_result_variant'%server
 
 
 
@@ -21,11 +23,11 @@ campaign_id = 886126
 #                 {'name':'Callback_used' , 'comment': 'Callback_used for MSSQL' ,"dataType":"INTEGER"}
 #                 ]
 
-
-url = "%s/SmiddleCampaignManager/cm/manager/resultcode" % server
-get_campaign_url = "%s/SmiddleCampaignManager/cm/uccx/campaign" % server
-result_code_url = "%s/SmiddleCampaignManager/cm/manager/resultcode" % server
-fields = "%s/SmiddleCampaignManager/cm/settings/fields"%server
+#
+# url = "%s/SmiddleCampaignManager/cm/manager/resultcode" % server
+# get_campaign_url = "%s/SmiddleCampaignManager/cm/uccx/campaign" % server
+# result_code_url = "%s/SmiddleCampaignManager/cm/manager/resultcode" % server
+# fields = "%s/SmiddleCampaignManager/cm/settings/fields"%server
 
 # Считывем результаты с файла
 with open('JSON_files/result_codes.json', encoding="utf8") as data_file:
@@ -33,26 +35,28 @@ with open('JSON_files/result_codes.json', encoding="utf8") as data_file:
 
 add_mapfield_json = {"order": "1", "forExport": None, "forFilter": None, "phoneNumber": None, "enabled": None,
                      "deleted": None, "name": "123", "fieldImport": "123", "dataType": "STRING",
-                     "fieldAbonent": "ClientID", "campaign": {"id": campaign_id}}
+                     "fieldAbonent": "ClientID", "campaign": {"id": "campaign_id"}}
 edit_result_code = {"campaign": {"id": None}, "fieldOrder": None, "name": None, "code": None, "dataType": "STRING",
                     "comment": "comm", "forExport": False, "forFilter": False}
 
 
 def get_campaign():
-    # Запрос на добавление пользователя
-    response = requests.get(url=get_campaign_url, headers=headers)
+    # # Новый
+    # response = requests.get(url=get_campaign_url, headers=headers)
+    response = requests.post(url=get_campaign_url, data = json.dumps({}), headers=headers)
     return response.json()
 
 
 # Для одной кампании
-campaign_list = [{id: campaign_id, "code": campaign_code, "name": "qqweqqwr", "comment": "11231", "deleted": False,
-                  "groups": [{id: 2}]}]
+# campaign_list = [{id: campaign_id, "code": campaign_code, "name": "qqweqqwr", "comment": "11231", "deleted": False,
+#                   "groups": [{id: 2}]}]
 #Для всех кампаний
-# campaign_list = get_campaign()
+campaign_list = get_campaign()
 
 for i in campaign_list:
 
-    response = requests.get(url=result_code_url, params={"code": campaign_code}, headers=headers)
+    response = requests.post(url=get_result_code_url, data=json.dumps({"campaignId": i['id']}), headers=headers)
+    print(response.json())
 
     field_order_list = []
     for k in response.json():
@@ -70,27 +74,28 @@ for i in campaign_list:
         edit_result_code['forExport'] = j['forExport']
         edit_result_code['forFilter'] = j['forFilter']
         # #Для всех кампаний
-        # edit_result_code["campaign"] = {"id":i['id']}
-        # #Для одной кампании
-        edit_result_code["campaign"] = {"id": campaign_id}
+        edit_result_code["campaign"] = {"id":i['id']}
+        # # #Для одной кампании
+        # edit_result_code["campaign"] = {"id": campaign_id}
         print(edit_result_code)
         payload = json.dumps(edit_result_code)
-        response = requests.post(url=result_code_url, data=payload, headers=headers)
-        print(response.status_code, response.json())
-
-
-def add_mapping():
-    with open('JSON_files/mapfields.json', encoding="utf8") as data_file:
-        add_mapfield = json.load(data_file)
-    for field in add_mapfield:
-        for j in field:
-            print(j)
-            if j != 'id':
-                add_mapfield_json[j] = field[j]
-        payload = json.dumps(add_mapfield_json)
-        response = requests.post(fields, data=payload, headers=headers)
+        # response = requests.post(url=result_code_url, data=payload, headers=headers)
+        response = requests.post(edit_result_code_url, data=payload, headers=headers)
         print(response.status_code)
-add_mapping()
+
+
+# def add_mapping():
+#     with open('JSON_files/mapfields.json', encoding="utf8") as data_file:
+#         add_mapfield = json.load(data_file)
+#     for field in add_mapfield:
+#         for j in field:
+#             print(j)
+#             if j != 'id':
+#                 add_mapfield_json[j] = field[j]
+#         payload = json.dumps(add_mapfield_json)
+#         response = requests.post(fields, data=payload, headers=headers)
+#         print(response.status_code)
+# add_mapping()
 
             # for j in campaign_list:
             #     payload = json.dumps({"campaignCode":j['code'], "resultCode":"inquiryTime","resultVariant":{"value":"27316628","forInit":True}})

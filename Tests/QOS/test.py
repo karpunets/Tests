@@ -8,7 +8,7 @@ from Data.Make_requests_and_answers import JSON_generator as _
 
 
 
-def test_setup_add_template(setup_add_criterias, make_request):
+def test_setup_add_template(setup_add_criterias, send_request):
     random_name = lambda: ''.join(random.choice(string.ascii_letters + string.digits) for list in range(8))
     date = lambda: round(time.time() * 1000)
 
@@ -80,7 +80,7 @@ def test_setup_add_template(setup_add_criterias, make_request):
                 data = _.make_data('template_criteria', new_criteria)
                 templateSections[i - 1]["templateCriterias"].append(data)
     template["templateSections"] = templateSections
-    response = make_request(URL.edit_template, template)
+    response = send_request(URL.edit_template, template)
 
 
 

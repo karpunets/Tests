@@ -24,6 +24,8 @@ class JSON_generator(object):
                         JSON_generator.generate_JSON(JSON_request[j], {i[0]: i[1]})
         return JSON_request
 
+
+
     def get_JSON_request(request_name, **kwargs):
         data = kwargs
         request = defaul_request(request_name)
@@ -37,24 +39,19 @@ class JSON_generator(object):
     # Получаем и преобразуем JSON файл, согласно переданным параметрам
     def make_data(json_name, data={}, default=False):
         # Определяем откуда брать json файл
-        if default == False:
-            json_file = open('JSON_files/%s.json' % json_name, encoding="utf8").read()
-        else:
-            json_file = open('JSON_files/default_data/%s.json' % json_name, encoding="utf8").read()
+        path = 'JSON_files/%s.json' % json_name
+        if default == True:
+            path = path.replace("JSON_files/", "JSON_files/default_data/")
+        json_file = open(path, encoding="utf8").read()
         # Если передали параметры для изменения, заменяем их
         if len(data) > 0:
             for key, val in iter(data.items()):
-                # if type(val) == int:
-                #     key = '"%s"'%key
-                #     val = str(val)
-                #     json_file = json_file.replace(key, val)
-                # json_file = json_file.replace(key, val)
                 try:
                     if type(val) == int:
                         key = '"%s"' % key
                         val = str(val)
                     json_file = json_file.replace(key, val)
-                # Возникает если передать None(null) или int
+                # Возникает если передать None(null)
                 except TypeError:
                         continue
         # Вместо не переданных параметров подставляем null
