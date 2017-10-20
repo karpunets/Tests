@@ -30,7 +30,7 @@ add_result = {"campaignCode": 'test_111', "clientId": '5544226', "code": 'RESULT
 # agentIDs = f.read().split()
 # f.close()
 
-server = "http://10.101.10.188:10500"
+server = "http://172.22.2.63:8080"
 url = "%s/SmiddleCampaignManager/cm/result/add_result_async"%server
 # url = "%s/www"%server
 url_get_abonent_and_result = "%s/SmiddleCampaignManager/cm/manager/get_abonent_and_result"%server

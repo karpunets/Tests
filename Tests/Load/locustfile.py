@@ -3,13 +3,12 @@ import json, requests, random
 from locust import HttpLocust, TaskSet, task
 
 
-campaign_name = "qqwe"
+campaign_name = "test_111"
 campaign_id = 146093915
 
 headers = {
-    'content-type': "application/json;charset=UTF-8",
-    'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}
-f = open("C:\\Users\\Victor\\PycharmProjects\\Smiddle_API\\Trash\\qq.txt", 'r')
+    'content-type': "application/json;charset=UTF-8"}
+f = open("C:\\Users\\Victor\\PycharmProjects\\Smiddle_API\\Tests\\Load\\qq.txt", 'r')
 abonents = f.read().split()
 f.close()
 add_excel_params = {"campaignId":"%s"%campaign_id,"batchId":146312506}
@@ -18,13 +17,13 @@ authorization = ('Root', 'Smidle098adm!')
 
 add_excel_params_2 = {"campaignId":"%s"%campaign_id,"batchId":146094116}
 
-f = open("C:\\Users\\Victor\\PycharmProjects\\Smiddle_API\\Trash\\agentids.txt", 'r')
+f = open("C:\\Users\\Victor\\PycharmProjects\\Smiddle_API\\Tests\\Load\\agentids.txt", 'r')
 agentIDs = f.read().split()
 f.close()
 
 
 class UserBehavior(TaskSet):
-    @task(50)
+    @task()
     def as_script(self):
         agent_id = random.choice(agentIDs)
         url_script_start = "http://172.22.2.63:8080/SmiddleAgentScripting/as/script_executor/script_start"
@@ -56,10 +55,14 @@ class UserBehavior(TaskSet):
         data_start['clientId'] = random.choice(abonents)
         data_start['ani'] = random.randint(1, 99999999)
         payload_start = json.dumps(data_start)
-        response = self.client.post(url=url_script_start, data=payload_start, headers=headers)
+        response = self.client.post(url=url_script_start, data=payload_start, headers=headers, auth = authorization)
+        print("start", response.status_code)
         for step_data in steps:
-            self.client.post(url_next, data=json.dumps(step_data), headers=headers)
-        self.client.post(url_next, data=json.dumps(data_next_finish), headers=headers)
+            response = self.client.post(url_next, data=json.dumps(step_data), headers=headers, auth = authorization)
+            print("next", response.status_code)
+        response = self.client.post(url_next, data=json.dumps(data_next_finish), headers=headers, auth = authorization)
+        print("finish", response.status_code)
+
 
 
     # @task(35)
