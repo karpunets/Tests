@@ -4,10 +4,6 @@ import random
 
 
 
-
-
-
-
 a = {
 "identifier": 142017415,
 "data": [{

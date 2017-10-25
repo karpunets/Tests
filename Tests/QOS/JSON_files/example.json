@@ -1,0 +1,43 @@
+{
+  "ROOT": [
+    {
+      "request": {
+        "dateCreate": "$dateCreate",
+        "supervisor": {
+          "fname": "Root",
+          "lname": "Initiate",
+          "pname": "User",
+          "id": 68
+        },
+        "name": "$name",
+
+        "groups": [
+          {
+            "id": 2
+          }
+        ],
+        "version": "$version",
+        "templateSections": []
+      },
+      "response": {},
+      "status_code": 200
+    },
+    {
+      "request": {},
+      "response": {},
+      "status_code": 400
+    }
+  ],
+  "ADMINISTRATOR": [
+    {
+      "request": {},
+      "response": {},
+      "status_code": 200
+    },
+    {
+      "request": {},
+      "response": {},
+      "status_code": 400
+    }
+  ]
+}
