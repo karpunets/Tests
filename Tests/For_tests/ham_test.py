@@ -16,6 +16,9 @@ def assert_equal(a,schema):
      assert len(not_equal) == 0,(not_equal)
 
 
+
+@allure.feature('Позитивный тест')
+@allure.story('test_assert_equal')
 def test_assert():
      a = {"fname": "asdsad", "lname": "lname", "pname": "sadsad", "phone": "12321321", "fax": "qwewqe", "login": "qwe",
           "password": "sads", "loginAD": "sadsad", "agentId": "123213", "scMode": "0", "unmappedCalls": False,
