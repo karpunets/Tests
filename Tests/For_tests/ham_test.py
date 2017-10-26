@@ -38,10 +38,10 @@ def test_assert():
     #      "dateCreate": 1508847939631, "scMode": 0, "unmappedCalls": False, "enabled": True, "deleted": False,
     #      "groups": [{"id": 2, "name": "ROOT"}], "roles": [{"id": 3, "name": "ROOT"}], "userGroupRoles": None}
 
-    schema = {"fname": {'type': str}, "lname": "lname", "pname": "sadsad", "phone": "12321321", "fax": "qwewqe",
+    schema = {"fname": {'type': str}, "lname": "ln1ame", "pname": "sadsad", "phone": "12321321", "fax": "qwewqe",
               "login": "qwe",
               "password": "sads", "loginAD": "sadsad", "agentId": "123213", "scMode": 0, "unmappedCalls": False,
               "enabled": True, "deleted": False, "dateCreate": 1508847939631, "groups": [{"id": {'type': int}, "name": "ROOT"}],
-              "roles": [{"id": 3, "name": "ROOT"}]}
+              "roles": [{"id": 3, "name": "qq"}]}
 
     assert_equal(a, schema)
