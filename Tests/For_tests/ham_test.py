@@ -14,7 +14,7 @@ def assert_equal(a,schema):
           elif (key,val) not in schema.items() and key not in schema.keys():
                not_equal.append("No such {'%s':'%s'} in scema"%(key,val))
      result = lambda: len(not_equal) == 0
-     assert result,(not_equal)
+     assert result(),(not_equal)
 
 
 
