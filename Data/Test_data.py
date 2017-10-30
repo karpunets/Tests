@@ -1,10 +1,9 @@
-import random, string
-
-from Data.Make_requests_and_answers import JSON_generator
-import Data.Requests_default_map as get
+import random, string, time
 
 
 random_name = lambda: ''.join(random.choice(string.ascii_letters + string.digits) for list in range(8))
+date_now = lambda: round(time.time() * 1000)
+
 
 # MANAGER(ADM)
 one_user_get_userlist = {"fname": "get_userlist_fName_one",

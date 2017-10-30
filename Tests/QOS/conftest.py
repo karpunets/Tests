@@ -1,14 +1,14 @@
 import json, pytest, requests, random, string, time
 import Data.URLs_MAP as URL
 
-from Data.Make_requests_and_answers import JSON_generator as _
+from Data.Make_requests_and_answers import make_test_data
 from Data.Test_data import random_name
 import Data.Test_data as get
 
 
 @pytest.fixture(scope="module")
 def setup_add_criterias(send_request):
-    criteria_names = _.make_data('criteria_names', default=True)
+    criteria_names = make_test_data('criteria_names', default=True)
     group_and_criteria_id = {}
     for criteria_groups in criteria_names:
         payload = {"groups": [{"id": 2}], "name": criteria_groups}
@@ -37,7 +37,7 @@ def setup_add_template(setup_add_criterias, send_request):
                "$dateCreate": date_now(),
                "$version": str(random.randint(1, 255))}
     # Получаем сущность template
-    template = _.make_data('template', payload)
+    template = make_test_data('template', payload)
     # Получаем ID и групы критериев
     group_and_criteria_id = setup_add_criterias
     max_criterias_number = 0
@@ -78,7 +78,7 @@ def setup_add_template(setup_add_criterias, send_request):
                                 '$criteria_group_id': random_criteria_and_group[0],
                                 '$weight': random_weight,
                                 '$position': j}
-                data = _.make_data('template_criteria', new_criteria)
+                data = make_test_data('template_criteria', new_criteria)
                 templateSections[i - 1]["templateCriterias"].append(data)
             number_of_criterias = number_of_criterias - randomed_criterias_number
             count += 1
@@ -97,7 +97,7 @@ def setup_add_template(setup_add_criterias, send_request):
                                 '$criteria_group_id': random_criteria_and_group[0],
                                 '$weight': random_weight,
                                 '$position': j}
-                data = _.make_data('template_criteria', new_criteria)
+                data = make_test_data('template_criteria', new_criteria)
                 templateSections[i - 1]["templateCriterias"].append(data)
     template["templateSections"] = templateSections
     response = send_request(URL.edit_template, template)
@@ -106,7 +106,7 @@ def setup_add_template(setup_add_criterias, send_request):
 
 @pytest.fixture()
 def add_group(send_request):
-    payload = json.dumps({"groups": [{"id": 2}], "name": random_name()})
+    payload = {"groups": [{"id": 2}], "name": random_name()}
     response = send_request(URL.criteria_group, payload)
     group_id_name = {'id':response.json()['id'], 'name':response.json()['name']}
     yield group_id_name
@@ -115,9 +115,9 @@ def add_group(send_request):
 
 @pytest.fixture(scope="function")
 def delete_group(send_request):
-    for_delete = []
+    for_delete = {}
     yield for_delete
-    for id in for_delete:
+    for id in for_delete.values():
         payload = json.dumps({"criteriaGroupId":id})
         send_request(URL.delete_criteria_group, payload)
 

@@ -1,0 +1,26 @@
+{
+  "request": {
+    "groups": [
+      {
+        "id": 2
+      }
+    ],
+    "name": "$name"
+  },
+  "schema": {
+    "id": {
+      "type": "number"
+    },
+    "name": "$name",
+    "groups": [
+      {
+        "id": 2,
+        "name": "ROOT",
+        "cid": {
+          "type": "number"
+        }
+      }
+    ],
+    "criteriaList": null
+  }
+}
