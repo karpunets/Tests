@@ -1,8 +1,10 @@
 import json, re, pytest, random, string
 
 
-random_name = lambda: ''.join(random.choice(string.ascii_letters + string.digits) for list in range(8))
-
+def random_string():
+    random_name = lambda: ''.join(random.choice(string.ascii_letters + string.digits) for list in range(random.randint(1,30)))
+    random_string = random_name()
+    return random_string
 
 # Получаем и преобразуем JSON файл, согласно переданным параметрам
 def make_test_data(json_name, data= {}, default=False):
@@ -39,7 +41,7 @@ def equal_schema(instance, schema, assert_keys_quantity=True):
                      'array': list,
                      str: 'string',
                      int: 'number',
-                     None: 'null',
+                     type(None): 'null',
                      dict: 'object',
                      bool: 'boolean',
                      list: 'array'
@@ -76,7 +78,6 @@ def equal_schema(instance, schema, assert_keys_quantity=True):
         helper(instance, schema)
     else:
         not_equal.append("Length of instance != length of schema")
-    if len(not_equal) > 0:
-        assert instance == schema, (not_equal)
-    else:
-        return True
+
+    assert instance == schema,(not_equal)
+    return True

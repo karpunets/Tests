@@ -9,11 +9,11 @@ import Data.URLs_MAP as URL
 
 
 # def test_setup_add_template(setup_add_criterias, send_request):
-#     random_name = lambda: ''.join(random.choice(string.ascii_letters + string.digits) for list in range(8))
+#     random_string = lambda: ''.join(random.choice(string.ascii_letters + string.digits) for list in range(8))
 #     date = lambda: round(time.time() * 1000)
 #
-#     payload = {"$name": random_name(),
-#                "$description": random_name(),
+#     payload = {"$name": random_string(),
+#                "$description": random_string(),
 #                "$dateCreate": date(),
 #                "$version": str(random.randint(1, 255))}
 #     # Получаем сущность template
@@ -39,7 +39,7 @@ import Data.URLs_MAP as URL
 #     for i in range(1, number_of_sections + 1):
 #         # Сущность секции
 #         what_append_1 = {"name": "section_name_1", "position": 1, "templateCriterias": []}
-#         what_append_1['name'] = random_name()
+#         what_append_1['name'] = random_string()
 #         what_append_1['position'] = i
 #         templateSections.append(what_append_1)
 #         # Если не последняя секция

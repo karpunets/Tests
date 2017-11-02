@@ -2,8 +2,8 @@ import json, pytest, requests, random, string, time
 import Data.URLs_MAP as URL
 
 from Data.Make_requests_and_answers import make_test_data
-from Data.Test_data import random_name
-import Data.Test_data as get
+from Data.Make_requests_and_answers import random_string
+
 
 
 @pytest.fixture(scope="module")
@@ -106,20 +106,39 @@ def setup_add_template(setup_add_criterias, send_request):
 
 @pytest.fixture()
 def add_group(send_request):
-    payload = {"groups": [{"id": 2}], "name": random_name()}
+    payload = {"groups": [{"id": 2}], "name": random_string()}
     response = send_request(URL.criteria_group, payload)
     group_id_name = {'id':response.json()['id'], 'name':response.json()['name']}
     yield group_id_name
-    send_request(URL.delete_criteria_group,{"criteriaGroupId": group_id_name['id']})
+    response = send_request(URL.delete_criteria_group, {"criteriaGroupId": group_id_name['id']})
+    # print(response.json())
 
 
 @pytest.fixture(scope="function")
-def delete_group(send_request):
-    for_delete = {}
+def delete_group_and_criteria(send_request):
+    for_delete = {"criteriaGroupId":[], 'criteriaId':[]}
     yield for_delete
-    for id in for_delete.values():
-        payload = json.dumps({"criteriaGroupId":id})
-        send_request(URL.delete_criteria_group, payload)
+    for key in for_delete:
+        for id in for_delete[key]:
+            if key == 'criteriaId':
+                send_request(method = "DELETE", url = URL.criteria, params = {"id": id})
+            else:
+                send_request(URL.delete_criteria_group, {"criteriaGroupId":id})
+
+
+@pytest.fixture(scope='function')
+def add_criteria(send_request, add_group, delete_group_and_criteria):
+    group_id = add_group['id']
+    data = make_test_data('post_criteria', {'$name': random_string(),
+                                            '$criteriagroupId': group_id,
+                                            '$description': random_string()})
+    response = send_request(URL.criteria, data['request'])
+    # Шаг для удаления критерия
+    criteria = response.json()
+    delete_group_and_criteria['criteriaId'].append(criteria['id'])
+    return criteria
+
+
 
 # @pytest.fixture(scope="function")
 # def add_questioner():

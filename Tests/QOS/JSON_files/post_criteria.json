@@ -1,0 +1,22 @@
+{
+  "request": {
+    "name": "$name",
+    "description": "$description",
+    "criteriaGroup": {
+      "id": "$criteriagroupId"
+    }
+  },
+  "schema": {
+    "id": {
+      "type": "number"
+    },
+    "name": "$name",
+    "description": "$description",
+    "criteriaGroup": {
+      "id": "$criteriagroupId",
+      "name": {
+        "type": "string"
+      }
+    }
+  }
+}

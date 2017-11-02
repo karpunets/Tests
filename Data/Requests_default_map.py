@@ -27,7 +27,7 @@ def defaul_request(request_name):
                       "unmappedCalls": False,
                       "enabled": True, "deleted": False, "dateCreate": 1494845540000, "groups": [{"id": root_group_id}],
                       "roles": [{"id": 3}]},
-        "delete_group": {"groupId": None},
+        "delete_group_and_criteria": {"groupId": None},
         "edit_group": {"id": None, "name": None, "parent": {"id": root_group_id}},
         'add_role': {"name": None, "roleTemplateId": None, "group": {"id": root_group_id}},
         'edit_role': {"id": None, "name": None, "group": {"id": root_group_id}},

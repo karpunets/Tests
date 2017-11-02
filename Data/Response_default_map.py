@@ -21,7 +21,7 @@ def defaul_response(response_name):
                       'enabled': True, 'deleted': False, 'groups': [{'id': 2, 'name': 'ROOT'}],
                       'roles': [{'id': 3, 'name': 'ROOT'}], 'userGroupRoles': None},
         'add_group': {"id": 731148, "name": "qqq", "children": [], "cid": 731148},
-        'delete_group': True,
+        'delete_group_and_criteria': True,
         "edit_group": {"id": None, "name": None, "children": [], "cid": None},
         'add_role': {"id": None, "name": None, "group": {"id": 2, "name": "ROOT", "cid": 0}, "tasks": None,
                      "roleTemplateId": None, "system": False},
