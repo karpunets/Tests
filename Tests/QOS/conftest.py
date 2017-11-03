@@ -106,11 +106,13 @@ def setup_add_template(setup_add_criterias, send_request):
 
 @pytest.fixture()
 def add_group(send_request):
-    payload = {"groups": [{"id": 2}], "name": random_string()}
-    response = send_request(URL.criteria_group, payload)
-    group_id_name = {'id':response.json()['id'], 'name':response.json()['name']}
-    yield group_id_name
-    response = send_request(URL.delete_criteria_group, {"criteriaGroupId": group_id_name['id']})
+    groups = []
+    for i in range(1):
+        payload = {"groups": [{"id": 2}], "name": random_string()}
+        response = send_request(URL.criteria_group, payload)
+        yield response.json()
+    for group in groups:
+        send_request(URL.delete_criteria_group, {"criteriaGroupId": group['id']})
     # print(response.json())
 
 
