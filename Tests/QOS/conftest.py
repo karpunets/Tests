@@ -107,10 +107,11 @@ def setup_add_template(setup_add_criterias, send_request):
 @pytest.fixture()
 def add_group(send_request):
     groups = []
-    for i in range(1):
+    for i in range(2):
         payload = {"groups": [{"id": 2}], "name": random_string()}
         response = send_request(URL.criteria_group, payload)
-        yield response.json()
+        groups.append(response.json())
+    yield iter(groups)
     for group in groups:
         send_request(URL.delete_criteria_group, {"criteriaGroupId": group['id']})
     # print(response.json())
@@ -130,15 +131,17 @@ def delete_group_and_criteria(send_request):
 
 @pytest.fixture(scope='function')
 def add_criteria(send_request, add_group, delete_group_and_criteria):
-    group_id = add_group['id']
-    data = make_test_data('post_criteria', {'$name': random_string(),
-                                            '$criteriagroupId': group_id,
-                                            '$description': random_string()})
-    response = send_request(URL.criteria, data['request'])
-    # Шаг для удаления критерия
-    criteria = response.json()
-    delete_group_and_criteria['criteriaId'].append(criteria['id'])
-    return criteria
+    group_id = next(add_group)['id']
+    criterias = []
+    for i in range(2):
+        data = make_test_data('post_criteria', {'$name': random_string(),
+                                                '$criteriagroupId': group_id,
+                                                '$description': random_string()})
+        response = send_request(URL.criteria, data['request'])
+        criteria = response.json()
+        criterias.append(criteria)
+        delete_group_and_criteria['criteriaId'].append(criteria['id'])
+    return iter(criterias)
 
 
 

@@ -4,6 +4,8 @@ import Data.URLs_MAP as URL
 from Data.Make_requests_and_answers import make_test_data, equal_schema, random_string
 from Data.Test_data import ROOT_group_id
 
+
+
 # @allure.feature('Позитивный тест')
 # @allure.story('Добавляем новую групу')
 # def test_add_group(send_request, delete_group_and_criteria):
@@ -18,7 +20,7 @@ from Data.Test_data import ROOT_group_id
 # @allure.feature('Позитивный тест')
 # @allure.story('Добавляем новую групу с существующим именем')
 # def test_add_group_with_existing_name(send_request, add_group):
-#     existing_group_name = add_group['name']
+#     existing_group_name = next(add_group)['name']
 #     data = make_test_data('post_criteria_group', {'$name': existing_group_name})
 #     response = send_request(URL.criteria_group, data['request'])
 #     answer = {"QOS_ENTITY_WITH_SUCH_FIELD_EXISTS":"QoSEntityWithSuchFieldExists: NAME"}
@@ -40,7 +42,7 @@ from Data.Test_data import ROOT_group_id
 # @allure.feature('Позитивный тест')
 # @allure.story('Добавляем критерий')
 # def test_add_criteria(send_request, add_group, delete_group_and_criteria):
-#     group_id = add_group['id']
+#     group_id = next(add_group)['id']
 #     data = make_test_data('post_criteria', {'$name': random_string(),
 #                                        '$criteriagroupId': group_id,
 #                                        '$description':random_string()})
@@ -50,28 +52,26 @@ from Data.Test_data import ROOT_group_id
 #     delete_group_and_criteria['criteriaId'].append(instance['id'])
 #     assert response.status_code == 200
 #     assert equal_schema(instance, data['schema'])
-#
+
 # @allure.feature('Позитивный тест')
 # @allure.story('Добавляем критерий с уже существующим именем')
 # def test_add_criteria_with_existing_name(send_request, add_group, add_criteria, delete_group_and_criteria):
-#     group_id = add_group['id']
-#     existing_criteria_name = add_criteria['name']
-#     data = make_test_data('post_criteria', {'$name': existing_criteria_name,
-#                                        '$criteriagroupId': group_id,
+#     existing_criteria = next(add_criteria)
+#     data = make_test_data('post_criteria', {'$name': existing_criteria['name'],
+#                                        '$criteriagroupId': existing_criteria['criteriaGroup']['id'],
 #                                        '$description':random_string()})
 #     response = send_request(URL.criteria, data['request'])
 #     instance = response.json()
-#     print(instance)
 #     #Шаг для удаления критерия
 #     delete_group_and_criteria['criteriaId'].append(instance['id'])
 #     assert response.status_code == 200
 #     assert equal_schema(instance, data['schema'])
-#
-#
+
+
 # @allure.feature('Позитивный тест')
 # @allure.story('Добавляем критерий без имени и описания')
 # def test_add_criteria_without_description_and_name(send_request, add_group):
-#     group_id = add_group['id']
+#     group_id = next(add_group)['id']
 #     data = make_test_data('post_criteria', {'$criteriagroupId': group_id})
 #     response = send_request(URL.criteria, data['request'])
 #     #Шаг для удаления критерия
@@ -114,7 +114,7 @@ from Data.Test_data import ROOT_group_id
 # @allure.feature('Позитивный тест')
 # @allure.story('Редактируем имя группы')
 # def test_edit_criteria_group(add_group, send_request):
-#     group_id = add_group['id']
+#     group_id = next(add_group)['id']
 #     data = make_test_data('put_criteria_group', {'$name': random_string(),
 #                                            '$criteriaGroupId':group_id,
 #                                            '$groupId':ROOT_group_id})
@@ -126,7 +126,7 @@ from Data.Test_data import ROOT_group_id
 # @allure.feature('Позитивный тест')
 # @allure.story('Редактируем имя группы на пустое')
 # def test_edit_criteria_group_name_on_empty(add_group, send_request):
-#     group_id = add_group['id']
+#     group_id = next(add_group)['id']
 #     data = make_test_data('put_criteria_group', {'$name': None,
 #                                            '$criteriaGroupId':group_id,
 #                                            '$groupId':ROOT_group_id})
@@ -134,24 +134,113 @@ from Data.Test_data import ROOT_group_id
 #     answer = {'QOS_TEMPLATE_CRITERIA_GROUP_NAME': 'NAME length from 1 to 255 characters.'}
 #     assert response.status_code == 400
 #     assert answer == response.json()
+#
+#
+#
+# @allure.feature('Позитивный тест')
+# @allure.story('Редактируем имя группы на уже существующее')
+# @pytest.mark.xfail
+# def test_edit_criteria_group_name_on_existing(add_group, send_request):
+#     existing_name = next(add_group)['name']
+#     group_id = next(add_group)['id']
+#     data = make_test_data('put_criteria_group', {'$name': existing_name,
+#                                            '$criteriaGroupId':group_id,
+#                                            '$groupId':ROOT_group_id})
+#     response = send_request(URL.criteria_group, data['request'], method = "PUT")
+#     answer = {'QOS_TEMPLATE_CRITERIA_GROUP_NAME': 'NAME of criteria is already exist.'}
+#     assert response.status_code == 500
+#     assert response.json() == answer
+#
 
+
+# @allure.feature('Позитивный тест')
+# @allure.story('Редактируем имя и описание критерия')
+# def test_edit_criteria_name_and_description(send_request, add_criteria):
+#     criteria_for_edit = next(add_criteria)
+#     data = make_test_data('put_criteria', {'$criteriaId': criteria_for_edit['id'],
+#                                         '$name': random_string(),
+#                                        '$criteriaGroupId': criteria_for_edit['criteriaGroup']['id'],
+#                                        '$description':random_string()})
+#     response = send_request(URL.criteria, data['request'], method = "PUT")
+#     instance = response.json()
+#     assert response.status_code == 200
+#     assert equal_schema(instance, data['schema'])
+#
+#
+# @allure.feature('Позитивный тест')
+# @allure.story('Редактируем критерий на уже существующее имя')
+# def test_edit_criteria_on_existing_name(send_request, add_criteria):
+#     existing_criteria = next(add_criteria)
+#     criteria_for_edit = next(add_criteria)
+#     data = make_test_data('put_criteria', {'$criteriaId': criteria_for_edit['id'],
+#                                         '$name': existing_criteria['name'],
+#                                        '$criteriaGroupId': criteria_for_edit['criteriaGroup']['id'],
+#                                        '$description':existing_criteria['description']})
+#     response = send_request(URL.criteria, data['request'], method = "PUT")
+#     instance = response.json()
+#     assert response.status_code == 200
+#     assert equal_schema(instance, data['schema'])
+
+
+
+# @allure.feature('Позитивный тест')
+# @allure.story('Редактируем критерий с не известным id')
+# def test_edit_criteria_with_unknown_id(send_request, add_criteria):
+#     unknown_criteria_id = random.randint(1,99999999)
+#     criteria_for_edit = next(add_criteria)
+#     data = make_test_data('put_criteria', {'$criteriaId': unknown_criteria_id,
+#                                            '$name': random_string(),
+#                                            '$criteriaGroupId': criteria_for_edit['criteriaGroup']['id'],
+#                                            '$description':random_string()})
+#
+#     response = send_request(URL.criteria, data['request'], method = "PUT")
+#     answer = {'QOS_REQUEST_VALIDATION_EXCEPTION': 'QOSRequestValidationException: Criteria with id does not exist'}
+#     assert response.status_code == 500
+#     assert response.json() == answer
+
+# @allure.feature('Позитивный тест')
+# @allure.story('Редактируем имя критерия и описание на пустые')
+# def test_edit_criteria_name_and_description_on_empty(send_request, add_criteria):
+#     criteria_for_edit = next(add_criteria)
+#     criteria_id = criteria_for_edit['id']
+#     data = make_test_data('put_criteria', {'$criteriaId': criteria_id,
+#                                            '$name': None,
+#                                            '$criteriaGroupId': criteria_for_edit['criteriaGroup']['id'],
+#                                            '$description': None})
+#     response = send_request(URL.criteria, data['request'], method="PUT")
+#     answer = {'QOS_TEMPLATE_CRITERIA_DESCRIPTION': 'DESCRIPTION length from 1 to 1024 characters. Сriteria id=[%s]'%str(criteria_id),
+#               'QOS_TEMPLATE_CRITERIA_NAME': 'NAME length from 1 to 255 characters. Сriteria id=[%s]'%str(criteria_id)}
+#     assert response.status_code == 400
+#     assert response.json() == answer
+
+
+# @allure.feature('Позитивный тест')
+# @allure.story('Редактируем criteriaGroupId критерия на другую(уже существующую)')
+# @pytest.mark.xfail
+# def test_edit_criteria_on_existing_criteriaGroup(send_request, add_group, add_criteria):
+#     criteria_group_id_without_criteria = next(add_group)['id']
+#     criteria_for_edit = next(add_criteria)
+#     data = make_test_data('put_criteria', {'$criteriaId': criteria_for_edit['id'],
+#                                            '$name': random_string(),
+#                                            '$criteriaGroupId': criteria_group_id_without_criteria,
+#                                            '$description': random_string()})
+#     response = send_request(URL.criteria, data['request'], method="PUT")
+#     answer = {'QOS_TEMPLATE_CRITERIA_CRITERIAGROUPID': 'No such criteria id{criteria_id} in criteriaGroup {id}'}
+#     assert response.status_code == 500
+#     assert response.json() == answer
 
 
 @allure.feature('Позитивный тест')
-@allure.story('Редактируем имя группы на уже существующее')
-#@pytest.mark.xfail
-def test_edit_criteria_group_name_on_existing(add_group, send_request):
-
-    existing_name = add_group
-    print(existing_name)
-    existing_name_2 = add_group
-    print(existing_name_2)
-
-    # data = make_test_data('put_criteria_group', {'$name': existing_name,
-    #                                        '$criteriaGroupId':group_id,
-    #                                        '$groupId':ROOT_group_id})
-    # response = send_request(URL.criteria_group, data['request'], method = "PUT")
-    # answer = {'QOS_TEMPLATE_CRITERIA_GROUP_NAME': 'NAME of criteria is already exist.'}
-    # assert response.status_code == 500
-    # assert response.json() == answer
-
+@allure.story('Редактируем criteriaGroupId критерия на не существующую или пустую')
+# @pytest.mark.xfail
+def test_edit_criteria_on_existing_criteriaGroup(send_request, add_group, add_criteria):
+    criteria_for_edit = next(add_criteria)
+    data = make_test_data('put_criteria', {'$criteriaId': criteria_for_edit['id'],
+                                           '$name': random_string(),
+                                           '$criteriaGroupId': 999456,
+                                           '$description': random_string()})
+    response = send_request(URL.criteria, data['request'], method="PUT")
+    print(response.json())
+    answer = {'QOS_TEMPLATE_CRITERIA_CRITERIAGROUPID': 'No such criteria id{criteria_id} in criteriaGroup {id}'}
+    assert response.status_code == 500
+    assert response.json() == answer

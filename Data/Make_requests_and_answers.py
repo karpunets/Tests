@@ -41,7 +41,6 @@ def equal_schema(instance, schema, assert_keys_quantity=True):
                      'array': list,
                      str: 'string',
                      int: 'number',
-                     type(None): 'null',
                      dict: 'object',
                      bool: 'boolean',
                      list: 'array'
