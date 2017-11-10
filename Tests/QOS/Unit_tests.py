@@ -230,17 +230,32 @@ from Data.Test_data import ROOT_group_id
 #     assert response.json() == answer
 
 
-@allure.feature('Позитивный тест')
-@allure.story('Редактируем criteriaGroupId критерия на не существующую или пустую')
+# @allure.feature('Позитивный тест')
+# @allure.story('Редактируем criteriaGroupId критерия на не существующую или пустую')
 # @pytest.mark.xfail
-def test_edit_criteria_on_existing_criteriaGroup(send_request, add_group, add_criteria):
-    criteria_for_edit = next(add_criteria)
-    data = make_test_data('put_criteria', {'$criteriaId': criteria_for_edit['id'],
-                                           '$name': random_string(),
-                                           '$criteriaGroupId': 999456,
-                                           '$description': random_string()})
-    response = send_request(URL.criteria, data['request'], method="PUT")
+# def test_edit_criteria_on_unknown_or_empty_criteriaGroup(send_request, add_criteria):
+#     criteria_for_edit = next(add_criteria)
+#     data = make_test_data('put_criteria', {'$criteriaId': criteria_for_edit['id'],
+#                                            '$name': random_string(),
+#                                            '$criteriaGroupId': None,
+#                                            '$description': random_string()})
+#     response = send_request(URL.criteria, data['request'], method="PUT")
+#     print(response.json())
+#     answer = {'QOS_TEMPLATE_CRITERIA_CRITERIAGROUPID': 'No such criteriaGroup {id}'}
+#     assert response.status_code == 500
+#     assert response.json() == answer
+
+
+@allure.feature('Позитивный тест')
+@allure.story('Получаем групы')
+def test_edit_criteria_on_existing_criteriaGroup(send_request, add_group):
+    group = next(add_group)
+    # data = make_test_data('put_criteria', {'$criteriaId': criteria_for_edit['id'],
+    #                                        '$name': random_string(),
+    #                                        '$criteriaGroupId': None,
+    #                                        '$description': random_string()})
+    response = send_request(URL.criteria_group, method="GET")
     print(response.json())
-    answer = {'QOS_TEMPLATE_CRITERIA_CRITERIAGROUPID': 'No such criteria id{criteria_id} in criteriaGroup {id}'}
-    assert response.status_code == 500
-    assert response.json() == answer
+    print(group)
+    assert response.status_code == 200
+    assert group in response.json()
