@@ -1,4 +1,4 @@
-server = 'http://172.22.2.66:8080'
+server = 'http://172.22.2.63:8080'
 # headers = {
 #     'content-type': "application/json;charset=UTF-8",
 #     'authorization': "Basic QVBJX2F1dG90ZXN0X1JPT1Q6QVBJX2F1dG90ZXN0X1JPT1Q="}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h"  "Basic cm9vdDpyb290"
@@ -107,3 +107,8 @@ questioner = "%s/SmiddleQualityService_CA/qos/ca/questioner" % server
 filter = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter" % server
 abonent = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter/phone/import" % server
 agent = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter/agent" % server
+
+
+#SESL
+sesl_integration = "%s/SmiddleExtendedSmartLabel/sesl/integration"%server
+sesl_mapfield = "%s/SmiddleExtendedSmartLabel/sesl/integration/mapfield"%server

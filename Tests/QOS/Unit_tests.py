@@ -248,14 +248,9 @@ from Data.Test_data import ROOT_group_id
 
 @allure.feature('Позитивный тест')
 @allure.story('Получаем групы')
-def test_edit_criteria_on_existing_criteriaGroup(send_request, add_group):
+@pytest.mark.xfail
+def test_get_criteria_group_withou_criterias(send_request, add_group):
     group = next(add_group)
-    # data = make_test_data('put_criteria', {'$criteriaId': criteria_for_edit['id'],
-    #                                        '$name': random_string(),
-    #                                        '$criteriaGroupId': None,
-    #                                        '$description': random_string()})
     response = send_request(URL.criteria_group, method="GET")
-    print(response.json())
-    print(group)
     assert response.status_code == 200
     assert group in response.json()

@@ -1,0 +1,16 @@
+{"request":{
+
+"name": "$name",
+"url": "$url",
+"login": "$login",
+"password": "$password",
+"position": "$position"
+},
+"schema":{
+"id": {"type":"number"},
+"name": "$name",
+"url": "$url",
+"login": "$login",
+"password": "$password",
+"position": "$position"
+}}

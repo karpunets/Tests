@@ -37,14 +37,14 @@ def send_request(get_role):
 
 
 @pytest.fixture(scope='function')
-def clear_result():
+def clear_result(send_request):
     data = {}
     yield data
     try:
         if isinstance(data['id'], list) or isinstance(data['id'], tuple):
             for i in data['id']:
-                requests.delete(url=data['url'], params={'id': int(i)}, headers=URL.headers)
+                send_request(url=data['url'], params={'id': int(i)}, method = "DELETE")
         else:
-            requests.delete(url=data['url'], params={'id': int(data['id'])}, headers=URL.headers)
+            send_request(url=data['url'], params={'id': int(data['id'])},method = "DELETE")
     except KeyError:
         pass
