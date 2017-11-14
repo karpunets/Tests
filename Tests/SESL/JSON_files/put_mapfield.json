@@ -1,0 +1,12 @@
+{"request":{
+"id": "$mapfieldId",
+"databaseColumn": "$databaseColumn",
+"title": "$title",
+"position": "$position"},
+"schema":{
+"id": "$mapfieldId",
+"databaseColumn": "$databaseColumn",
+"title": "$title",
+"position": "$position",
+"integration": {"type":"object"}
+}}

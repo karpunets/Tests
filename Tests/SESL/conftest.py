@@ -22,3 +22,16 @@ def add_integration(send_request, clear_result):
     yield iter(results)
     clear_result['url'] = sesl_integration
     clear_result['id'] = [results[0]['id'], results[1]['id']]
+
+@pytest.fixture(scope="function")
+def add_mapping(send_request, add_integration):
+    exitsting_integration = next(add_integration)
+    result = []
+    for i in range(2):
+        data = make_test_data("post_mapfield", {"$databaseColumn":random_string(),
+                                                        "$title":random_string(),
+                                                        "$position":1,
+                                                        "$integrationId":exitsting_integration['id']})
+        response = send_request(sesl_mapfield, data['request'])
+        result.append(response.json())
+    yield iter(result)
