@@ -19,6 +19,7 @@ def add_integration(send_request, clear_result):
                                                         '$position': 1})
         response = send_request(url=sesl_integration, data=data['request'])
         results.append(response.json())
+
     yield iter(results)
     clear_result['url'] = sesl_integration
     clear_result['id'] = [results[0]['id'], results[1]['id']]
