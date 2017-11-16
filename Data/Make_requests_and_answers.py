@@ -13,7 +13,7 @@ def make_test_data(json_name, data= {}, default=False):
     # curframe = inspect.currentframe()
     # calframe = inspect.getouterframes(curframe)
     # print(calframe[1][1])
-    print()
+
     # Определяем откуда брать json файл
     path = 'JSON_files/%s.json' % json_name
     if default == True:
