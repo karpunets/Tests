@@ -16,6 +16,7 @@ def test_add_integration(send_request, clear_result):
                                              '$password':random_string(),
                                              '$position':1})
     response = send_request(url = sesl_integration, data=data['request'])
+    print(response.json())
     assert response.status_code == 200
     assert equal_schema(response.json(),data['schema'])
     clear_result['url'], clear_result['id'] = sesl_integration, response.json()['id']
