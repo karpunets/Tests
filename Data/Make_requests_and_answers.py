@@ -14,7 +14,7 @@ def make_test_data(json_name, data= {}, default=False):
     # calframe = inspect.getouterframes(curframe)
     # print(calframe[1][1])
     # Определяем откуда брать json файл
-    print(sys.path)
+
     path = 'JSON_files/%s.json' % json_name
     if default == True:
         path = path.replace("JSON_files/", "JSON_files/default_data/")
