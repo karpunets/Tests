@@ -16,7 +16,6 @@ def test_add_integration(send_request, clear_result):
                                              '$password':random_string(),
                                              '$position':1})
     response = send_request(url = sesl_integration, data=data['request'])
-    print(response.json())
     assert response.status_code == 200
     assert equal_schema(response.json(),data['schema'])
     clear_result['url'], clear_result['id'] = sesl_integration, response.json()['id']
@@ -24,23 +23,22 @@ def test_add_integration(send_request, clear_result):
 
 @allure.feature('Позитивный тест')
 @allure.story('Добавляем интеграцию с пустыми значениями')
-@pytest.mark.xfail
-def test_add_integration_without_data(send_request, clear_result):
+def test_add_integration_without_data(send_request):
     data = make_test_data('post_integration', data={'$name':None,
                                              '$url':None,
                                              '$login':None,
                                              '$password':None,
                                              '$position':None})
     response = send_request(url = sesl_integration, data=data['request'])
-    print(response.json())
-    assert response.status_code == 200
-    assert equal_schema(response.json(),data['schema'])
-    clear_result['url'], clear_result['id'] = sesl_integration, response.json()['id']
+    answer = {'SESL_VALIDATION_INTEGRATION_POSITION_EMPTY': 'Integration position is empty',
+              'SESL_VALIDATION_INTEGRATION_URL_EMPTY': 'Integration URL is empty',
+              'SESL_VALIDATION_INTEGRATION_NAME_EMPTY': 'Integration name is empty'}
+    assert response.status_code == 400
+    assert response.json() == answer
 
 
 @allure.feature('Позитивный тест')
 @allure.story('Добавляем интеграцию с не правильной позицией')
-@pytest.mark.xfail
 def test_add_integration_with_incorrect_position(send_request, clear_result):
     data = make_test_data('post_integration', data={'$name':random_string(),
                                              '$url':random_string(),
@@ -48,9 +46,8 @@ def test_add_integration_with_incorrect_position(send_request, clear_result):
                                              '$password':random_string(),
                                              '$position':random.randint(2,10)})
     response = send_request(url = sesl_integration, data=data['request'])
-    print(response.json())
     clear_result['url'], clear_result['id'] = sesl_integration, response.json()['id']
-    assert response.status_code == 400
+    assert response.status_code == 200
     assert equal_schema(response.json(),data['schema'])
 
 
@@ -63,15 +60,14 @@ def test_edit_integration(send_request, add_integration):
                                              '$url':random_string(),
                                              '$login':random_string(),
                                              '$password':random_string(),
-                                             '$position':2})
+                                             '$position':random.randint(3,999)})
     response = send_request(url = sesl_integration, data=data['request'], method = "PUT")
     assert response.status_code == 200
     assert equal_schema(response.json(),data['schema'])
 
 @allure.feature('Позитивный тест')
 @allure.story('Добавляем интеграцию с существующей позицией')
-@pytest.mark.xfail
-def test_add_integration_with_existing_position(send_request, clear_result, add_integration):
+def test_add_integration_with_existing_position(send_request, add_integration):
     existing_position = next(add_integration)['position']
     data = make_test_data('post_integration', data={'$name':random_string(),
                                              '$url':random_string(),
@@ -79,25 +75,23 @@ def test_add_integration_with_existing_position(send_request, clear_result, add_
                                              '$password':random_string(),
                                              '$position':existing_position})
     response = send_request(url = sesl_integration, data=data['request'])
-    clear_result['url'], clear_result['id'] = sesl_integration, response.json()['id']
-    answer = {'SESL_UNIQUE_VALUE_EXCEPTION': "SESLUniqueValueException: Integration with position %s already exists"%existing_position}
+
+    answer = {'SESL_VALIDATION_INTEGRATION_POSITION_UNIQUE': 'Integration position already exists'}
     assert response.status_code == 400
     assert answer == response.json()
 
 
 @allure.feature('Позитивный тест')
 @allure.story('Добавляем интеграцию с существующим именем')
-@pytest.mark.xfail
 def test_add_integration_with_existing_name(send_request, add_integration):
     existing_name = next(add_integration)['name']
     data = make_test_data('post_integration', data={'$name':existing_name,
                                              '$url':random_string(),
                                              '$login':random_string(),
                                              '$password':random_string(),
-                                             '$position':random.randint(1,3)})
+                                             '$position':random.randint(3,999)})
     response = send_request(url = sesl_integration, data=data['request'])
-    print(response.json())
-    answer = {'SESL_UNIQUE_VALUE_EXCEPTION': "SESLUniqueValueException: Integration with name '%s' already exists"%existing_name}
+    answer = {'SESL_VALIDATION_INTEGRATION_NAME_UNIQUE': 'Integration name already exists'}
     assert response.status_code == 400
     assert answer == response.json()
 
@@ -105,8 +99,7 @@ def test_add_integration_with_existing_name(send_request, add_integration):
 
 
 @allure.feature('Позитивный тест')
-@allure.story('Редактируем интегратор на уже существующее имя')
-@pytest.mark.xfail
+@allure.story('Редактируем интеграцию на уже существующее имя')
 def test_edit_integration_on_existing_name(send_request, add_integration):
     integration = next(add_integration)
     existing_name = next(add_integration)['name']
@@ -115,16 +108,15 @@ def test_edit_integration_on_existing_name(send_request, add_integration):
                                              '$url':integration['url'],
                                              '$login':random_string(),
                                              '$password':random_string(),
-                                             '$position':1})
+                                             '$position':random.randint(3,999)})
     response = send_request(url = sesl_integration, data=data['request'], method = "PUT")
-    answer = {'SESL_UNIQUE_VALUE_EXCEPTION': "SESLUniqueValueException: Integration with name '%s' already exists"%existing_name}
+    answer = {'SESL_VALIDATION_INTEGRATION_NAME_UNIQUE': 'Integration name already exists'}
     assert response.status_code == 400
     assert answer == response.json()
 
 
 @allure.feature('Позитивный тест')
 @allure.story('Редактируем интегратор на пустые значения')
-@pytest.mark.xfail
 def test_edit_integration_on_empty_fields(send_request, add_integration):
     integration = next(add_integration)
     data = make_test_data('put_integration', data={'$integrationId':integration['id'],
@@ -149,7 +141,7 @@ def test_edit_integration_with_null_integrationId(send_request):
                                              '$url':random_string(),
                                              '$login':random_string(),
                                              '$password':random_string(),
-                                             '$position':1})
+                                             '$position':random.randint(3,999)})
     response = send_request(url = sesl_integration, data=data['request'], method = "PUT")
     answer = {'SESL_REQUEST_VALIDATION_EXCEPTION': 'SESLRequestValidationException: Integration id must not be empty'}
     assert response.status_code == 500
@@ -165,7 +157,7 @@ def test_edit_integration_with_null_integrationId(send_request):
                                              '$url':random_string(),
                                              '$login':random_string(),
                                              '$password':random_string(),
-                                             '$position':1})
+                                             '$position':random.randint(3,999)})
     response = send_request(url = sesl_integration, data=data['request'], method = "PUT")
     answer = {'SESL_INTEGRATION_NOT_FOUND_EXCEPTION': 'SESLIntegrationNotFoundException: Unable to find integration with id=%d'%randomId}
     assert response.status_code == 500
@@ -188,6 +180,8 @@ def test_get_interation_by_integration_id(send_request, add_integration):
     existing_integration = next(add_integration)
     params = {'id':existing_integration['id']}
     response = send_request(url = sesl_integration, params = params, method = "GET")
+    print("existing", existing_integration)
+    print(response.json())
     assert response.status_code == 200
     assert existing_integration == response.json()
 
@@ -275,14 +269,13 @@ def test_add_mapping_with_empty_fields(send_request, add_integration):
 
 @allure.feature('Позитивный тест')
 @allure.story('Добавляем маппинг с неизвестным|null integrationId')
-@pytest.mark.xfail
 def test_add_mapping_with_unknown_integrationId(send_request):
     data = make_test_data("post_mapfield", {"$databaseColumn":random_string(),
                                                     "$title":random_string(),
-                                                    "$position":1,
+                                                    "$position":random.randint(3,999),
                                                     "$integrationId":random.randint(1,999999)})
     response = send_request(sesl_mapfield, data['request'])
-    answer = {'SESL_VALIDATION_INTEGRATION_ID': 'No such integration ID'}
+    answer = {'SESL_VALIDATION_MAP_FIELD_INTEGRATION_NOT_EXISTS': 'Map field integration not exists'}
     assert response.status_code == 400
     assert response.json() == answer
 
@@ -293,7 +286,7 @@ def test_add_mapping_check_integration_response(send_request, add_integration):
     exitsting_integration = next(add_integration)
     data = make_test_data("post_mapfield", {"$databaseColumn":random_string(),
                                                     "$title":random_string(),
-                                                    "$position":1,
+                                                    "$position":random.randint(3,999),
                                                     "$integrationId":exitsting_integration['id']})
     response = send_request(sesl_mapfield, data['request'])
     assert response.status_code == 200
@@ -302,7 +295,6 @@ def test_add_mapping_check_integration_response(send_request, add_integration):
 
 @allure.feature('Позитивный тест')
 @allure.story('Добавляем маппинг с уже существующими параметрами')
-@pytest.mark.xfail
 def test_add_mapping_with_existing_title_position_databaseColumn(send_request, add_mapping):
     existing_mapping = next(add_mapping)
     data = make_test_data("post_mapfield", {"$databaseColumn":existing_mapping['databaseColumn'],
@@ -310,29 +302,29 @@ def test_add_mapping_with_existing_title_position_databaseColumn(send_request, a
                                                     "$position":existing_mapping['position'],
                                                     "$integrationId":existing_mapping['integration']['id']})
     response = send_request(sesl_mapfield, data['request'])
-    answer = {'SESL_VALIDATION_MAPPING': 'Fields with this title position databasecolumn already exist'}
+
+    answer = {'SESL_VALIDATION_MAP_FIELD_TITLE_UNIQUE': 'Map field title for such integration already exists',
+              'SESL_VALIDATION_MAP_FIELD_DATABASE_COLUMN_UNIQUE': 'Map field database column for such integration already exists',
+              'SESL_VALIDATION_MAP_FIELD_POSITION_UNIQUE': 'Map field position for such integration already exists'}
     assert response.status_code == 400
     assert response.json() == answer
 
 
 @allure.feature('Позитивный тест')
 @allure.story('Изменяем маппинг на валидные данные')
-@pytest.mark.xfail
 def test_edit_mapping(send_request, add_mapping):
     existing_mapping = next(add_mapping)
     data = make_test_data("put_mapfield", {"$databaseColumn":random_string(),
                                             "$mapfieldId":existing_mapping['id'],
                                             "$title":random_string(),
-                                            "$position":5})
+                                            "$position":random.randint(3,999)})
     response = send_request(sesl_mapfield, data['request'], method = "PUT")
     print(response.json())
-    answer = {'SESL_VALIDATION_MAPPING': 'Fields with this title position databasecolumn already exist'}
-    assert response.status_code == 400
-    assert response.json() == answer
+    assert response.status_code == 200
+    assert equal_schema(response.json(), data['schema'])
 
 @allure.feature('Позитивный тест')
 @allure.story('Изменяем маппинг на пустые значения')
-@pytest.mark.xfail
 def test_edit_mapping_on_empty_values(send_request, add_mapping):
     existing_mapping = next(add_mapping)
     data = make_test_data("put_mapfield", { "$mapfieldId":existing_mapping['id'],
@@ -340,30 +332,30 @@ def test_edit_mapping_on_empty_values(send_request, add_mapping):
                                             "$title":None,
                                             "$position":None})
     response = send_request(sesl_mapfield, data['request'], method = "PUT")
-    print(response.json())
-    answer = {'SESL_VALIDATION_MAPPING': 'The requirement fields didnt have any data'}
+
+    answer = {'SESL_VALIDATION_MAP_FIELD_DATABASE_COLUMN_EMPTY': 'Map field database column is empty',
+              'SESL_VALIDATION_MAP_FIELD_TITLE_EMPTY': 'Map field title is empty',
+              'SESL_VALIDATION_MAP_FIELD_POSITION_EMPTY': 'Map field position is empty'}
     assert response.status_code == 400
     assert response.json() == answer
 
 @allure.feature('Позитивный тест')
 @allure.story('Изменяем маппинг с неизвестным\пустым ID')
-@pytest.mark.xfail
 def test_edit_mapping_with_unknown_id(send_request):
     randomId= random.randint(1,999999)
     data = make_test_data("put_mapfield", { "$mapfieldId":randomId,
-                                            "$databaseColumn":None,
-                                            "$title":None,
-                                            "$position":None})
+                                            "$databaseColumn":random_string(),
+                                            "$title":random_string(),
+                                            "$position":random.randint(3,999)})
     response = send_request(sesl_mapfield, data['request'], method = "PUT")
-    print(response.json())
-    answer = {'SESL_VALIDATION_MAPPING': 'Cant find mapping with id=%d'%randomId}
+
+    answer = {'SESL_VALIDATION_MAP_FIELD_NOT_EXISTS': 'Map field not exists'}
     assert response.status_code == 400
     assert response.json() == answer
 
 
 @allure.feature('Позитивный тест')
 @allure.story('Изменяем маппинг на существующие данные')
-@pytest.mark.xfail
 def test_edit_mapping_on_already_exist_fields(send_request, add_mapping):
     existing_mapping = next(add_mapping)
     to_change_mapping = next(add_mapping)
@@ -372,14 +364,15 @@ def test_edit_mapping_on_already_exist_fields(send_request, add_mapping):
                                             "$title":existing_mapping['title'],
                                             "$position":existing_mapping['position']})
     response = send_request(sesl_mapfield, data['request'], method = "PUT")
-    print(response.json())
-    answer = {'SESL_VALIDATION_MAPPING': 'Fields already exist'}
+
+    answer = {'SESL_VALIDATION_MAP_FIELD_TITLE_UNIQUE': 'Map field title for such integration already exists',
+              'SESL_VALIDATION_MAP_FIELD_DATABASE_COLUMN_UNIQUE': 'Map field database column for such integration already exists',
+              'SESL_VALIDATION_MAP_FIELD_POSITION_UNIQUE': 'Map field position for such integration already exists'}
     assert response.status_code == 400
     assert response.json() == answer
 
 @allure.feature('Позитивный тест')
 @allure.story('Получаем маппинг по ID')
-@pytest.mark.xfail
 def test_get_mapping_by_id(send_request, add_mapping):
     existing_mapping = next(add_mapping)
     params = {'id':existing_mapping['id']}
@@ -390,7 +383,6 @@ def test_get_mapping_by_id(send_request, add_mapping):
 
 @allure.feature('Позитивный тест')
 @allure.story('Получаем маппинг по ID')
-@pytest.mark.xfail
 def test_get_mapping_by_id(send_request, add_mapping):
     existing_mapping = next(add_mapping)
     params = {'id':existing_mapping['id']}
@@ -401,7 +393,6 @@ def test_get_mapping_by_id(send_request, add_mapping):
 
 @allure.feature('Позитивный тест')
 @allure.story('Получаем маппинг по integrationId')
-@pytest.mark.xfail
 def test_get_mapping_by_integrationId(send_request, add_mapping):
     existing_mapping_1 = next(add_mapping)
     existing_mapping_2 = next(add_mapping)
@@ -414,7 +405,6 @@ def test_get_mapping_by_integrationId(send_request, add_mapping):
 
 @allure.feature('Позитивный тест')
 @allure.story('Удаляем маппинг по Id')
-@pytest.mark.xfail
 def test_delete_mapping_by_id(send_request, add_mapping):
     existing_mapping = next(add_mapping)
     mappingId = existing_mapping['id']
@@ -426,12 +416,11 @@ def test_delete_mapping_by_id(send_request, add_mapping):
 
 @allure.feature('Позитивный тест')
 @allure.story('Удаляем маппинг по неизвестному Id')
-@pytest.mark.xfail
 def test_delete_mapping_by_unknown_id(send_request):
     randomId = random.randint(1,9999999)
     params = {'id':randomId}
     response = send_request(sesl_mapfield, params=params, method = "DELETE")
-    answer = {'SESL_MAPPING_NOT_FOUND_EXCEPTION': 'SESLMappingNotFoundException: Unable to find mapping with id=%d'%randomId}
+    answer = {'SESL_MAP_FIELD_NOT_FOUND_EXCEPTION': 'SESLMapFieldNotFoundException: Unable to find map field with id=%d'%randomId}
     assert response.status_code == 500
     assert response.json() == answer
 
@@ -439,35 +428,40 @@ def test_delete_mapping_by_unknown_id(send_request):
 
 @allure.feature('Позитивный тест')
 @allure.story('Получаем маппинг без параметров')
-@pytest.mark.xfail
-def test_get_mapping_without_params(send_request, add_mapping):
-    existing_mapping = next(add_mapping)
+def test_get_mapping_without_params(send_request):
     response = send_request(sesl_mapfield,  method = "GET")
-    print(response.json(), response.status_code)
-    assert response.status_code == 200
-    assert response.json() == existing_mapping
+    answer = {'SESL_MAP_FIELD_NOT_FOUND_EXCEPTION': 'SESLMapFieldNotFoundException: Id or integrationId must not be empty'}
+    assert response.status_code == 500
+    assert response.json() == answer
 
 
 @allure.feature('Позитивный тест')
 @allure.story('Получаем маппинг по не правильному ID')
-@pytest.mark.xfail
 def test_get_mapping_by_unknown_id(send_request):
     randomId = random.randint(1,999999)
     params = {'id':randomId}
     response = send_request(sesl_mapfield, params=params, method = "GET")
-    answer = {'SESL_VALIDATION_MAPPING': 'Cant find mapping with id=%d'%randomId}
-    assert response.status_code == 400
-    assert response.json() == answer
 
+    answer = {'SESL_MAP_FIELD_NOT_FOUND_EXCEPTION': 'SESLMapFieldNotFoundException: Unable to find map field with id=%d'%randomId}
+    assert response.status_code == 500
+    assert response.json() == answer
 
 
 @allure.feature('Позитивный тест')
 @allure.story('Получаем маппинг по не правильному integrationId')
-@pytest.mark.xfail
 def test_get_mapping_by_unknown_integrationId(send_request):
     randomIntegrationId = random.randint(1,999999)
     params = {'id':randomIntegrationId}
     response = send_request(sesl_mapfield, params=params, method = "GET")
-    answer = {'SESL_VALIDATION_MAPPING': 'Cant find mapping with IntegrationId=%d'%randomIntegrationId}
-    assert response.status_code == 400
+    answer = {'SESL_MAP_FIELD_NOT_FOUND_EXCEPTION': 'SESLMapFieldNotFoundException: Unable to find map field with id=%d'%randomIntegrationId}
+    assert response.status_code == 500
     assert response.json() == answer
+
+@allure.feature('Позитивный тест')
+@allure.story('Получаем маппинг по не правильному integrationId')
+def test_get_integration_check_password(send_request, add_integration_with_password):
+    integration_id = add_integration_with_password['id']
+    params = {'id':integration_id}
+    response = send_request(url=sesl_integration, params=params, method="GET")
+    assert response.status_code == 200
+    assert response.json()['password'] == None
