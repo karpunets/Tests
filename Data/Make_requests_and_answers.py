@@ -12,6 +12,7 @@ def random_string():
 def make_test_data(json_name, data= {}, default=False):
     # Определяем откуда брать json файл
     path = 'JSON_files/%s.json' % json_name
+    print(path)
     if default == True:
         path = path.replace("JSON_files/", "JSON_files/default_data/")
     json_file = open(path, encoding="utf8").read()

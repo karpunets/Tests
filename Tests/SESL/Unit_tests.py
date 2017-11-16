@@ -180,8 +180,6 @@ def test_get_interation_by_integration_id(send_request, add_integration):
     existing_integration = next(add_integration)
     params = {'id':existing_integration['id']}
     response = send_request(url = sesl_integration, params = params, method = "GET")
-    print("existing", existing_integration)
-    print(response.json())
     assert response.status_code == 200
     assert existing_integration == response.json()
 
@@ -319,7 +317,6 @@ def test_edit_mapping(send_request, add_mapping):
                                             "$title":random_string(),
                                             "$position":random.randint(3,999)})
     response = send_request(sesl_mapfield, data['request'], method = "PUT")
-    print(response.json())
     assert response.status_code == 200
     assert equal_schema(response.json(), data['schema'])
 

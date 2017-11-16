@@ -1,0 +1,16 @@
+{"request":{
+"id":"$integrationId",
+"name": "$name",
+"url": "$url",
+"login": "$login",
+"password": "$password",
+"position": "$position"
+},
+"schema":{
+"id":"$integrationId",
+"name": "$name",
+"url": "$url",
+"login": "$login",
+"password": "$password",
+"position": "$position"
+}}

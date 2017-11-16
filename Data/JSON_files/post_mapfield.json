@@ -1,0 +1,15 @@
+{"request":{
+"databaseColumn": "$databaseColumn",
+"title": "$title",
+"position": "$position",
+"integration": {
+"id": "$integrationId"
+}
+},
+"schema":{
+"id": {"type":"number"},
+"databaseColumn": "$databaseColumn",
+"title": "$title",
+"position": "$position",
+"integration": {"type":"object"}
+}}
