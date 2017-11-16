@@ -7,7 +7,7 @@ from Data.Make_requests_and_answers import random_string
 from Data.URLs_MAP import sesl_integration,sesl_mapfield
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Добавляем интеграцию')
 def test_add_integration(send_request, clear_result):
     data = make_test_data('post_integration', data={'$name':random_string(),
@@ -21,7 +21,7 @@ def test_add_integration(send_request, clear_result):
     clear_result['url'], clear_result['id'] = sesl_integration, response.json()['id']
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Добавляем интеграцию с пустыми значениями')
 def test_add_integration_without_data(send_request):
     data = make_test_data('post_integration', data={'$name':None,
@@ -37,7 +37,7 @@ def test_add_integration_without_data(send_request):
     assert response.json() == answer
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Добавляем интеграцию с не правильной позицией')
 def test_add_integration_with_incorrect_position(send_request, clear_result):
     data = make_test_data('post_integration', data={'$name':random_string(),
@@ -51,7 +51,7 @@ def test_add_integration_with_incorrect_position(send_request, clear_result):
     assert equal_schema(response.json(),data['schema'])
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Редактируем интегратор')
 def test_edit_integration(send_request, add_integration):
     integrationId = next(add_integration)['id']
@@ -65,7 +65,7 @@ def test_edit_integration(send_request, add_integration):
     assert response.status_code == 200
     assert equal_schema(response.json(),data['schema'])
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Добавляем интеграцию с существующей позицией')
 def test_add_integration_with_existing_position(send_request, add_integration):
     existing_position = next(add_integration)['position']
@@ -81,7 +81,7 @@ def test_add_integration_with_existing_position(send_request, add_integration):
     assert answer == response.json()
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Добавляем интеграцию с существующим именем')
 def test_add_integration_with_existing_name(send_request, add_integration):
     existing_name = next(add_integration)['name']
@@ -98,7 +98,7 @@ def test_add_integration_with_existing_name(send_request, add_integration):
 
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Редактируем интеграцию на уже существующее имя')
 def test_edit_integration_on_existing_name(send_request, add_integration):
     integration = next(add_integration)
@@ -115,7 +115,7 @@ def test_edit_integration_on_existing_name(send_request, add_integration):
     assert answer == response.json()
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Редактируем интегратор на пустые значения')
 def test_edit_integration_on_empty_fields(send_request, add_integration):
     integration = next(add_integration)
@@ -133,7 +133,7 @@ def test_edit_integration_on_empty_fields(send_request, add_integration):
     assert answer == response.json()
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Редактируем интегратор не передавая integrationId')
 def test_edit_integration_with_null_integrationId(send_request):
     data = make_test_data('put_integration', data={'$integrationId':None,
@@ -148,7 +148,7 @@ def test_edit_integration_with_null_integrationId(send_request):
     assert answer == response.json()
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Редактируем интегратор не передавая integrationId')
 def test_edit_integration_with_null_integrationId(send_request):
     randomId = random.randint(1,9999999)
@@ -164,7 +164,7 @@ def test_edit_integration_with_null_integrationId(send_request):
     assert answer == response.json()
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Получаем интегратор по имени')
 def test_get_interation_by_integration_name(send_request, add_integration):
     existing_integration = next(add_integration)
@@ -174,7 +174,7 @@ def test_get_interation_by_integration_name(send_request, add_integration):
     assert existing_integration == response.json()
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Получаем интегратор по ID')
 def test_get_interation_by_integration_id(send_request, add_integration):
     existing_integration = next(add_integration)
@@ -186,7 +186,7 @@ def test_get_interation_by_integration_id(send_request, add_integration):
     assert existing_integration == response.json()
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Получаем интегратор не передавая параметр')
 def test_get_interation_without_sending_params(send_request, add_integration):
     existing_integration_profile_1, existing_integration_profile_2 = next(add_integration), next(add_integration)
@@ -195,7 +195,7 @@ def test_get_interation_without_sending_params(send_request, add_integration):
     assert existing_integration_profile_1 and existing_integration_profile_2 in response.json()
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Получаем интегратор по неизвестному ID')
 def test_get_interation_by_unknown_integration_id(send_request):
     randomId = random.randint(1,999999)
@@ -206,7 +206,7 @@ def test_get_interation_by_unknown_integration_id(send_request):
     assert answer == response.json()
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Получаем интегратор по неизвестному имени')
 def test_get_interation_by_unknown_integration_name(send_request):
     randomName = random_string()
@@ -217,7 +217,7 @@ def test_get_interation_by_unknown_integration_name(send_request):
     assert answer == response.json()
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Удаляем интегратор')
 def test_delete_interation_by_id(send_request, add_integration):
     existing_integration_id = next(add_integration)['id']
@@ -227,7 +227,7 @@ def test_delete_interation_by_id(send_request, add_integration):
     assert response.json() == existing_integration_id
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Удаляем интегратор с неизвестным ID')
 def test_delete_interation_by_unknown_integration_id(send_request):
     randomId = random.randint(1,99999999)
@@ -238,7 +238,7 @@ def test_delete_interation_by_unknown_integration_id(send_request):
     assert response.json() == answer
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Добавляем маппинг с коректными параметрами')
 def test_add_mapping(send_request, add_integration):
     exitsting_integration = next(add_integration)
@@ -251,7 +251,7 @@ def test_add_mapping(send_request, add_integration):
     assert equal_schema(response.json(), data['schema'])
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Добавляем маппинг с пустыми полями')
 def test_add_mapping_with_empty_fields(send_request, add_integration):
     exitsting_integration = next(add_integration)
@@ -267,7 +267,7 @@ def test_add_mapping_with_empty_fields(send_request, add_integration):
     assert response.json() == answer
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Добавляем маппинг с неизвестным|null integrationId')
 def test_add_mapping_with_unknown_integrationId(send_request):
     data = make_test_data("post_mapfield", {"$databaseColumn":random_string(),
@@ -280,7 +280,7 @@ def test_add_mapping_with_unknown_integrationId(send_request):
     assert response.json() == answer
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Добавляем маппинг, проверяем правильность присвоения к integration профилю')
 def test_add_mapping_check_integration_response(send_request, add_integration):
     exitsting_integration = next(add_integration)
@@ -293,7 +293,7 @@ def test_add_mapping_check_integration_response(send_request, add_integration):
     assert response.json()['integration'] == exitsting_integration
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Добавляем маппинг с уже существующими параметрами')
 def test_add_mapping_with_existing_title_position_databaseColumn(send_request, add_mapping):
     existing_mapping = next(add_mapping)
@@ -310,7 +310,7 @@ def test_add_mapping_with_existing_title_position_databaseColumn(send_request, a
     assert response.json() == answer
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Изменяем маппинг на валидные данные')
 def test_edit_mapping(send_request, add_mapping):
     existing_mapping = next(add_mapping)
@@ -323,7 +323,7 @@ def test_edit_mapping(send_request, add_mapping):
     assert response.status_code == 200
     assert equal_schema(response.json(), data['schema'])
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Изменяем маппинг на пустые значения')
 def test_edit_mapping_on_empty_values(send_request, add_mapping):
     existing_mapping = next(add_mapping)
@@ -339,7 +339,7 @@ def test_edit_mapping_on_empty_values(send_request, add_mapping):
     assert response.status_code == 400
     assert response.json() == answer
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Изменяем маппинг с неизвестным\пустым ID')
 def test_edit_mapping_with_unknown_id(send_request):
     randomId= random.randint(1,999999)
@@ -354,7 +354,7 @@ def test_edit_mapping_with_unknown_id(send_request):
     assert response.json() == answer
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Изменяем маппинг на существующие данные')
 def test_edit_mapping_on_already_exist_fields(send_request, add_mapping):
     existing_mapping = next(add_mapping)
@@ -371,7 +371,7 @@ def test_edit_mapping_on_already_exist_fields(send_request, add_mapping):
     assert response.status_code == 400
     assert response.json() == answer
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Получаем маппинг по ID')
 def test_get_mapping_by_id(send_request, add_mapping):
     existing_mapping = next(add_mapping)
@@ -381,7 +381,7 @@ def test_get_mapping_by_id(send_request, add_mapping):
     assert response.json() == existing_mapping
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Получаем маппинг по ID')
 def test_get_mapping_by_id(send_request, add_mapping):
     existing_mapping = next(add_mapping)
@@ -391,7 +391,7 @@ def test_get_mapping_by_id(send_request, add_mapping):
     assert response.json() == existing_mapping
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Получаем маппинг по integrationId')
 def test_get_mapping_by_integrationId(send_request, add_mapping):
     existing_mapping_1 = next(add_mapping)
@@ -403,7 +403,7 @@ def test_get_mapping_by_integrationId(send_request, add_mapping):
     assert existing_mapping_1 and existing_mapping_2 in response.json()
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Удаляем маппинг по Id')
 def test_delete_mapping_by_id(send_request, add_mapping):
     existing_mapping = next(add_mapping)
@@ -414,7 +414,7 @@ def test_delete_mapping_by_id(send_request, add_mapping):
     assert response.json() == mappingId
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Удаляем маппинг по неизвестному Id')
 def test_delete_mapping_by_unknown_id(send_request):
     randomId = random.randint(1,9999999)
@@ -426,7 +426,7 @@ def test_delete_mapping_by_unknown_id(send_request):
 
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Получаем маппинг без параметров')
 def test_get_mapping_without_params(send_request):
     response = send_request(sesl_mapfield,  method = "GET")
@@ -435,7 +435,7 @@ def test_get_mapping_without_params(send_request):
     assert response.json() == answer
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Получаем маппинг по не правильному ID')
 def test_get_mapping_by_unknown_id(send_request):
     randomId = random.randint(1,999999)
@@ -447,7 +447,7 @@ def test_get_mapping_by_unknown_id(send_request):
     assert response.json() == answer
 
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Получаем маппинг по не правильному integrationId')
 def test_get_mapping_by_unknown_integrationId(send_request):
     randomIntegrationId = random.randint(1,999999)
@@ -457,7 +457,7 @@ def test_get_mapping_by_unknown_integrationId(send_request):
     assert response.status_code == 500
     assert response.json() == answer
 
-@allure.feature('Позитивный тест')
+@allure.feature('SESL')
 @allure.story('Получаем маппинг по не правильному integrationId')
 def test_get_integration_check_password(send_request, add_integration_with_password):
     integration_id = add_integration_with_password['id']

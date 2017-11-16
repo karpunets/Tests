@@ -2,9 +2,11 @@ import json, re, pytest, random, string
 
 
 def random_string():
-    random_name = lambda: ''.join(random.choice(string.ascii_letters + string.digits) for list in range(random.randint(1,30)))
+    random_name = lambda: ''.join(random.choice(string.ascii_letters + string.digits) for list in range(random.randint(1,10)))
     random_string = random_name()
     return random_string
+
+
 
 # Получаем и преобразуем JSON файл, согласно переданным параметрам
 def make_test_data(json_name, data= {}, default=False):
