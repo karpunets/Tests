@@ -39,8 +39,8 @@ def test_add_integration_without_data(send_request):
 
 
 @allure.feature('SESL')
-@allure.story('Добавляем интеграцию с не правильной позицией')
-def test_add_integration_with_incorrect_position(send_request, clear_result):
+@allure.story('Добавляем интеграцию с рандомной позицией')
+def test_add_integration_with_random_position(send_request, clear_result):
     data = make_test_data('post_integration', data={'$name':random_string(),
                                              '$url':random_string(),
                                              '$login':random_string(),
@@ -54,8 +54,8 @@ def test_add_integration_with_incorrect_position(send_request, clear_result):
 
 @allure.feature('SESL')
 @allure.story('Редактируем интегратор')
-def test_edit_integration(send_request, add_integration):
-    integrationId = next(add_integration)['id']
+def test_edit_integration(send_request, add_one_integration):
+    integrationId = add_one_integration['id']
     data = make_test_data('put_integration', data={'$integrationId':integrationId,
                                              '$name':random_string(),
                                              '$url':random_string(),
@@ -68,8 +68,8 @@ def test_edit_integration(send_request, add_integration):
 
 @allure.feature('SESL')
 @allure.story('Добавляем интеграцию с существующей позицией')
-def test_add_integration_with_existing_position(send_request, add_integration):
-    existing_position = next(add_integration)['position']
+def test_add_integration_with_existing_position(send_request, add_one_integration):
+    existing_position = add_one_integration['position']
     data = make_test_data('post_integration', data={'$name':random_string(),
                                              '$url':random_string(),
                                              '$login':random_string(),
@@ -84,8 +84,8 @@ def test_add_integration_with_existing_position(send_request, add_integration):
 
 @allure.feature('SESL')
 @allure.story('Добавляем интеграцию с существующим именем')
-def test_add_integration_with_existing_name(send_request, add_integration):
-    existing_name = next(add_integration)['name']
+def test_add_integration_with_existing_name(send_request, add_one_integration):
+    existing_name = add_one_integration['name']
     data = make_test_data('post_integration', data={'$name':existing_name,
                                              '$url':random_string(),
                                              '$login':random_string(),
@@ -101,9 +101,9 @@ def test_add_integration_with_existing_name(send_request, add_integration):
 
 @allure.feature('SESL')
 @allure.story('Редактируем интеграцию на уже существующее имя')
-def test_edit_integration_on_existing_name(send_request, add_integration):
-    integration = next(add_integration)
-    existing_name = next(add_integration)['name']
+def test_edit_integration_on_existing_name(send_request, add_two_integrations):
+    integration = next(add_two_integrations)
+    existing_name = next(add_two_integrations)['name']
     data = make_test_data('put_integration', data={'$integrationId':integration['id'],
                                              '$name':existing_name,
                                              '$url':integration['url'],
@@ -118,8 +118,8 @@ def test_edit_integration_on_existing_name(send_request, add_integration):
 
 @allure.feature('SESL')
 @allure.story('Редактируем интегратор на пустые значения')
-def test_edit_integration_on_empty_fields(send_request, add_integration):
-    integration = next(add_integration)
+def test_edit_integration_on_empty_fields(send_request, add_one_integration):
+    integration = add_one_integration
     data = make_test_data('put_integration', data={'$integrationId':integration['id'],
                                              '$name':None,
                                              '$url':None,
@@ -167,8 +167,8 @@ def test_edit_integration_with_null_integrationId(send_request):
 
 @allure.feature('SESL')
 @allure.story('Получаем интегратор по имени')
-def test_get_interation_by_integration_name(send_request, add_integration):
-    existing_integration = next(add_integration)
+def test_get_interation_by_integration_name(send_request, add_one_integration):
+    existing_integration = add_one_integration
     params = {'name':existing_integration['name']}
     response = send_request(url = sesl_integration, params = params, method = "GET")
     assert response.status_code == 200
@@ -177,8 +177,8 @@ def test_get_interation_by_integration_name(send_request, add_integration):
 
 @allure.feature('SESL')
 @allure.story('Получаем интегратор по ID')
-def test_get_interation_by_integration_id(send_request, add_integration):
-    existing_integration = next(add_integration)
+def test_get_interation_by_integration_id(send_request, add_one_integration):
+    existing_integration = add_one_integration
     params = {'id':existing_integration['id']}
     response = send_request(url = sesl_integration, params = params, method = "GET")
     assert response.status_code == 200
@@ -187,8 +187,8 @@ def test_get_interation_by_integration_id(send_request, add_integration):
 
 @allure.feature('SESL')
 @allure.story('Получаем интегратор не передавая параметр')
-def test_get_interation_without_sending_params(send_request, add_integration):
-    existing_integration_profile_1, existing_integration_profile_2 = next(add_integration), next(add_integration)
+def test_get_interation_without_sending_params(send_request, add_two_integrations):
+    existing_integration_profile_1, existing_integration_profile_2 = next(add_two_integrations), next(add_two_integrations)
     response = send_request(url = sesl_integration,  method = "GET")
     assert response.status_code == 200
     assert existing_integration_profile_1 and existing_integration_profile_2 in response.json()
@@ -218,8 +218,8 @@ def test_get_interation_by_unknown_integration_name(send_request):
 
 @allure.feature('SESL')
 @allure.story('Удаляем интегратор')
-def test_delete_interation_by_id(send_request, add_integration):
-    existing_integration_id = next(add_integration)['id']
+def test_delete_interation_by_id(send_request, add_one_integration):
+    existing_integration_id = add_one_integration['id']
     params = {'id':existing_integration_id}
     response = send_request(url = sesl_integration, params = params, method = "DELETE")
     assert response.status_code == 200
@@ -239,8 +239,8 @@ def test_delete_interation_by_unknown_integration_id(send_request):
 
 @allure.feature('SESL')
 @allure.story('Добавляем маппинг с коректными параметрами')
-def test_add_mapping(send_request, add_integration):
-    exitsting_integration = next(add_integration)
+def test_add_mapping(send_request, add_one_integration):
+    exitsting_integration = add_one_integration
     data = make_test_data("post_mapfield", {"$databaseColumn":random_string(),
                                                     "$title":random_string(),
                                                     "$position":1,
@@ -252,8 +252,8 @@ def test_add_mapping(send_request, add_integration):
 
 @allure.feature('SESL')
 @allure.story('Добавляем маппинг с пустыми полями')
-def test_add_mapping_with_empty_fields(send_request, add_integration):
-    exitsting_integration = next(add_integration)
+def test_add_mapping_with_empty_fields(send_request, add_one_integration):
+    exitsting_integration = add_one_integration
     data = make_test_data("post_mapfield", {"$databaseColumn":None,
                                                     "$title":None,
                                                     "$position":None,
@@ -281,8 +281,8 @@ def test_add_mapping_with_unknown_integrationId(send_request):
 
 @allure.feature('SESL')
 @allure.story('Добавляем маппинг, проверяем правильность присвоения к integration профилю')
-def test_add_mapping_check_integration_response(send_request, add_integration):
-    exitsting_integration = next(add_integration)
+def test_add_mapping_check_integration_response(send_request, add_one_integration):
+    exitsting_integration = add_one_integration
     data = make_test_data("post_mapfield", {"$databaseColumn":random_string(),
                                                     "$title":random_string(),
                                                     "$position":random.randint(3,999),
@@ -294,8 +294,8 @@ def test_add_mapping_check_integration_response(send_request, add_integration):
 
 @allure.feature('SESL')
 @allure.story('Добавляем маппинг с уже существующими параметрами')
-def test_add_mapping_with_existing_title_position_databaseColumn(send_request, add_mapping):
-    existing_mapping = next(add_mapping)
+def test_add_mapping_with_existing_title_position_databaseColumn(send_request, add_one_map):
+    existing_mapping = add_one_map
     data = make_test_data("post_mapfield", {"$databaseColumn":existing_mapping['databaseColumn'],
                                                     "$title":existing_mapping['title'],
                                                     "$position":existing_mapping['position'],
@@ -311,8 +311,8 @@ def test_add_mapping_with_existing_title_position_databaseColumn(send_request, a
 
 @allure.feature('SESL')
 @allure.story('Изменяем маппинг на валидные данные')
-def test_edit_mapping(send_request, add_mapping):
-    existing_mapping = next(add_mapping)
+def test_edit_mapping(send_request, add_one_map):
+    existing_mapping = add_one_map
     data = make_test_data("put_mapfield", {"$databaseColumn":random_string(),
                                             "$mapfieldId":existing_mapping['id'],
                                             "$title":random_string(),
@@ -323,8 +323,8 @@ def test_edit_mapping(send_request, add_mapping):
 
 @allure.feature('SESL')
 @allure.story('Изменяем маппинг на пустые значения')
-def test_edit_mapping_on_empty_values(send_request, add_mapping):
-    existing_mapping = next(add_mapping)
+def test_edit_mapping_on_empty_values(send_request, add_one_map):
+    existing_mapping = add_one_map
     data = make_test_data("put_mapfield", { "$mapfieldId":existing_mapping['id'],
                                             "$databaseColumn":None,
                                             "$title":None,
@@ -354,9 +354,9 @@ def test_edit_mapping_with_unknown_id(send_request):
 
 @allure.feature('SESL')
 @allure.story('Изменяем маппинг на существующие данные')
-def test_edit_mapping_on_already_exist_fields(send_request, add_mapping):
-    existing_mapping = next(add_mapping)
-    to_change_mapping = next(add_mapping)
+def test_edit_mapping_on_already_exist_fields(send_request, add_two_maps):
+    existing_mapping = next(add_two_maps)
+    to_change_mapping = next(add_two_maps)
     data = make_test_data("put_mapfield", {"$databaseColumn":existing_mapping['databaseColumn'],
                                             "$mapfieldId":to_change_mapping['id'],
                                             "$title":existing_mapping['title'],
@@ -371,8 +371,8 @@ def test_edit_mapping_on_already_exist_fields(send_request, add_mapping):
 
 @allure.feature('SESL')
 @allure.story('Получаем маппинг по ID')
-def test_get_mapping_by_id(send_request, add_mapping):
-    existing_mapping = next(add_mapping)
+def test_get_mapping_by_id(send_request, add_one_map):
+    existing_mapping = add_one_map
     params = {'id':existing_mapping['id']}
     response = send_request(sesl_mapfield, params=params, method = "GET")
     assert response.status_code == 200
@@ -381,8 +381,8 @@ def test_get_mapping_by_id(send_request, add_mapping):
 
 @allure.feature('SESL')
 @allure.story('Получаем маппинг по ID')
-def test_get_mapping_by_id(send_request, add_mapping):
-    existing_mapping = next(add_mapping)
+def test_get_mapping_by_id(send_request, add_one_map):
+    existing_mapping = add_one_map
     params = {'id':existing_mapping['id']}
     response = send_request(sesl_mapfield, params=params, method = "GET")
     assert response.status_code == 200
@@ -391,9 +391,9 @@ def test_get_mapping_by_id(send_request, add_mapping):
 
 @allure.feature('SESL')
 @allure.story('Получаем маппинг по integrationId')
-def test_get_mapping_by_integrationId(send_request, add_mapping):
-    existing_mapping_1 = next(add_mapping)
-    existing_mapping_2 = next(add_mapping)
+def test_get_mapping_by_integrationId(send_request, add_two_maps):
+    existing_mapping_1 = next(add_two_maps)
+    existing_mapping_2 = next(add_two_maps)
     integrationId = existing_mapping_1['integration']['id']
     params = {'integrationId':integrationId}
     response = send_request(sesl_mapfield, params=params, method = "GET")
@@ -403,8 +403,8 @@ def test_get_mapping_by_integrationId(send_request, add_mapping):
 
 @allure.feature('SESL')
 @allure.story('Удаляем маппинг по Id')
-def test_delete_mapping_by_id(send_request, add_mapping):
-    existing_mapping = next(add_mapping)
+def test_delete_mapping_by_id(send_request, add_one_map):
+    existing_mapping = add_one_map
     mappingId = existing_mapping['id']
     params = {'id':mappingId}
     response = send_request(sesl_mapfield, params=params, method = "DELETE")

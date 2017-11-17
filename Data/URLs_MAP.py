@@ -1,4 +1,4 @@
-server = 'http://172.22.2.63:8080'
+server = 'http://172.22.2.66:8080'
 # headers = {
 #     'content-type': "application/json;charset=UTF-8",
 #     'authorization': "Basic QVBJX2F1dG90ZXN0X1JPT1Q6QVBJX2F1dG90ZXN0X1JPT1Q="}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h"  "Basic cm9vdDpyb290"
