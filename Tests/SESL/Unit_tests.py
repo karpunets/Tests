@@ -4,7 +4,7 @@ import pytest, allure, json, requests, random
 from Data.Make_requests_and_answers import make_test_data
 from Data.Make_requests_and_answers import equal_schema
 from Data.Make_requests_and_answers import random_string
-from Data.URLs_MAP import sesl_integration,sesl_mapfield
+from Data.URLs_MAP import sesl_integration,sesl_mapfield, sesl_tag
 
 
 @allure.feature('SESL')
@@ -452,8 +452,7 @@ def test_get_mapping_by_unknown_integrationId(send_request):
     params = {'id':randomIntegrationId}
     response = send_request(sesl_mapfield, params=params, method = "GET")
     answer = {'SESL_MAP_FIELD_NOT_FOUND_EXCEPTION': 'SESLMapFieldNotFoundException: Unable to find map field with id=%d'%randomIntegrationId}
-    assert response.status_code == 500
-    assert response.json() == answer
+    assert response.json() == answer and response.status_code == 500
 
 @allure.feature('SESL')
 @allure.story('Получаем маппинг по не правильному integrationId')
@@ -461,5 +460,79 @@ def test_get_integration_check_password(send_request, add_integration_with_passw
     integration_id = add_integration_with_password['id']
     params = {'id':integration_id}
     response = send_request(url=sesl_integration, params=params, method="GET")
+    assert response.json()['password'] == None and response.status_code == 200
+
+
+@allure.feature('SESL')
+@allure.story('Добавляем тег')
+def test_add_tag(send_request, add_one_integration, clear_result):
+    integrationId = add_one_integration['id']
+    data = make_test_data("post_tag", {"$tag":random_string(),
+                                       "$integrationId":integrationId})
+    response = send_request(sesl_tag, data['request'])
+    clear_result['url'], clear_result['id'] = sesl_tag, response.json()['id']
     assert response.status_code == 200
-    assert response.json()['password'] == None
+    assert equal_schema(response.json(), data['schema'])
+
+
+@allure.feature('SESL')
+@allure.story('Добавляем тег без интеграции')
+@pytest.mark.xfail
+def test_add_tag_without_integration(send_request,  clear_result):
+    data = make_test_data("post_tag", {"$tag":random_string()})
+    response = send_request(sesl_tag, data['request'])
+    clear_result['url'], clear_result['id'] = sesl_tag, response.json()['id']
+    assert response.status_code == 200
+    assert equal_schema(response.json(), data['schema'])
+
+
+@allure.feature('SESL')
+@allure.story('Добавляем тег без поля tag')
+def test_add_tag_without_tag_name(send_request, add_one_integration):
+    integrationId = add_one_integration['id']
+    data = make_test_data("post_tag", {"$integrationId":integrationId})
+    response = send_request(sesl_tag, data['request'])
+    expected_answer = {'SESL_VALIDATION_INTEGRATION_TAG_TAG_EMPTY': 'Integration tag is empty'}
+    assert response.status_code == 400
+    assert response.json() == expected_answer
+
+
+@allure.feature('SESL')
+@allure.story('Добавляем тег с не верным integrationId')
+@pytest.mark.xfail
+def test_add_tag_with_unknown_integrationId(send_request):
+    randomId = random.randint(1,99999)
+    data = make_test_data("post_tag", {"$tag":random_string(),
+                                       "$integrationId":randomId})
+    response = send_request(sesl_tag, data['request'])
+    expected_answer = {'DATA_ACCESS_ENTITY_NOT_FOUND_EXCEPTION': 'mosuch integrationID %d'%randomId}
+    assert response.status_code == 500
+    assert response.json() == expected_answer
+
+
+@allure.feature('SESL')
+@allure.story('Добавляем тег с несколькими интеграциями')
+def test_add_tag_with_few_integrations(send_request, add_two_integrations, clear_result):
+    first_integration = next(add_two_integrations)
+    second_integration = next(add_two_integrations)
+    data = make_test_data("post_tag", {"$tag":random_string(),
+                                       "$integrationId":first_integration['id']})
+    #Добавляем еще одну интеграцию в список
+    data['request']['integrations'].append({'id':second_integration['id']})
+    response = send_request(sesl_tag, data['request'])
+    clear_result['url'], clear_result['id'] = sesl_tag, response.json()['id']
+    assert response.status_code == 200
+    assert first_integration in response.json()['integrations'] and \
+           second_integration in response.json()['integrations']
+
+
+@allure.feature('Validation')
+@allure.story('Добавляем тег')
+def test_add_tag_with_existing_name(send_request, add_one_integration, add_one_tag, clear_result):
+    integrationId = add_one_integration['id']
+    data = make_test_data("post_tag", {"$tag":random_string(),
+                                       "$integrationId":integrationId})
+    response = send_request(sesl_tag, data['request'])
+    clear_result['url'], clear_result['id'] = sesl_tag, response.json()['id']
+    assert response.status_code == 200
+    assert equal_schema(response.json(), data['schema'])

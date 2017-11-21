@@ -3,7 +3,7 @@ import pytest, allure, json, requests, random
 
 from Data.Make_requests_and_answers import make_test_data
 from Data.Make_requests_and_answers import random_string
-from Data.URLs_MAP import sesl_integration,sesl_mapfield
+from Data.URLs_MAP import sesl_integration,sesl_mapfield, sesl_tag
 
 
 
@@ -16,7 +16,8 @@ def add_one_integration(send_request, clear_result):
                                                     '$position': 1})
     response = send_request(url=sesl_integration, data=data['request'])
     yield response.json()
-    clear_result['url'], clear_result['id'] = sesl_integration, response.json()['id']
+    send_request(method = "DELETE", url=sesl_integration, params={'id':response.json()['id']})
+
 
 
 
@@ -34,8 +35,9 @@ def add_two_integrations(send_request, clear_result):
         results.append(response.json())
         position+=1
     yield iter(results)
-    clear_result['url'] = sesl_integration
-    clear_result['id'] = [results[0]['id'], results[1]['id']]
+    for result in results:
+        send_request(method = "DELETE", url=sesl_integration, params={'id':result['id']})
+
 
 
 @pytest.fixture(scope="function")
@@ -73,4 +75,16 @@ def add_integration_with_password(send_request, clear_result):
     response = send_request(url=sesl_integration, data=data['request'])
     yield response.json()
     clear_result['url'], clear_result['id'] = sesl_integration, response.json()['id']
+
+
+@pytest.fixture(scope="function")
+def add_one_tag(send_request, add_one_integration):
+    integrationId = add_one_integration['id']
+    data = make_test_data("post_tag", {"$tag":random_string(),
+                                       "$integrationId":integrationId})
+    response = send_request(sesl_tag, data['request'])
+    yield response.json()
+    send_request(method = "DELETE", url = sesl_tag, params = {'id':response.json()['id']})
+
+
 

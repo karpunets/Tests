@@ -1,0 +1,12 @@
+{"request":{
+"tag": "$tag",
+"integrations": [ {
+"id": "$integrationId"
+}
+]
+},
+"schema":{
+  "id":{"type":"number"},
+"tag": "$tag",
+"integrations": {"type":"array"}
+}}

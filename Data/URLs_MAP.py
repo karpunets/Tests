@@ -112,3 +112,4 @@ agent = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter/agent" % server
 #SESL
 sesl_integration = "%s/SmiddleExtendedSmartLabel/sesl/integration"%server
 sesl_mapfield = "%s/SmiddleExtendedSmartLabel/sesl/integration/mapfield"%server
+sesl_tag = "%s/SmiddleExtendedSmartLabel/sesl/integration/tag"%server
