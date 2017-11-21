@@ -1,4 +1,5 @@
 import os
 
-os.chdir(os.path.dirname(__file__))
+os.defpath = os.getcwd()
 
+os.chdir(os.path.dirname(__file__))
