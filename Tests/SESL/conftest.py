@@ -88,3 +88,15 @@ def add_one_tag(send_request, add_one_integration):
 
 
 
+@pytest.fixture(scope="function")
+def add_two_tags(send_request, add_one_integration):
+    results = []
+    for i in range(2):
+        integrationId = add_one_integration['id']
+        data = make_test_data("post_tag", {"$tag":random_string(),
+                                           "$integrationId":integrationId})
+        response = send_request(sesl_tag, data['request'])
+        results.append(response.json())
+    yield iter(results)
+    for result in results:
+        send_request(method = "DELETE", url = sesl_tag, params = {'id':result['id']})
