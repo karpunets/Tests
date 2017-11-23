@@ -3,14 +3,12 @@
 "name": "$name",
 "url": "$url",
 "login": "$login",
-"password": "$password",
-"position": "$position"
+"password": "$password"
 },
 "schema":{
 "id": {"type":"number"},
 "name": "$name",
 "url": "$url",
 "login": "$login",
-"password": "$password",
-"position": "$position"
+"password": "$password"
 }}

@@ -8,12 +8,11 @@ from Data.URLs_MAP import sesl_integration,sesl_mapfield, sesl_tag
 
 
 @pytest.fixture(scope="function")
-def add_one_integration(send_request, clear_result):
+def add_one_integration(send_request):
     data = make_test_data('post_integration', data={'$name': random_string(),
                                                     '$url': random_string(),
                                                     '$login': random_string(),
-                                                    '$password': None,
-                                                    '$position': 1})
+                                                    '$password': None})
     response = send_request(url=sesl_integration, data=data['request'])
     yield response.json()
     send_request(method = "DELETE", url=sesl_integration, params={'id':response.json()['id']})
@@ -22,18 +21,15 @@ def add_one_integration(send_request, clear_result):
 
 
 @pytest.fixture(scope="function")
-def add_two_integrations(send_request, clear_result):
+def add_two_integrations(send_request):
     results = []
-    position = 1
     for i in range(2):
         data = make_test_data('post_integration', data={'$name': random_string(),
                                                         '$url': random_string(),
                                                         '$login': random_string(),
-                                                        '$password': None,
-                                                        '$position': position})
+                                                        '$password': None})
         response = send_request(url=sesl_integration, data=data['request'])
         results.append(response.json())
-        position+=1
     yield iter(results)
     for result in results:
         send_request(method = "DELETE", url=sesl_integration, params={'id':result['id']})
@@ -70,8 +66,7 @@ def add_integration_with_password(send_request, clear_result):
     data = make_test_data('post_integration', data={'$name': random_string(),
                                                     '$url': random_string(),
                                                     '$login': random_string(),
-                                                    '$password': random_string(),
-                                                    '$position': 1})
+                                                    '$password': random_string()})
     response = send_request(url=sesl_integration, data=data['request'])
     yield response.json()
     clear_result['url'], clear_result['id'] = sesl_integration, response.json()['id']
@@ -81,7 +76,8 @@ def add_integration_with_password(send_request, clear_result):
 def add_one_tag(send_request, add_one_integration):
     integrationId = add_one_integration['id']
     data = make_test_data("post_tag", {"$tag":random_string(),
-                                       "$integrationId":integrationId})
+                                       "$integrationId":integrationId,
+                                       "$position": 1})
     response = send_request(sesl_tag, data['request'])
     yield response.json()
     send_request(method = "DELETE", url = sesl_tag, params = {'id':response.json()['id']})
@@ -91,11 +87,13 @@ def add_one_tag(send_request, add_one_integration):
 @pytest.fixture(scope="function")
 def add_two_tags(send_request, add_one_integration):
     results = []
+    position = 1
     for i in range(2):
         integrationId = add_one_integration['id']
         data = make_test_data("post_tag", {"$tag":random_string(),
                                            "$integrationId":integrationId})
         response = send_request(sesl_tag, data['request'])
+        position+=1
         results.append(response.json())
     yield iter(results)
     for result in results:

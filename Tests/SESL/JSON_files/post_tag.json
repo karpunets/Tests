@@ -1,12 +1,16 @@
 {"request":{
 "tag": "$tag",
-"integrations": [ {
-"id": "$integrationId"
-}
-]
+  "positionIntegrations": {
+    "$position": {
+      "id": "$integrationId"
+    }
+  }
 },
-"schema":{
-  "id":{"type":"number"},
-"tag": "$tag",
-"integrations": {"type":"array"}
+  "schema": {"id":{"type":"number"},
+    "tag": "$tag",
+    "positionIntegrations": {
+      "$position": {
+        "type": "$object"
+      }
+    }
 }}
