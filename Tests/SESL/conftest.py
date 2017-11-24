@@ -44,7 +44,7 @@ def add_two_maps(send_request, add_one_integration):
     for i in range(2):
         data = make_test_data("post_mapfield", {"$databaseColumn":random_string(),
                                                         "$title":random_string(),
-                                                        "$position":position,
+                                                        "$position":str(position),
                                                         "$integrationId":exitsting_integration['id']})
         position+=1
         response = send_request(sesl_mapfield, data['request'])
@@ -77,7 +77,7 @@ def add_one_tag(send_request, add_one_integration):
     integrationId = add_one_integration['id']
     data = make_test_data("post_tag", {"$tag":random_string(),
                                        "$integrationId":integrationId,
-                                       "$position": 1})
+                                       "$position": "1"})
     response = send_request(sesl_tag, data['request'])
     yield response.json()
     send_request(method = "DELETE", url = sesl_tag, params = {'id':response.json()['id']})
@@ -91,7 +91,8 @@ def add_two_tags(send_request, add_one_integration):
     for i in range(2):
         integrationId = add_one_integration['id']
         data = make_test_data("post_tag", {"$tag":random_string(),
-                                           "$integrationId":integrationId})
+                                           "$integrationId":integrationId,
+                                           "$position": str(position)})
         response = send_request(sesl_tag, data['request'])
         position+=1
         results.append(response.json())
