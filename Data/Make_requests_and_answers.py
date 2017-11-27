@@ -59,16 +59,18 @@ def equal_schema(instance, schema, assert_keys_quantity=True):
                                                                                                          'type']))
                     # Подменяем значение в данных, для более коректного отображения в отчетах Allure
                     instance[key] = {'type': default_types[type(val)]}
+                # Если список, проходимся по елементам в списке с применением рекурсии
                 elif type(val) == list:
                     for param in val:
                         helper(param, schema[key][val.index(param)])
+                # Если тип значения - обьект, так же применяем рекурсию
                 elif type(val) == dict:
                     helper(instance[key], schema[key])
                 else:
                     not_equal.append(
                         "Value {{{0}:{1}}} not match schemas value {{{0}:{2}}}".format(key, val, schema[key]))
             elif (key, val) not in schema.items() and key not in schema.keys():
-                not_equal.append("The key '%s' where no found in schema" % key)
+                not_equal.append("The key '%s' were not found in schema" % key)
 
     # Если есть ошибки, делаем асерт, для удобства отображения в отчетах
     if assert_keys_quantity == True and len(instance) == len(schema):

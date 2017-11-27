@@ -10,7 +10,7 @@
     "tag": "$tag",
     "positionIntegrations": {
       "$position": {
-        "type": "$object"
+        "type": "object"
       }
     }
 }}
