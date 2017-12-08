@@ -77,7 +77,7 @@ def equal_schema(response, schema, assert_keys_quantity=True):
         if len(schema) > len(response):
             for key in schema:
                 if key not in response.keys():
-                    not_equal.append('There is no key "{0}" in response{{{0}:{1}}}, but it exist in schema'.format(key, schema[key]))
+                    not_equal.append('There is no key "{0}" in response keys {1}, but it exist in schema'.format(key, list(response.keys())))
         else:
             equal(response, schema)
 

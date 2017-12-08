@@ -9,6 +9,5 @@
 "id":"$integrationId",
 "name": "$name",
 "url": "$url",
-"login": "$login",
-"password": "$password"
+"login": "$login"
 }}
