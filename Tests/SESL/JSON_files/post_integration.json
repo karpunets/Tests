@@ -9,6 +9,6 @@
 "id": {"type":"number"},
 "name": "$name",
 "url": "$url",
-"login": "$login",
+"login1": "$login",
 "password": "$password"
 }}

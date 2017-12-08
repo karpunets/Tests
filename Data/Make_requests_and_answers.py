@@ -1,8 +1,8 @@
-import json, re, pytest, random, string
+import json, re, random, string, pytest
+
 
 def random_string():
     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(random.randint(3,10)))
-
 
 # Получаем и преобразуем JSON файл, согласно переданным параметрам
 def make_test_data(json_name, data= {}, default=False):
@@ -45,7 +45,7 @@ def equal_schema(response, schema, assert_keys_quantity=True):
                      list: 'array'
                      }
     # Подпрограмма для использования рекурсии
-    def helper(response, schema):
+    def equal(response, schema):
         for (key, val) in response.items():
             # Если пара (ключ:значение), не совпадает, но ключ существует в схеме
             if (key, val) not in schema.items() and key in schema.keys():
@@ -62,10 +62,10 @@ def equal_schema(response, schema, assert_keys_quantity=True):
                 # Если список, проходимся по елементам в списке с применением рекурсии
                 elif type(val) == list:
                     for param in val:
-                        helper(param, schema[key][val.index(param)])
+                        equal(param, schema[key][val.index(param)])
                 # Если тип значения - обьект, так же применяем рекурсию
                 elif type(val) == dict:
-                    helper(response[key], schema[key])
+                    equal(response[key], schema[key])
                 else:
                     not_equal.append(
                         "Value {{{0}:{1}}} not match schemas value {{{0}:{2}}}".format(key, val, schema[key]))
@@ -73,12 +73,20 @@ def equal_schema(response, schema, assert_keys_quantity=True):
                 not_equal.append("{{{0}:{1}}} the key '{0}' were not found in schema".format(key, val))
 
 
+    def find_differences(response, schema):
+        if len(schema) > len(response):
+            for key in schema:
+                if key not in response.keys():
+                    not_equal.append('There is no key "{0}" in response{{{0}:{1}}}, but it exist in schema'.format(key, schema[key]))
+        else:
+            equal(response, schema)
+
     # Если есть ошибки, делаем асерт, для удобства отображения в отчетах
     if assert_keys_quantity == True and len(response) == len(schema) or assert_keys_quantity == False:
-        helper(response, schema)
+        equal(response, schema)
     else:
         s = lambda: "more" if len(response) > len(schema) else "less"
         not_equal.append("Number of keys in  response %s than number of keys in schema"%s())
-        helper(response, schema)
+        find_differences(response, schema)
     assert response == schema,(not_equal)
     return True
