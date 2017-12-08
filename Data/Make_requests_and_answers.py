@@ -1,4 +1,4 @@
-import json, re, pytest, random, string, inspect,os, sys
+import json, re, pytest, random, string
 
 def random_string():
     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(random.randint(3,10)))
@@ -28,9 +28,10 @@ def make_test_data(json_name, data= {}, default=False):
     return {'request':json_file['request'], 'schema':json_file['schema']} if default==False else json_file
 
 
-def equal_schema(instance, schema, assert_keys_quantity=True):
+def equal_schema(response, schema, assert_keys_quantity=True):
     # Переменная для сбора ошибок
     not_equal = []
+    #Мапа для преобразований json обьектов в python
     default_types = {'string': str,
                      'number': int,
                      'null': None,
@@ -43,10 +44,9 @@ def equal_schema(instance, schema, assert_keys_quantity=True):
                      bool: 'boolean',
                      list: 'array'
                      }
-
     # Подпрограмма для использования рекурсии
-    def helper(instance, schema):
-        for (key, val) in instance.items():
+    def helper(response, schema):
+        for (key, val) in response.items():
             # Если пара (ключ:значение), не совпадает, но ключ существует в схеме
             if (key, val) not in schema.items() and key in schema.keys():
                 # Если в схеме указана проверка на тип
@@ -58,25 +58,27 @@ def equal_schema(instance, schema, assert_keys_quantity=True):
                                                                                                      schema[key][
                                                                                                          'type']))
                     # Подменяем значение в данных, для более коректного отображения в отчетах Allure
-                    instance[key] = {'type': default_types[type(val)]}
+                    response[key] = {'type': default_types[type(val)]}
                 # Если список, проходимся по елементам в списке с применением рекурсии
                 elif type(val) == list:
                     for param in val:
                         helper(param, schema[key][val.index(param)])
                 # Если тип значения - обьект, так же применяем рекурсию
                 elif type(val) == dict:
-                    helper(instance[key], schema[key])
+                    helper(response[key], schema[key])
                 else:
                     not_equal.append(
                         "Value {{{0}:{1}}} not match schemas value {{{0}:{2}}}".format(key, val, schema[key]))
             elif (key, val) not in schema.items() and key not in schema.keys():
-                not_equal.append("The key '%s' were not found in schema" % key)
+                not_equal.append("{{{0}:{1}}} the key '{0}' were not found in schema".format(key, val))
+
 
     # Если есть ошибки, делаем асерт, для удобства отображения в отчетах
-    if assert_keys_quantity == True and len(instance) == len(schema):
-        helper(instance, schema)
+    if assert_keys_quantity == True and len(response) == len(schema) or assert_keys_quantity == False:
+        helper(response, schema)
     else:
-        not_equal.append("Length of instance != length of schema")
-
-    assert instance == schema,(not_equal)
+        s = lambda: "more" if len(response) > len(schema) else "less"
+        not_equal.append("Number of keys in  response %s than number of keys in schema"%s())
+        helper(response, schema)
+    assert response == schema,(not_equal)
     return True

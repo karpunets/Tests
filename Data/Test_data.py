@@ -4,6 +4,7 @@ import random, string, time
 random_name = lambda: ''.join(random.choice(string.ascii_letters + string.digits) for list in range(8))
 date_now = lambda: round(time.time() * 1000)
 ROOT_group_id = 2
+ROOT_user_id = 68
 
 # MANAGER(ADM)
 one_user_get_userlist = {"fname": "get_userlist_fName_one",

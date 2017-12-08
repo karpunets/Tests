@@ -143,7 +143,11 @@ def add_criteria(send_request, add_group, delete_group_and_criteria):
         delete_group_and_criteria['criteriaId'].append(criteria['id'])
     return iter(criterias)
 
-
+@pytest.fixture(scope="function")
+def delete_template(send_request):
+    templateId = {"templateId":""}
+    yield templateId
+    send_request(URL.delete_template, templateId)
 
 # @pytest.fixture(scope="function")
 # def add_questioner():

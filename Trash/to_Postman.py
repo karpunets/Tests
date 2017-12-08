@@ -7,5 +7,5 @@ def toPostman(a):
     return a
 
 
-send_value = {'id': 218001699, 'name': 'mGfbRUfl', 'groups': [{'id': 2, 'name': 'ROOT', 'cid': 0}], 'criteriaList': None}
+send_value = {'dateCreate': 1512048684805, 'supervisor': {'id': 68}, 'name': 'VsywRA8D', 'version': 895, 'description': 'CM3y', 'approvalPolicy': None, 'groups': [{'id': 2}], 'templateSections': [{'templateCriterias': [{'templateCriteria': {'id': 218035101}, 'weight': 82, 'position': 1}], 'name': 'KP4f7t', 'position': 1}]}
 print(toPostman(send_value))

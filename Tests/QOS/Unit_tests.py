@@ -2,7 +2,7 @@ import pytest, allure, json, requests, random
 import Data.URLs_MAP as URL
 
 from Data.Make_requests_and_answers import make_test_data, equal_schema, random_string
-from Data.Test_data import ROOT_group_id
+from Data.Test_data import ROOT_group_id, ROOT_user_id
 
 
 
@@ -52,10 +52,10 @@ from Data.Test_data import ROOT_group_id
 #     delete_group_and_criteria['criteriaId'].append(instance['id'])
 #     assert response.status_code == 200
 #     assert equal_schema(instance, data['schema'])
-
+#
 # @allure.feature('Позитивный тест')
 # @allure.story('Добавляем критерий с уже существующим именем')
-# def test_add_criteria_with_existing_name(send_request, add_group, add_criteria, delete_group_and_criteria):
+# def test_add_criteria_with_existing_name(send_request, add_criteria, delete_group_and_criteria):
 #     existing_criteria = next(add_criteria)
 #     data = make_test_data('post_criteria', {'$name': existing_criteria['name'],
 #                                        '$criteriagroupId': existing_criteria['criteriaGroup']['id'],
@@ -66,15 +66,15 @@ from Data.Test_data import ROOT_group_id
 #     delete_group_and_criteria['criteriaId'].append(instance['id'])
 #     assert response.status_code == 200
 #     assert equal_schema(instance, data['schema'])
-
-
+#
+#
 # @allure.feature('Позитивный тест')
 # @allure.story('Добавляем критерий без имени и описания')
 # def test_add_criteria_without_description_and_name(send_request, add_group):
 #     group_id = next(add_group)['id']
 #     data = make_test_data('post_criteria', {'$criteriagroupId': group_id})
 #     response = send_request(URL.criteria, data['request'])
-#     #Шаг для удаления критерия
+#
 #     answer = {'QOS_TEMPLATE_CRITERIA_DESCRIPTION': 'DESCRIPTION length from 1 to 1024 characters. Сriteria id=[null]',
 #               'QOS_TEMPLATE_CRITERIA_NAME': 'NAME length from 1 to 255 characters. Сriteria id=[null]'}
 #     assert response.status_code == 400
@@ -123,6 +123,22 @@ from Data.Test_data import ROOT_group_id
 #     assert response.status_code == 200
 #     assert equal_schema(instance, data['schema'])
 #
+
+# @allure.feature('Позитивный тест')
+# @allure.story('Редактируем criteriagroup с неизвестным id')
+# @pytest.mark.xfail
+# def test_edit_criteria_group_with_unknown_id(send_request):
+#     randomId = random.randint(1,9999)
+#     data = make_test_data('put_criteria_group', {'$name': random_string(),
+#                                            '$criteriaGroupId':randomId,
+#                                            '$groupId':ROOT_group_id})
+#     response = send_request(URL.criteria_group, data['request'], method = "PUT")
+#     expect_answer = {'QOS_TEMPLATE_CRITERIA_GROUP_NAME': 'Cant find criteria group with id'}
+#     assert response.status_code == 500
+#     assert response.json() == expect_answer
+
+
+#
 # @allure.feature('Позитивный тест')
 # @allure.story('Редактируем имя группы на пустое')
 # def test_edit_criteria_group_name_on_empty(add_group, send_request):
@@ -147,12 +163,13 @@ from Data.Test_data import ROOT_group_id
 #                                            '$criteriaGroupId':group_id,
 #                                            '$groupId':ROOT_group_id})
 #     response = send_request(URL.criteria_group, data['request'], method = "PUT")
+#     print(response.json())
 #     answer = {'QOS_TEMPLATE_CRITERIA_GROUP_NAME': 'NAME of criteria is already exist.'}
 #     assert response.status_code == 500
 #     assert response.json() == answer
 #
-
-
+#
+#
 # @allure.feature('Позитивный тест')
 # @allure.story('Редактируем имя и описание критерия')
 # def test_edit_criteria_name_and_description(send_request, add_criteria):
@@ -168,8 +185,8 @@ from Data.Test_data import ROOT_group_id
 #
 #
 # @allure.feature('Позитивный тест')
-# @allure.story('Редактируем критерий на уже существующее имя')
-# def test_edit_criteria_on_existing_name(send_request, add_criteria):
+# @allure.story('Редактируем критерий на уже существующее имя и description')
+# def test_edit_criteria_on_existing_name_and_description(send_request, add_criteria):
 #     existing_criteria = next(add_criteria)
 #     criteria_for_edit = next(add_criteria)
 #     data = make_test_data('put_criteria', {'$criteriaId': criteria_for_edit['id'],
@@ -180,9 +197,9 @@ from Data.Test_data import ROOT_group_id
 #     instance = response.json()
 #     assert response.status_code == 200
 #     assert equal_schema(instance, data['schema'])
-
-
-
+#
+#
+#
 # @allure.feature('Позитивный тест')
 # @allure.story('Редактируем критерий с не известным id')
 # def test_edit_criteria_with_unknown_id(send_request, add_criteria):
@@ -197,7 +214,7 @@ from Data.Test_data import ROOT_group_id
 #     answer = {'QOS_REQUEST_VALIDATION_EXCEPTION': 'QOSRequestValidationException: Criteria with id does not exist'}
 #     assert response.status_code == 500
 #     assert response.json() == answer
-
+#
 # @allure.feature('Позитивный тест')
 # @allure.story('Редактируем имя критерия и описание на пустые')
 # def test_edit_criteria_name_and_description_on_empty(send_request, add_criteria):
@@ -212,8 +229,8 @@ from Data.Test_data import ROOT_group_id
 #               'QOS_TEMPLATE_CRITERIA_NAME': 'NAME length from 1 to 255 characters. Сriteria id=[%s]'%str(criteria_id)}
 #     assert response.status_code == 400
 #     assert response.json() == answer
-
-
+#
+#
 # @allure.feature('Позитивный тест')
 # @allure.story('Редактируем criteriaGroupId критерия на другую(уже существующую)')
 # @pytest.mark.xfail
@@ -225,11 +242,12 @@ from Data.Test_data import ROOT_group_id
 #                                            '$criteriaGroupId': criteria_group_id_without_criteria,
 #                                            '$description': random_string()})
 #     response = send_request(URL.criteria, data['request'], method="PUT")
+#     print(response.json())
 #     answer = {'QOS_TEMPLATE_CRITERIA_CRITERIAGROUPID': 'No such criteria id{criteria_id} in criteriaGroup {id}'}
 #     assert response.status_code == 500
 #     assert response.json() == answer
-
-
+#
+#
 # @allure.feature('Позитивный тест')
 # @allure.story('Редактируем criteriaGroupId критерия на не существующую или пустую')
 # @pytest.mark.xfail
@@ -244,13 +262,158 @@ from Data.Test_data import ROOT_group_id
 #     answer = {'QOS_TEMPLATE_CRITERIA_CRITERIAGROUPID': 'No such criteriaGroup {id}'}
 #     assert response.status_code == 500
 #     assert response.json() == answer
+#
+#
+# @allure.feature('Позитивный тест')
+# @allure.story('Получаем групы без параметров')
+# @pytest.mark.xfail
+# def test_get_criteria_group_without_params(send_request, add_group):
+#     #На add_criteria возвразащает 'criteriaList': null, a на get 'criteriaList': []
+#     group = next(add_group)
+#     print("group", group)
+#     response = send_request(URL.criteria_group, method="GET")
+#     print("response", response.json())
+#     assert response.status_code == 200
+#     assert group in response.json()
+
+
+# @allure.feature('Позитивный тест')
+# @allure.story('Получаем групы по id')
+# @pytest.mark.xfail
+# def test_get_criteria_group_by_id(send_request, add_group):
+#     criteria_group = next(add_group)
+#     response = send_request(url=URL.criteria_group, params={'id':criteria_group['id']}, method="GET")
+#     print("response", response.json())
+#     assert response.status_code == 200
+#     assert response.json() == criteria_group
+#
+#
+# @allure.feature('Позитивный тест')
+# @allure.story('Получаем групы по не известному id')
+# @pytest.mark.xfail
+# def test_get_criteria_group_by_unknown_id(send_request):
+#     randomId = random.randint(2,99999)
+#     response = send_request(url=URL.criteria_group, params={'id':randomId}, method="GET")
+#     print("response", response.json())
+#     expect_answer = {}
+#     assert response.status_code == 500
+#     assert response.json() == expect_answer
+
+# @allure.feature('Позитивный тест')
+# @allure.story('Удаляем criteria_group по id')
+# @pytest.mark.xfail
+# def test_delete_criteria_group_by_id(send_request, add_group):
+#     criteria_group_id = next(add_group)['id']
+#     response = send_request(url=URL.criteria_group, params={'id':criteria_group_id}, method="DELETE")
+#     print("response", response.json())
+#     assert response.status_code == 200
+#     assert response.json() == criteria_group_id
+
+
+
+# @allure.feature('Позитивный тест')
+# @allure.story('Удаляем criteria_group по id')
+# @pytest.mark.xfail
+# def test_delete_criteria_group_by_id(send_request):
+#     random_criteria_group_id = random.randint(1,9999)
+#     response = send_request(url=URL.criteria_group, params={'id':random_criteria_group_id}, method="DELETE")
+#     expect_answer = {'nu such criteria group with id'}
+#     assert response.status_code == 500
+#     assert response.json() == expect_answer
+
+
+# @allure.feature('Позитивный тест')
+# @allure.story('Удаляем criteria_group z id==null')
+# @pytest.mark.xfail
+# def test_delete_criteria_group_by_id(send_request):
+#     response = send_request(url=URL.criteria_group, method="DELETE")
+#     print(response.json())
+#     expect_answer = {'nu such criteria group with id'}
+#     assert response.status_code == 500
+#     assert response.json() == expect_answer
+
+
+#
+# @allure.feature('Позитивный тест')
+# @allure.story('Получаем все criteria')
+# @pytest.mark.xfail
+# def test_get_criteria(send_request):
+#     response = send_request(url=URL.criteria, method="GET")
+#     print(response.json())
+#     expect_answer = {"Required long parameter 'id' is not presen"}
+#     assert response.status_code == 400
+#     assert response.json() == expect_answer
+
+# @allure.feature('Позитивный тест')
+# @allure.story('Получаем criteria by id')
+# def test_get_criteria_by_id(send_request, add_criteria):
+#     criteria_for_test = next(add_criteria)
+#     response = send_request(url=URL.criteria, params = {'id':criteria_for_test['id']}, method="GET")
+#     print(response.json())
+#     assert response.status_code == 200
+#     assert response.json() == criteria_for_test
+
+
+# @allure.feature('Позитивный тест')
+# @allure.story('Получаем criteria by id')
+# def test_get_criteria_by_unknown_id(send_request):
+#     criteria_for_test = random.randint(1,9999)
+#     response = send_request(url=URL.criteria, params = {'id':criteria_for_test}, method="GET")
+#     #Присылает ничего
+#     assert response.status_code == 500
+
+
+# @allure.feature('Позитивный тест')
+# @allure.story('Удаляем criteria by id')
+# def test_delete_criteria_by_id(send_request, add_criteria):
+#     criteria_for_test = next(add_criteria)
+#     response = send_request(url=URL.criteria, params = {'id':criteria_for_test['id']}, method="GET")
+#     #Присылает ничего
+#     assert response.status_code == 200
+#     assert response.json() == criteria_for_test
+
+
+# @allure.feature('Позитивный тест')
+# @allure.story('Удаляем criteria с неизвестным id')
+# @pytest.mark.xfail
+# def test_delete_criteria_by_unknown_id(send_request):
+#     criteria_for_test = random.randint(1,999)
+#     response = send_request(url=URL.criteria, params = {'id':criteria_for_test}, method="GET")
+#     expect_answer = {"QOS_ERROR":"No such criteria with ID"}
+#     assert response.status_code == 400
+#     assert response.json() == expect_answer
+#
+
+
+# @allure.feature('Позитивный тест')
+# @allure.story('Удаляем criteria без id')
+# @pytest.mark.xfail
+# def test_delete_criteria_without_id(send_request):
+#     response = send_request(url=URL.criteria, method="GET")
+#     print(response.json())
+#     expect_answer = {"QOS_ERROR":" Required long parameter 'id' is not presentD"}
+#     assert response.status_code == 400
+#     assert response.json() == expect_answer
+
 
 
 @allure.feature('Позитивный тест')
-@allure.story('Получаем групы')
-@pytest.mark.xfail
-def test_get_criteria_group_withou_criterias(send_request, add_group):
-    group = next(add_group)
-    response = send_request(URL.criteria_group, method="GET")
+@allure.story('Добавляем template')
+def test_add_template(send_request, add_criteria, delete_template):
+    criteriaId = next(add_criteria)['id']
+    data = make_test_data("post_template", {"$supervisorId":ROOT_user_id,
+                                     "$name":random_string(),
+                                     "$version":str(random.randint(1,10)),
+                                     "$description":random_string(),
+                                     "$criteriaId":criteriaId,
+                                     "$weight":random.randint(1,100),
+                                     "$criteriaPosition":1,
+                                     "$section_name":random_string(),
+                                     "$approvalPolicy":"STANDARD",
+                                     "$templateCriteriaPosition":1
+                                     })
+    response = send_request(URL.edit_template, data['request'])
+    print(response.json())
     assert response.status_code == 200
-    assert group in response.json()
+    delete_template['templateId'] = response.json()['id']
+    assert equal_schema(response.json(), data['schema'])

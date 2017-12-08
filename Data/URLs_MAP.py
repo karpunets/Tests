@@ -101,7 +101,7 @@ criteria_group = "%s/SmiddleQualityService/qos/template/criteria_group" % server
 criteria = "%s/SmiddleQualityService/qos/template/criteria" % server
 delete_criteria_group = "%s/SmiddleQualityService/qos/template//delete_criteria_group" % server
 edit_template = "%s/SmiddleQualityService/qos/template/edit_template"%server
-
+delete_template = "%s/SmiddleQualityService/qos/template/delete_template"%server
 # QOS
 questioner = "%s/SmiddleQualityService_CA/qos/ca/questioner" % server
 filter = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter" % server
