@@ -30,6 +30,7 @@
         From: <sip:1044@172.22.2.12;x-farend;x-refci=25410702;x-nearendclusterid=StandAloneCluster;x-nearenddevice=54ee754a879e;x-nearendaddr=1044;x-farendrefci=25410701;x-farendclusterid=StandAloneCluster;x-farenddevice=SEP000000000017;x-farendaddr=1056>;tag=46063~f643f5b4-6431-42a7-b82c-b7175b6c3219-25410709
         To: sut <sip:2222@172.22.2.33>
         Call-ID: f21dc980-a2812228-9570-c0216ac@172.22.2.12
+        Supported: timer,resource-priority,replaces,X-cisco-srtp-fallback,Geolocation
         CSeq: 1 INVITE
         Contact: sip:sipp@[local_ip]:[local_port]
         Max-Forwards: 70
