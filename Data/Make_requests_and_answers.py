@@ -72,7 +72,6 @@ def equal_schema(response, schema, assert_keys_quantity=True):
             elif (key, val) not in schema.items() and key not in schema.keys():
                 not_equal.append("{{{0}:{1}}} the key '{0}' were not found in schema".format(key, val))
 
-
     def find_differences(response, schema):
         if len(schema) > len(response):
             for key in schema:
