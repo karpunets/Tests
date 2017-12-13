@@ -21,6 +21,6 @@
         }
       }
     ],
-    "criteriaList": null
+    "criteriaList": {"type":"array"}
   }
 }
