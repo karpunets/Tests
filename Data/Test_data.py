@@ -1,8 +1,13 @@
 import random, string, time
 
 
-random_name = lambda: ''.join(random.choice(string.ascii_letters + string.digits) for list in range(8))
-date_now = lambda: round(time.time() * 1000)
+def random_name():
+    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(random.randint(3,10)))
+
+def date_now():
+    return round(time.time() * 1000)
+
+# date_now = lambda: round(time.time() * 1000)
 ROOT_group_id = 2
 ROOT_user_id = 68
 

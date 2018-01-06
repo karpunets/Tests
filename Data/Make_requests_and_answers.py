@@ -1,4 +1,4 @@
-import json, re, random, string, pytest
+import json, re, random, string
 
 
 def random_string():
