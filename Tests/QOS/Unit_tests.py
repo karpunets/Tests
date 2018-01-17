@@ -386,6 +386,28 @@ from Data.Test_data import ROOT_group_id, ROOT_user_id
 
 
 
+# @allure.feature('Позитивный тест')
+# @allure.story('Добавляем template')
+# def test_add_template(send_request, add_criteria, delete_template):
+#     criteriaId = next(add_criteria)['id']
+#     data = make_test_data("post_template", {"$supervisorId":ROOT_user_id,
+#                                      "$name":random_string(),
+#                                      "$version":str(random.randint(1,10)),
+#                                      "$description":random_string(),
+#                                      "$criteriaId":criteriaId,
+#                                      "$weight":random.randint(1,100),
+#                                      "$criteriaPosition":1,
+#                                      "$section_name":random_string(),
+#                                      "$approvalPolicy":"STANDARD",
+#                                      "$templateCriteriaPosition":1
+#                                      })
+#     response = send_request(URL.edit_template, data['request'])
+#     print(response.json())
+#     assert response.status_code == 200
+#     delete_template['templateId'] = response.json()['id']
+#     assert equal_schema(response.json(), data['schema'])
+
+
 @allure.feature('Позитивный тест')
 @allure.story('Добавляем template')
 def test_add_template(send_request, add_criteria, delete_template):
@@ -402,7 +424,29 @@ def test_add_template(send_request, add_criteria, delete_template):
                                      "$templateCriteriaPosition":1
                                      })
     response = send_request(URL.edit_template, data['request'])
-    print(response.json())
     assert response.status_code == 200
     delete_template['templateId'] = response.json()['id']
     assert equal_schema(response.json(), data['schema'])
+
+
+@allure.feature('Позитивный тест')
+@allure.story('Добавляем template без имени, версии, id критерии, названия секции')
+def test_add_template_without_name_version_criteriaId_sectionName(send_request):
+    data = make_test_data("post_template", { "$supervisorId":None,
+                                             "$name":None,
+                                             "$version":None,
+                                             "$description":random_string(),
+                                             "$criteriaId":None,
+                                             "$weight":random.randint(1,100),
+                                             "$criteriaPosition":1,
+                                             "$section_name":None,
+                                             "$approvalPolicy":"STANDARD",
+                                             "$templateCriteriaPosition":1
+                                             })
+    response = send_request(URL.edit_template, data['request'])
+    excepted_response = {'QOS_TEMPLATE_NAME': 'NAME length from 1 to 255 characters.',
+                         'QOS_TEMPLATE_QCCL_SECTION_NAME': 'SECTION NAME length from 1 to 255 character. In section name=[null]',
+                         'QOS_TEMPLATE_QCCL_CRITERIA_EMPTY_CRITERIA': 'Template CRITERIA must be not empty or CRITERIA ID must be > 0. id=[null]',
+                         'QOS_TEMPLATE_VERSION': 'VERSION length from 1 to 255 characters.'}
+    assert response.status_code == 400
+    assert excepted_response == response.json()

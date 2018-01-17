@@ -5,7 +5,7 @@ def random_string():
     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(random.randint(3,10)))
 
 # Получаем и преобразуем JSON файл, согласно переданным параметрам
-def make_test_data(json_name, data= {}, default=False):
+def make_test_data(json_name, data = {}, default=False):
     # Определяем откуда брать json файл
     path = 'JSON_files/%s.json' % json_name
     if default == True:

@@ -1,4 +1,4 @@
-import json, pytest, requests, random, string, time
+import json, pytest, requests, random, string, time, allure
 import Data.URLs_MAP as URL
 
 from Data.Make_requests_and_answers import make_test_data
@@ -128,7 +128,7 @@ def delete_group_and_criteria(send_request):
             else:
                 send_request(URL.delete_criteria_group, {"criteriaGroupId":id})
 
-
+@allure.before
 @pytest.fixture(scope='function')
 def add_criteria(send_request, add_group, delete_group_and_criteria):
     group_id = next(add_group)['id']

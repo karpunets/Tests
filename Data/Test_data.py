@@ -7,7 +7,7 @@ def random_name():
 def date_now():
     return round(time.time() * 1000)
 
-# date_now = lambda: round(time.time() * 1000)
+
 ROOT_group_id = 2
 ROOT_user_id = 68
 
