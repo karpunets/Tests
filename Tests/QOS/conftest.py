@@ -128,7 +128,7 @@ def delete_group_and_criteria(send_request):
             else:
                 send_request(URL.delete_criteria_group, {"criteriaGroupId":id})
 
-
+@allure.step
 @pytest.fixture(scope='function')
 def add_criteria(send_request, add_group, delete_group_and_criteria):
     group_id = next(add_group)['id']
@@ -142,7 +142,7 @@ def add_criteria(send_request, add_group, delete_group_and_criteria):
         criterias.append(criteria)
         delete_group_and_criteria['criteriaId'].append(criteria['id'])
     return iter(criterias)
-
+@allure.step
 @pytest.fixture(scope="function")
 def delete_template(send_request):
     templateId = {"templateId":""}
