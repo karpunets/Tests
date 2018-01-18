@@ -86,7 +86,7 @@
         t=0 0
         m=audio [auto_media_port] RTP/AVP 0 101
         a=ptime:20
-        a=rtpmap:0 PCMA/8000
+        a=rtpmap:0 PCMU/8000
         a=sendonly
         a=rtpmap:101 telephone-event/8000
         a=fmtp:101 0-15
@@ -96,13 +96,13 @@
     <!-- Play a pre-recorded PCAP file (RTP stream)                       -->
     <nop>
       <action>
-        <exec play_pcap_audio="pcap/g711a.pcap"/>
+        <exec play_pcap_audio="pcap/zxa.pcap"/>
       </action>
     </nop>
   
     <!-- Pause 8 seconds, which is approximately the duration of the      -->
     <!-- PCAP file                                                        -->
-    <pause milliseconds="8000"/>
+    <pause milliseconds="4000"/>
 
 
  

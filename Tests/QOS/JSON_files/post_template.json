@@ -5,7 +5,7 @@
             "version":"$version",
             "description":"$description",
             "approvalPolicy":"$approvalPolicy",
-            "groups":[{"id":2}],
+            "groups":[{"id":"$groupId"}],
             "templateSections":
                               [{"templateCriterias":
                                                   [{"templateCriteria":{"id":"$criteriaId"},
