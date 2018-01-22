@@ -18,6 +18,8 @@ def make_test_data(json_name, data = {}, default=False):
                 if type(val) == int:
                     key = '"%s"' % key
                     val = str(val)
+                if key not in json_file:
+                    get_function_value(key)
                 json_file = json_file.replace(key, val)
             # Возникает если передать None(null)
             except TypeError:
@@ -27,6 +29,10 @@ def make_test_data(json_name, data = {}, default=False):
     json_file = json.loads(json_file)
     return {'request':json_file['request'], 'schema':json_file['schema']} if default==False else json_file
 
+def get_function_value(function_name):
+    function_map = {"$random_string":random_string(),
+                    "$random_int":random.randint(1,10)}
+    return function_map[function_name]
 
 def equal_schema(response, schema, assert_keys_quantity=True):
     # Переменная для сбора ошибок

@@ -39,19 +39,19 @@ from Data.Test_data import ROOT_group_id, ROOT_user_id
 #
 #
 #
-# @allure.feature('Позитивный тест')
-# @allure.story('Добавляем критерий')
-# def test_add_criteria(send_request, add_group, delete_group_and_criteria):
-#     group_id = next(add_group)['id']
-#     data = make_test_data('post_criteria', {'$name': random_string(),
-#                                        '$criteriagroupId': group_id,
-#                                        '$description':random_string()})
-#     response = send_request(URL.criteria, data['request'])
-#     instance = response.json()
-#     #Шаг для удаления критерия
-#     delete_group_and_criteria['criteriaId'].append(instance['id'])
-#     assert response.status_code == 200
-#     assert equal_schema(instance, data['schema'])
+@allure.feature('Позитивный тест')
+@allure.story('Добавляем критерий')
+def test_add_criteria(send_request, add_group, delete_group_and_criteria):
+    group_id = next(add_group)['id']
+    data = make_test_data('post_criteria', {'$name': random_string(),
+                                       '$criteriagroupId': group_id,
+                                       '$description':random_string()})
+    response = send_request(URL.criteria, data['request'])
+    instance = response.json()
+    #Шаг для удаления критерия
+    delete_group_and_criteria['criteriaId'].append(instance['id'])
+    assert response.status_code == 200
+    assert equal_schema(instance, data['schema'])
 #
 # @allure.feature('Позитивный тест')
 # @allure.story('Добавляем критерий с уже существующим именем')
