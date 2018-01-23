@@ -1,4 +1,4 @@
-import json, re, random, string
+import json, re, random, string, codecs,os
 
 
 def random_string():
@@ -18,8 +18,9 @@ def make_test_data(json_name, data = {}, default=False):
                 if type(val) == int:
                     key = '"%s"' % key
                     val = str(val)
-                if key not in json_file:
-                    get_function_value(key)
+                # Подставляем значение ф-ции из мапы, метод для использования DDT
+                if "$" in val and key:
+                    val = get_function_value(val)
                 json_file = json_file.replace(key, val)
             # Возникает если передать None(null)
             except TypeError:
@@ -27,12 +28,15 @@ def make_test_data(json_name, data = {}, default=False):
     # Вместо не переданных параметров подставляем null
     json_file = re.sub(r'(\"\$[\w]+\")', 'null', json_file)
     json_file = json.loads(json_file)
-    return {'request':json_file['request'], 'schema':json_file['schema']} if default==False else json_file
+    # return {'request':json_file['request'], 'schema':json_file['schema']} if default==False else json_file
+    return json_file
+
 
 def get_function_value(function_name):
-    function_map = {"$random_string":random_string(),
-                    "$random_int":random.randint(1,10)}
-    return function_map[function_name]
+    function_map = {"$random_string":lambda: random_string(),
+                    "$random_int":lambda: random.randint(1,10)}
+    return function_map[function_name]()
+
 
 def equal_schema(response, schema, assert_keys_quantity=True):
     # Переменная для сбора ошибок
@@ -95,3 +99,46 @@ def equal_schema(response, schema, assert_keys_quantity=True):
         find_differences(response, schema)
     assert response == schema,(not_equal)
     return True
+
+
+# Получаем и преобразуем JSON файл, согласно переданным параметрам
+def get_from_csv(fileName):
+    #Ищем конвертированный файл, если нету - конвертируем
+    try:
+        file_path = fileName+"_converted.csv"
+        csv_file = open(file_path, encoding="utf-8").readlines()
+    except FileNotFoundError:
+        file_path = convert_to_utf_8(fileName)
+        csv_file = open(file_path, encoding="utf-8").readlines()
+    count = 0
+    result = []
+    for line in csv_file:
+        if count != 0:
+            #Заменяем опечатки в CSV файле (одинарные кавычки на двойные и удалем символ переноса строки в конце)
+            line = line.replace('""','"')
+            line = line.replace("'",'"')
+            line = line.rstrip("\n")
+            #Разбиваем на строку
+            payload = line.split(";")
+            print(payload)
+            # Преобразуем в dict тело запроса
+            payload[3] = json.loads(payload[3].strip('"'))
+            payload[4] = int(payload[4])
+            if payload[4] != 200:
+                #Преобразуем в dict тело response
+                payload[5] = json.loads(payload[5].strip('"'))
+            #Собираем параметры в одну сущность
+            result.append(tuple(payload))
+        count += 1
+    return result
+
+
+def convert_to_utf_8(fileName):
+    csv_file = "%s.csv" % fileName
+    f = codecs.open(csv_file, 'r', 'cp1251')
+    u = f.read()  # now the contents have been transformed to a Unicode string
+    new_file_path = fileName + "_converted.csv"
+    out = codecs.open(new_file_path, 'w', 'utf-8')
+    out.write(u)  # and now the contents have been output as UTF-8
+    out.close()
+    return new_file_path

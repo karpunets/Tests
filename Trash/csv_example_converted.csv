@@ -1,0 +1,3 @@
+Test_Name;Method;URL;Request_Data;Status code;Response
+руссиан;POST;post_criteria;"{'$name':null, '$criteriagroupId': ""group"", '$description':null}";400;{'QOS_TEMPLATE_CRITERIA_DESCRIPTION': 'DESCRIPTION length from 1 to 1024 characters. Criteria id=[null]','QOS_TEMPLATE_CRITERIA_NAME': 'NAME length from 1 to 255 characters. Criteria id=[null]'}
+add_criteria;POST;post_criteria;"{""$name"": ""$random_string"", ""$criteriagroupId"": 2, ""$description"":""$random_string""}";200;

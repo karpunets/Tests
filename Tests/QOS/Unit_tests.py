@@ -68,18 +68,18 @@ def test_add_criteria(send_request, add_group, delete_group_and_criteria):
 #     assert equal_schema(instance, data['schema'])
 #
 #
-# @allure.feature('Позитивный тест')
-# @allure.story('Добавляем критерий без имени и описания')
-# def test_add_criteria_without_description_and_name(send_request, add_group):
-#     group_id = next(add_group)['id']
-#     data = make_test_data('post_criteria', {'$criteriagroupId': group_id})
-#     response = send_request(URL.criteria, data['request'])
-#
-#     answer = {'QOS_TEMPLATE_CRITERIA_DESCRIPTION': 'DESCRIPTION length from 1 to 1024 characters. Сriteria id=[null]',
-#               'QOS_TEMPLATE_CRITERIA_NAME': 'NAME length from 1 to 255 characters. Сriteria id=[null]'}
-#     assert response.status_code == 400
-#     assert answer == response.json()
-#
+@allure.feature('Позитивный тест')
+@allure.story('Добавляем критерий без имени и описания')
+def test_add_criteria_without_description_and_name(send_request, add_group):
+    group_id = next(add_group)['id']
+    data = make_test_data('post_criteria', {'$criteriagroupId': group_id})
+    response = send_request(URL.criteria, data['request'])
+
+    answer = {'QOS_TEMPLATE_CRITERIA_DESCRIPTION': 'DESCRIPTION length from 1 to 1024 characters. Criteria id=[null]',
+              'QOS_TEMPLATE_CRITERIA_NAME': 'NAME length from 1 to 255 characters. Criteria id=[null]'}
+    assert response.status_code == 400
+    assert answer == response.json()
+
 #
 # @allure.feature('Позитивный тест')
 # @allure.story('Добавляем критерий без ID групы критериев (criteriaGroupID)')
