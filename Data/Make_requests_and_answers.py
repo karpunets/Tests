@@ -15,12 +15,15 @@ def make_test_data(json_name, data = {}, default=False):
     if len(data) > 0:
         for key, val in iter(data.items()):
             try:
-                if type(val) == int:
+                if type(val) == int or type(val) == dict:
                     key = '"%s"' % key
                     val = str(val)
                 # Подставляем значение ф-ции из мапы, метод для использования DDT
-                if "$" in val and key:
-                    val = get_function_value(val)
+                try:
+                    if val.startswith("$") and key.startswith("$"):
+                        val = get_function_value(val)
+                except AttributeError:
+                    continue
                 json_file = json_file.replace(key, val)
             # Возникает если передать None(null)
             except TypeError:
@@ -120,13 +123,14 @@ def get_from_csv(fileName):
             line = line.rstrip("\n")
             #Разбиваем на строку
             payload = line.split(";")
-            print(payload)
             # Преобразуем в dict тело запроса
             payload[3] = json.loads(payload[3].strip('"'))
             payload[4] = int(payload[4])
+            print("QQQQQQQQQQQQQQQQQQ", payload[4])
             if payload[4] != 200:
                 #Преобразуем в dict тело response
                 payload[5] = json.loads(payload[5].strip('"'))
+                print("payload[5]", payload[5])
             #Собираем параметры в одну сущность
             result.append(tuple(payload))
         count += 1
@@ -142,3 +146,5 @@ def convert_to_utf_8(fileName):
     out.write(u)  # and now the contents have been output as UTF-8
     out.close()
     return new_file_path
+
+
