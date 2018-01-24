@@ -1,4 +1,4 @@
-import json, re, random, string, codecs,os
+import json, re, random, string, codecs
 
 
 def random_string():
@@ -12,27 +12,36 @@ def make_test_data(json_name, data = {}, default=False):
         path = path.replace("JSON_files/", "JSON_files/default_data/")
     json_file = open(path, encoding="utf8").read()
     # Если передали параметры для изменения, заменяем их
-    if len(data) > 0:
-        for key, val in iter(data.items()):
-            try:
-                if type(val) == int or type(val) == dict:
-                    key = '"%s"' % key
-                    val = str(val)
-                # Подставляем значение ф-ции из мапы, метод для использования DDT
+    def helpful(json_file, data):
+        dictTypeInData = False
+        if len(data) > 0:
+            for key, val in iter(data.items()):
                 try:
-                    if val.startswith("$") and key.startswith("$"):
-                        val = get_function_value(val)
-                except AttributeError:
+                    if type(val) == int or type(val) == dict:
+                        if type(val) == dict and key in json_file:
+                            dictTypeInData = True
+                        key = '"%s"' % key
+                        val = str(val)
+                    # Подставляем значение ф-ции из мапы, метод для использования DDT
+                    try:
+                        if val.startswith("$") and key.startswith("$"):
+                            val = get_function_value(val)
+                    except AttributeError:
+                        continue
+                    json_file = json_file.replace(key, val)
+                # Возникает если передать None(null)
+                except TypeError:
                     continue
-                json_file = json_file.replace(key, val)
-            # Возникает если передать None(null)
-            except TypeError:
-                continue
+        json_file = json_file.replace("'", '"')
+        if dictTypeInData == True:
+            json_file = helpful(json_file, data)
+        return json_file
+    result = helpful(json_file, data)
     # Вместо не переданных параметров подставляем null
-    json_file = re.sub(r'(\"\$[\w]+\")', 'null', json_file)
-    json_file = json.loads(json_file)
+    result = re.sub(r'(\"?\$[\w]+\"?)', 'null', result)
+    result = json.loads(result)
     # return {'request':json_file['request'], 'schema':json_file['schema']} if default==False else json_file
-    return json_file
+    return result
 
 
 def get_function_value(function_name):
@@ -126,11 +135,9 @@ def get_from_csv(fileName):
             # Преобразуем в dict тело запроса
             payload[3] = json.loads(payload[3].strip('"'))
             payload[4] = int(payload[4])
-            print("QQQQQQQQQQQQQQQQQQ", payload[4])
             if payload[4] != 200:
                 #Преобразуем в dict тело response
                 payload[5] = json.loads(payload[5].strip('"'))
-                print("payload[5]", payload[5])
             #Собираем параметры в одну сущность
             result.append(tuple(payload))
         count += 1

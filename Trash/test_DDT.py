@@ -12,10 +12,10 @@ from Data.Make_requests_and_answers import get_from_csv
 @pytest.mark.parametrize("name, method, json_name, payload, status_code, expect_response",get_from_csv("csv_example"))
 def test_add_criteria(send_request, add_group, delete_group_and_criteria, name, method, json_name, payload, status_code, expect_response):
     group_id = next(add_group)['id']
-    print(expect_response)
     payload["$criteriagroupId"] = group_id
     payload["$errors"] = expect_response
     data = make_test_data(json_name, payload)
+    print("data", data)
     response = send_request(URL.criteria, data['request'])
     instance = response.json()
     #Шаг для удаления критерия
