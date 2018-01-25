@@ -1,4 +1,4 @@
-import json, re, random, string, codecs
+import json, re, random, string, codecs, os
 
 
 def random_string():
@@ -11,28 +11,31 @@ def make_test_data(json_name, data = {}, default=False):
     if default == True:
         path = path.replace("JSON_files/", "JSON_files/default_data/")
     json_file = open(path, encoding="utf8").read()
-    # Если передали параметры для изменения, заменяем их
+    # Доп. ф-ция для использования рекурсии
     def helpful(json_file, data):
         dictTypeInData = False
         if len(data) > 0:
             for key, val in iter(data.items()):
                 try:
                     if type(val) == int or type(val) == dict:
+                        #Если в параметрах есть dict и в нем нужно подставить параметры
                         if type(val) == dict and key in json_file:
                             dictTypeInData = True
-                        key = '"%s"' % key
+                        #Для того что бы подставить int число в строку
+                        if '"%s"' % key in json_file:
+                            key = '"%s"' % key
                         val = str(val)
                     # Подставляем значение ф-ции из мапы, метод для использования DDT
-                    try:
+                    if type(key) and type(val) == str:
                         if val.startswith("$") and key.startswith("$"):
                             val = get_function_value(val)
-                    except AttributeError:
-                        continue
                     json_file = json_file.replace(key, val)
                 # Возникает если передать None(null)
                 except TypeError:
                     continue
+        #Для преобразования методом json.loads должны быть везде двойные кавычки
         json_file = json_file.replace("'", '"')
+        #Если подставили dict и в нем нужно заменить значения, делаем рекурсию
         if dictTypeInData == True:
             json_file = helpful(json_file, data)
         return json_file
@@ -114,7 +117,13 @@ def equal_schema(response, schema, assert_keys_quantity=True):
 
 
 # Получаем и преобразуем JSON файл, согласно переданным параметрам
+
 def get_from_csv(fileName):
+    try:
+        role_name_from_jenkins = os.environ['role_for_test']
+    # Если не передали используем рут роль
+    except KeyError:
+        role_name_from_jenkins = 'ROOT'
     #Ищем конвертированный файл, если нету - конвертируем
     try:
         file_path = fileName+"_converted.csv"
@@ -126,20 +135,21 @@ def get_from_csv(fileName):
     result = []
     for line in csv_file:
         if count != 0:
-            #Заменяем опечатки в CSV файле (одинарные кавычки на двойные и удалем символ переноса строки в конце)
-            line = line.replace('""','"')
-            line = line.replace("'",'"')
-            line = line.rstrip("\n")
-            #Разбиваем на строку
-            payload = line.split(";")
-            # Преобразуем в dict тело запроса
-            payload[3] = json.loads(payload[3].strip('"'))
-            payload[4] = int(payload[4])
-            if payload[4] != 200:
-                #Преобразуем в dict тело response
-                payload[5] = json.loads(payload[5].strip('"'))
-            #Собираем параметры в одну сущность
-            result.append(tuple(payload))
+            if role_name_from_jenkins in line:
+                #Заменяем опечатки в CSV файле (одинарные кавычки на двойные и удалем символ переноса строки в конце)
+                line = line.replace('""','"')
+                line = line.replace("'",'"')
+                line = line.rstrip("\n")
+                #Разбиваем на строку
+                payload = line.split(";")
+                # Преобразуем в dict тело запроса
+                payload[4] = json.loads(payload[4].strip('"'))
+                payload[5] = int(payload[5])
+                if payload[5] != 200:
+                    #Преобразуем в dict тело response
+                    payload[6] = json.loads(payload[6].strip('"'))
+                #Собираем параметры в одну сущность
+                result.append(tuple(payload))
         count += 1
     return result
 
@@ -155,3 +165,4 @@ def convert_to_utf_8(fileName):
     return new_file_path
 
 
+print(get_from_csv("csv_example_1"))

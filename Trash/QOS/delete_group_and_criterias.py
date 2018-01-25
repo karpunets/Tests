@@ -3,7 +3,7 @@ import Data.URLs_MAP as URL
 from Data.URLs_MAP import headers
 
 
-server = "http://172.22.2.63:8080"
+server = "http://172.22.2.66:8080"
 
 url = "%s/SmiddleQualityService/qos/template/criteria_group"%server
 url_delete_criteria = "%s/SmiddleQualityService/qos/template/criteria"%server
