@@ -143,7 +143,9 @@ def get_from_csv(fileName):
                 #Разбиваем на строку
                 payload = line.split(";")
                 # Преобразуем в dict тело запроса
-                payload[4] = json.loads(payload[4].strip('"'))
+                print(payload[4].strip('"'))
+                if payload[4]!="-":
+                    payload[4] = json.loads(payload[4].strip('"'))
                 payload[5] = int(payload[5])
                 if payload[5] != 200:
                     #Преобразуем в dict тело response
