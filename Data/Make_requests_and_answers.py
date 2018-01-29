@@ -1,5 +1,6 @@
 import json, re, random, string, codecs, os
-
+import Data.URLs_MAP as URLs
+from Data.Test_data import ROOT_user_id,ROOT_group_id
 
 def random_string():
     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(random.randint(3,10)))
@@ -48,9 +49,13 @@ def make_test_data(json_name, data = {}, default=False):
 
 
 def get_function_value(function_name):
-    function_map = {"$random_string":lambda: random_string(),
-                    "$random_int":lambda: random.randint(1,10)}
-    return function_map[function_name]()
+    get_value = re.match(r'(?P<function_name>[\$A-Za-z_]+)(\(+(?P<from>[0-9]+),+(?P<to>[0-9]+)\)+)?', function_name)
+    function_map = {"$random_str":lambda: random_string(),
+                    "$random_int":lambda: random.randint(int(get_value.group("from")),int(get_value.group("to"))),
+                    "$ROOT_user_id":lambda: ROOT_user_id,
+                    "$ROOT_group_id":lambda: ROOT_group_id}
+    print(function_map.keys())
+    return function_map[get_value.group("function_name")]()
 
 
 def equal_schema(response, schema, assert_keys_quantity=True):
@@ -124,13 +129,9 @@ def get_from_csv(fileName):
     # Если не передали используем рут роль
     except KeyError:
         role_name_from_jenkins = 'ROOT'
-    #Ищем конвертированный файл, если нету - конвертируем
-    try:
-        file_path = fileName+"_converted.csv"
-        csv_file = open(file_path, encoding="utf-8").readlines()
-    except FileNotFoundError:
-        file_path = convert_to_utf_8(fileName)
-        csv_file = open(file_path, encoding="utf-8").readlines()
+    #Конвертируем полученный файл
+    file_path = convert_to_utf_8(fileName)
+    csv_file = open(file_path, encoding="utf-8").readlines()
     count = 0
     result = []
     for line in csv_file:
@@ -143,15 +144,20 @@ def get_from_csv(fileName):
                 #Разбиваем на строку
                 payload = line.split(";")
                 # Преобразуем в dict тело запроса
-                print(payload[4].strip('"'))
-                if payload[4]!="-":
-                    payload[4] = json.loads(payload[4].strip('"'))
-                payload[5] = int(payload[5])
-                if payload[5] != 200:
-                    #Преобразуем в dict тело response
-                    payload[6] = json.loads(payload[6].strip('"'))
+                for param in ['Request_Data', 'Parameters', 'Response']:
+                    param_index = row_names.index(param)
+                    if payload[param_index]!="-":
+                        payload[param_index] = json.loads(payload[param_index].strip('"'))
+                    else:
+                        payload[param_index] = {}
+                payload[row_names.index("URL_name")] = getattr(URLs,payload[row_names.index("URL_name")])
                 #Собираем параметры в одну сущность
+                payload[row_names.index("Status_code")] = int(payload[row_names.index("Status_code")])
                 result.append(tuple(payload))
+        else:
+            line = line.rstrip("\n")
+            row_names = line.split(";")
+
         count += 1
     return result
 
@@ -167,4 +173,6 @@ def convert_to_utf_8(fileName):
     return new_file_path
 
 
-print(get_from_csv("csv_example_1"))
+
+
+print(get_from_csv("xls_example_for_tests"))

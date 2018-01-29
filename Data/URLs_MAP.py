@@ -108,7 +108,6 @@ filter = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter" % server
 abonent = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter/phone/import" % server
 agent = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter/agent" % server
 
-
 #SESL
 sesl_integration = "%s/SmiddleExtendedSmartLabel/sesl/integration"%server
 sesl_mapfield = "%s/SmiddleExtendedSmartLabel/sesl/integration/mapfield"%server

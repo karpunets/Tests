@@ -2,7 +2,6 @@ import pytest, allure, json, requests, random
 import Data.URLs_MAP as URL
 
 from Data.Make_requests_and_answers import make_test_data, equal_schema, random_string
-from Data.Test_data import ROOT_group_id, ROOT_user_id
 from Data.Make_requests_and_answers import get_from_csv
 
 
@@ -11,6 +10,7 @@ from Data.Make_requests_and_answers import get_from_csv
 @allure.story('Добавляем критерий')
 @pytest.mark.parametrize("name, method, json_name, payload, status_code, expect_response",get_from_csv("csv_example"))
 def test_add_criteria(send_request, add_group, delete_group_and_criteria, name, method, json_name, payload, status_code, expect_response):
+    #TODO: реализовать возможность не передвать ID, зарезервировать слово "$from fixture"
     group_id = next(add_group)['id']
     payload["$criteriagroupId"] = group_id
     payload["$errors"] = expect_response
@@ -24,7 +24,7 @@ def test_add_criteria(send_request, add_group, delete_group_and_criteria, name, 
     except KeyError:
         pass
     assert response.status_code == status_code
-    if status_code == 200:
+    if status_code == 200 and expect_response == {}:
         assert equal_schema(instance, data['schema'])
     else:
         assert equal_schema(instance, data['errors'])
