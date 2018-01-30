@@ -54,7 +54,6 @@ def get_function_value(function_name):
                     "$random_int":lambda: random.randint(int(get_value.group("from")),int(get_value.group("to"))),
                     "$ROOT_user_id":lambda: ROOT_user_id,
                     "$ROOT_group_id":lambda: ROOT_group_id}
-    print(function_map.keys())
     return function_map[get_value.group("function_name")]()
 
 
@@ -174,5 +173,3 @@ def convert_to_utf_8(fileName):
 
 
 
-
-print(get_from_csv("xls_example_for_tests"))

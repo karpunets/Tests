@@ -3,7 +3,7 @@
     "name": "$name",
     "description": "$description",
     "criteriaGroup": {
-      "id": "$criteriagroupId"
+      "id": "$criteriaGroupId"
     }
   },
   "schema": {
@@ -13,7 +13,7 @@
     "name": "$name",
     "description": "$description",
     "criteriaGroup": {
-      "id": "$criteriagroupId",
+      "id": "$criteriaGroupId",
       "name": {
         "type": "string"
       }
