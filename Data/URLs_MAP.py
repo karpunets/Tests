@@ -38,7 +38,8 @@ delete_domain = '%s/SmiddleManager/adm/admin/delete_domain' % server
 get_role_list = '%s/SmiddleManager/adm/management/get_role_list' % server
 get_group_list = '%s/SmiddleManager/adm/management/get_group_list' % server
 get_domain_list = '%s/SmiddleManager/adm/management/get_domain_list' % server
-get_user_group_roles = '%s/SmiddleManager/adm/management/user_group_roles?user_id=16357506&group_id=1908533' % server
+get_user_group_roles = '%s/SmiddleManager/adm/management/user_group_roles' \
+                       '' % server
 get_Manager_settings = '%s/SmiddleManager/adm/admin/settings' % server
 Manager_manifest = '%s/SmiddleManager/adm/admin/manifest' % server
 add_role_access = '%s/SmiddleManager/adm/management/add_role_access' % server

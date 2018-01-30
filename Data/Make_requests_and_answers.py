@@ -5,42 +5,43 @@ from Data.Test_data import ROOT_user_id,ROOT_group_id
 def random_string():
     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(random.randint(3,10)))
 
+
+#TODO: При рекурсии проверить праивльно ли отображает параметры, которые переданны с файла
 # Получаем и преобразуем JSON файл, согласно переданным параметрам
-def make_test_data(json_name, data = {}, default=False):
+def make_test_data(json_name, data = {}, params = {}):
     # Определяем откуда брать json файл
     path = 'JSON_files/%s.json' % json_name
-    if default == True:
-        path = path.replace("JSON_files/", "JSON_files/default_data/")
     json_file = open(path, encoding="utf8").read()
     # Доп. ф-ция для использования рекурсии
-    def helpful(json_file, data):
+    def helpful(json_file, data, params):
         dictTypeInData = False
-        if len(data) > 0:
-            for key, val in iter(data.items()):
-                try:
-                    if type(val) == int or type(val) == dict:
-                        #Если в параметрах есть dict и в нем нужно подставить параметры
-                        if type(val) == dict and key in json_file:
-                            dictTypeInData = True
-                        #Для того что бы подставить int число в строку
-                        if '"%s"' % key in json_file:
-                            key = '"%s"' % key
-                        val = str(val)
-                    # Подставляем значение ф-ции из мапы, метод для использования DDT
-                    if type(key) and type(val) == str:
-                        if val.startswith("$") and key.startswith("$"):
-                            val = get_function_value(val)
-                    json_file = json_file.replace(key, val)
-                # Возникает если передать None(null)
-                except TypeError:
-                    continue
+        for i in [data, params]:
+            if len(i) > 0:
+                for key, val in iter(i.items()):
+                    try:
+                        # Подставляем значение ф-ции из мапы, метод для использования DDT
+                        if type(key) and type(val) == str:
+                            if val.startswith("$") and key.startswith("$"):
+                                val = get_function_value(val)
+                        if type(val) == int or type(val) == dict:
+                            #Если в параметрах есть dict и в нем нужно подставить параметры
+                            if type(val) == dict and key in json_file:
+                                dictTypeInData = True
+                            #Для того что бы подставить int число в строку
+                            if '"%s"' % key in json_file:
+                                key = '"%s"' % key
+                            val = str(val)
+                        json_file = json_file.replace(key, val)
+                    # Возникает если передать None(null)
+                    except TypeError:
+                        continue
         #Для преобразования методом json.loads должны быть везде двойные кавычки
         json_file = json_file.replace("'", '"')
         #Если подставили dict и в нем нужно заменить значения, делаем рекурсию
         if dictTypeInData == True:
-            json_file = helpful(json_file, data)
+            json_file = helpful(json_file, data, params)
         return json_file
-    result = helpful(json_file, data)
+    result = helpful(json_file, data, params)
     # Вместо не переданных параметров подставляем null
     result = re.sub(r'(\"?\$[\w]+\"?)', 'null', result)
     result = json.loads(result)
@@ -54,7 +55,8 @@ def get_function_value(function_name):
                     "$random_int":lambda: random.randint(int(get_value.group("from")),int(get_value.group("to"))),
                     "$ROOT_user_id":lambda: ROOT_user_id,
                     "$ROOT_group_id":lambda: ROOT_group_id}
-    return function_map[get_value.group("function_name")]()
+    result = function_map[get_value.group("function_name")]()
+    return result
 
 
 def equal_schema(response, schema, assert_keys_quantity=True):
@@ -172,4 +174,6 @@ def convert_to_utf_8(fileName):
     return new_file_path
 
 
+payload = {'$criteriaGroupId': 218066919, '$name': '$random_int(9,99)', '$groupId': '$ROOT_group_id', '$errors': {}}
+print(make_test_data("put_criteria_group", data=payload))
 

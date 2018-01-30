@@ -22,5 +22,6 @@
       }
     ],
     "criteriaList": {"type":"array"}
-  }
+  },
+  "errors":"$errors"
 }

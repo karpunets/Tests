@@ -1,0 +1,65 @@
+{
+  "POST": {
+    "request_body": {
+      "name": "$name",
+      "description": "$description",
+      "criteriaGroup": {
+        "id": "$criteriaGroupId"
+      }
+    },
+    "params":"$params",
+    "schema": {
+      "id": {
+        "type": "number"
+      },
+      "name": "$name",
+      "description": "$description",
+      "criteriaGroup": {
+        "id": "$criteriaGroupId",
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "errors": "$errors"
+  },
+  "PUT": {
+    "request_body": {
+      "id": "$criteriaId",
+      "name": "$name",
+      "description": "$description",
+      "criteriaGroup": {
+        "id": "$criteriaGroupId"
+      }
+    },
+    "params":"$params",
+    "schema": {
+      "id": "$criteriaId",
+      "name": "$name",
+      "description": "$description",
+      "criteriaGroup": {
+        "id": "$criteriaGroupId",
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "errors": "$errors"
+  },
+  "GET":{
+    "request_body": {},
+    "params":"$params",
+    "schema": {
+      "id": "$criteriaId",
+      "name": "$name",
+      "description": "$description",
+      "criteriaGroup": {
+        "id": "$criteriaGroupId",
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "errors": "$errors"
+  }
+}

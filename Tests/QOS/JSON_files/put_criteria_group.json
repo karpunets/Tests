@@ -1,2 +1,31 @@
-{"request":{"id":"$criteriaGroupId","name":"$name","groups":[{"id":"$groupId"}],"criteriaList":[]},
-"schema":{"id":"$criteriaGroupId","name":"$name","groups":[{"id":"$groupId","name":{"type":"string"},"cid":{"type":"number"}}],"criteriaList":{"type":"array"}}}
+{
+  "request": {
+    "id": "$criteriaGroupId",
+    "name": "$name",
+    "groups": [
+      {
+        "id": "$groupId"
+      }
+    ],
+    "criteriaList": []
+  },
+  "schema": {
+    "id": "$criteriaGroupId",
+    "name": "$name",
+    "groups": [
+      {
+        "id": "$groupId",
+        "name": {
+          "type": "string"
+        },
+        "cid": {
+          "type": "number"
+        }
+      }
+    ],
+    "criteriaList": {
+      "type": "array"
+    }
+  },
+  "errors": "$errors"
+}
