@@ -6,55 +6,62 @@ def random_string():
     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(random.randint(3,10)))
 
 
-#TODO: При рекурсии проверить праивльно ли отображает параметры, которые переданны с файла
 # Получаем и преобразуем JSON файл, согласно переданным параметрам
-def make_test_data(json_name, data = {}, params = {}):
+def make_test_data(json_name, method = None, data = {}, params = {}):
+    delete_data = False
     # Определяем откуда брать json файл
     path = 'JSON_files/%s.json' % json_name
     json_file = open(path, encoding="utf8").read()
     # Доп. ф-ция для использования рекурсии
-    def helpful(json_file, data, params):
+    def helpful(json_file, data):
         dictTypeInData = False
-        for i in [data, params]:
-            if len(i) > 0:
-                for key, val in iter(i.items()):
-                    try:
-                        # Подставляем значение ф-ции из мапы, метод для использования DDT
-                        if type(key) and type(val) == str:
-                            if val.startswith("$") and key.startswith("$"):
-                                val = get_function_value(val)
-                        if type(val) == int or type(val) == dict:
-                            #Если в параметрах есть dict и в нем нужно подставить параметры
-                            if type(val) == dict and key in json_file:
-                                dictTypeInData = True
-                            #Для того что бы подставить int число в строку
-                            if '"%s"' % key in json_file:
-                                key = '"%s"' % key
-                            val = str(val)
-                        json_file = json_file.replace(key, val)
-                    # Возникает если передать None(null)
-                    except TypeError:
-                        continue
+        if "#" in json_file:
+            replace = re.finditer(r"(\#[A-Za-z_]+)+(\(+([0-9]+),+([0-9]+)\)+)?", json_file)
+            for i in replace:
+                key = i.group(0)
+                if key not in data.keys():
+                    data[key] = get_function_value(key)
+        if len(data) > 0:
+            for key, val in iter(data.items()):
+                try:
+                    if type(val) == int or type(val) == dict:
+                        # Если в параметрах есть dict и в нем нужно подставить параметры
+                        if type(val) == dict and key in json_file:
+                            dictTypeInData = True
+                        # Для того что бы подставить int число в строку
+                        if '"%s"' % key in json_file:
+                            key = '"%s"' % key
+                        val = str(val)
+                    json_file = json_file.replace(key, val)
+                # Возникает если передать None(null)
+                except TypeError:
+                    continue
         #Для преобразования методом json.loads должны быть везде двойные кавычки
         json_file = json_file.replace("'", '"')
         #Если подставили dict и в нем нужно заменить значения, делаем рекурсию
         if dictTypeInData == True:
-            json_file = helpful(json_file, data, params)
+            json_file = helpful(json_file, data)
         return json_file
-    result = helpful(json_file, data, params)
+    if len(params)>0:
+        if len(data) == 0:
+            delete_data = True
+        data["$params"] = params
+    result = helpful(json_file, data)
     # Вместо не переданных параметров подставляем null
     result = re.sub(r'(\"?\$[\w]+\"?)', 'null', result)
     result = json.loads(result)
+    if delete_data == True:
+        result[method]['request_body'] = {}
     # return {'request':json_file['request'], 'schema':json_file['schema']} if default==False else json_file
-    return result
+    return result[method]
 
 
 def get_function_value(function_name):
-    get_value = re.match(r'(?P<function_name>[\$A-Za-z_]+)(\(+(?P<from>[0-9]+),+(?P<to>[0-9]+)\)+)?', function_name)
-    function_map = {"$random_str":lambda: random_string(),
-                    "$random_int":lambda: random.randint(int(get_value.group("from")),int(get_value.group("to"))),
-                    "$ROOT_user_id":lambda: ROOT_user_id,
-                    "$ROOT_group_id":lambda: ROOT_group_id}
+    get_value = re.match(r'(?P<function_name>[\#A-Za-z_]+)(\(+(?P<from>[0-9]+),+(?P<to>[0-9]+)\)+)?', function_name)
+    function_map = {"#random_str":lambda: random_string(),
+                    "#random_int":lambda: random.randint(int(get_value.group("from")),int(get_value.group("to"))),
+                    "#ROOT_user_id":lambda: ROOT_user_id,
+                    "#ROOT_group_id":lambda: ROOT_group_id}
     result = function_map[get_value.group("function_name")]()
     return result
 
@@ -174,6 +181,4 @@ def convert_to_utf_8(fileName):
     return new_file_path
 
 
-payload = {'$criteriaGroupId': 218066919, '$name': '$random_int(9,99)', '$groupId': '$ROOT_group_id', '$errors': {}}
-print(make_test_data("put_criteria_group", data=payload))
 
