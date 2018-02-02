@@ -30,7 +30,7 @@ edit_result_variant = '%s/SmiddleCampaignManager/cm/manager/edit_result_variant'
 # fields = "%s/SmiddleCampaignManager/cm/settings/fields"%server
 
 # Считывем результаты с файла
-with open('JSON_files/result_codes.json', encoding="utf8") as data_file:
+with open('Test_data/result_codes.json', encoding="utf8") as data_file:
     add_result = json.load(data_file)
 
 add_mapfield_json = {"order": "1", "forExport": None, "forFilter": None, "phoneNumber": None, "enabled": None,
@@ -85,7 +85,7 @@ for i in campaign_list:
 
 
 # def add_mapping():
-#     with open('JSON_files/mapfields.json', encoding="utf8") as data_file:
+#     with open('Test_data/mapfields.json', encoding="utf8") as data_file:
 #         add_mapfield = json.load(data_file)
 #     for field in add_mapfield:
 #         for j in field:

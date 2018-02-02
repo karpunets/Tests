@@ -7,20 +7,20 @@ def random_string():
 
 
 # Получаем и преобразуем JSON файл, согласно переданным параметрам
-def make_test_data(json_name, method = None, data = {}, params = {}):
+def make_test_data(json_name, method = None, data = {}, params = {}, fixture_params = {}):
     delete_data = False
     # Определяем откуда брать json файл
-    path = 'JSON_files/%s.json' % json_name
+    path = 'Test_data/%s.json' % json_name
     json_file = open(path, encoding="utf8").read()
     # Доп. ф-ция для использования рекурсии
-    def helpful(json_file, data):
+    def helpful(json_file, data, fixture_params):
         dictTypeInData = False
         if "#" in json_file:
             replace = re.finditer(r"(\#[A-Za-z_]+)+(\(+([0-9]+),+([0-9]+)\)+)?", json_file)
             for i in replace:
                 key = i.group(0)
                 if key not in data.keys():
-                    data[key] = get_function_value(key)
+                    data[key] = get_function_value(key, fixture_params)
         if len(data) > 0:
             for key, val in iter(data.items()):
                 try:
@@ -46,7 +46,7 @@ def make_test_data(json_name, method = None, data = {}, params = {}):
         if len(data) == 0:
             delete_data = True
         data["$params"] = params
-    result = helpful(json_file, data)
+    result = helpful(json_file, data, fixture_params)
     # Вместо не переданных параметров подставляем null
     result = re.sub(r'(\"?\$[\w]+\"?)', 'null', result)
     result = json.loads(result)
@@ -56,14 +56,23 @@ def make_test_data(json_name, method = None, data = {}, params = {}):
     return result[method]
 
 
-def get_function_value(function_name):
-    get_value = re.match(r'(?P<function_name>[\#A-Za-z_]+)(\(+(?P<from>[0-9]+),+(?P<to>[0-9]+)\)+)?', function_name)
+def get_function_value(function_name, fixture):
+    get_value = re.match(r'(?P<function_name>\#[A-Za-z_]+)(\(+(?P<from>[0-9]+),+(?P<to>[0-9]+)\)+)?(\(+(?P<param>[A-Za-z0-9]+)\)+)?', function_name)
     function_map = {"#random_str":lambda: random_string(),
                     "#random_int":lambda: random.randint(int(get_value.group("from")),int(get_value.group("to"))),
                     "#ROOT_user_id":lambda: ROOT_user_id,
-                    "#ROOT_group_id":lambda: ROOT_group_id}
+                    "#ROOT_group_id":lambda: ROOT_group_id,
+                    "#fixture_value": lambda : fixture[get_value.group("param")] if get_value.group("param") in fixture.keys() else None}
+    print(get_value.group("param"))
     result = function_map[get_value.group("function_name")]()
     return result
+
+# def get_fixture_param(param, fixture):
+#     result = None
+#     get_value = re.match(r'(\#fixture_value)(\(+(?P<param>[A-Za-z0-9]+)\)+)', param)
+#     if get_value.group("param") in fixture.keys():
+#         result = fixture[get_value.group("param")]
+#     return result
 
 
 def equal_schema(response, schema, assert_keys_quantity=True):
@@ -151,7 +160,7 @@ def get_from_csv(fileName):
                 line = line.rstrip("\n")
                 #Разбиваем на строку
                 payload = line.split(";")
-                # Преобразуем в dict тело запроса
+                # Преобразуем в dict параметры
                 for param in ['Request_Data', 'Parameters', 'Response']:
                     param_index = row_names.index(param)
                     if payload[param_index]!="-":
@@ -165,13 +174,12 @@ def get_from_csv(fileName):
         else:
             line = line.rstrip("\n")
             row_names = line.split(";")
-
         count += 1
     return result
 
 
 def convert_to_utf_8(fileName):
-    csv_file = "%s.csv" % fileName
+    csv_file = "Test_data/%s.csv" % fileName
     f = codecs.open(csv_file, 'r', 'cp1251')
     u = f.read()  # now the contents have been transformed to a Unicode string
     new_file_path = fileName + "_converted.csv"
@@ -179,6 +187,4 @@ def convert_to_utf_8(fileName):
     out.write(u)  # and now the contents have been output as UTF-8
     out.close()
     return new_file_path
-
-
 

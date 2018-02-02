@@ -1,0 +1,65 @@
+{
+  "POST": {
+    "request": {
+      "databaseColumn": "$databaseColumn",
+      "title": "$title",
+      "position": "$position",
+      "integration": {
+        "id": "$integrationId"
+      }
+    },
+    "schema": {
+      "id": {
+        "type": "number"
+      },
+      "databaseColumn": "$databaseColumn",
+      "title": "$title",
+      "position": "$position",
+      "integration": {
+        "type": "object"
+      }
+    },
+    "params": "$params",
+    "errors": "$errors"
+  },
+  "PUT": {
+    "request": {
+      "id": "$mapfieldId",
+      "databaseColumn": "$databaseColumn",
+      "title": "$title",
+      "position": "$position"
+    },
+    "schema": {
+      "id": "$mapfieldId",
+      "databaseColumn": "$databaseColumn",
+      "title": "$title",
+      "position": "$position",
+      "integration": {
+        "type": "object"
+      }
+    },
+  "params": "$params",
+  "errors": "$errors"
+  },
+  "GET": {
+    "request": {},
+    "schema": {
+      "id": "$mapfieldId",
+      "databaseColumn": "$databaseColumn",
+      "title": "$title",
+      "position": "$position",
+      "integration": {
+        "type": "object"
+      }
+    },
+  "params": "$params",
+  "errors": "$errors"
+  },
+  "DELETE": {
+    "request": {},
+    "schema": {
+      "id": "$mapfieldId"},
+  "params": "$params",
+  "errors": "$errors"
+  }
+}

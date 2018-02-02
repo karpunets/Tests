@@ -1,0 +1,56 @@
+{
+  "POST": {
+    "request_body": {
+      "name": "$name",
+      "url": "$url",
+      "login": "$login",
+      "password": "$password"
+    },
+    "schema": {
+      "id": {
+        "type": "number"
+      },
+      "name": "$name",
+      "url": "$url",
+      "login": "$login"
+    },
+    "errors":"$errors",
+    "params":"$params"
+  },
+  "PUT": {
+    "request_body": {
+      "id": "$integrationId",
+      "name": "$name",
+      "url": "$url",
+      "login": "$login",
+      "password": "$password"
+    },
+    "schema": {
+      "id": "$integrationId",
+      "name": "$name",
+      "url": "$url",
+      "login": "$login"
+    },
+    "errors":"$errors",
+    "params":"$params"
+  },
+  "GET": {
+    "request_body": {},
+    "schema": {
+      "id": "$integrationId",
+      "name": "$name",
+      "url": "$url",
+      "login": "$login"
+    },
+    "errors":"$errors",
+    "params":"$params"
+  },
+  "DELETE": {
+    "request_body": {},
+    "schema": {
+      "id": "$integrationId"
+    },
+    "errors":"$errors",
+    "params":"$params"
+  }
+}

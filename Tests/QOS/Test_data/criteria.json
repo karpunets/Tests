@@ -61,5 +61,13 @@
       }
     },
     "errors": "$errors"
+  },
+    "DELETE":{
+    "request_body": {},
+    "params":"$params",
+    "schema": {
+      "id": "$criteriaId"
+      },
+    "errors": "$errors"
   }
 }
