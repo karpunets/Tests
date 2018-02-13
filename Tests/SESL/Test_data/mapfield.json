@@ -1,6 +1,6 @@
 {
   "POST": {
-    "request": {
+    "request_body": {
       "databaseColumn": "$databaseColumn",
       "title": "$title",
       "position": "$position",
@@ -23,7 +23,7 @@
     "errors": "$errors"
   },
   "PUT": {
-    "request": {
+    "request_body": {
       "id": "$mapfieldId",
       "databaseColumn": "$databaseColumn",
       "title": "$title",
@@ -42,7 +42,7 @@
   "errors": "$errors"
   },
   "GET": {
-    "request": {},
+    "request_body": {},
     "schema": {
       "id": "$mapfieldId",
       "databaseColumn": "$databaseColumn",
@@ -56,7 +56,7 @@
   "errors": "$errors"
   },
   "DELETE": {
-    "request": {},
+    "request_body": {},
     "schema": {
       "id": "$mapfieldId"},
   "params": "$params",

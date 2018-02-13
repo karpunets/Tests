@@ -14,7 +14,7 @@ def test_add_criteria(send_request, add_one_integration, add_one_map, add_one_ta
     fixture = {"add_one_integration":add_one_integration,
                "add_one_map":add_one_map,
                "add_one_tag":add_one_tag}
-    data = make_test_data(json_name= schema_name, method=method, data = payload, fixture_params=fixture["add_one_"+schema_name])
+    data = make_test_data(json_name= schema_name, method=method, data = payload, params=params, fixture_params=fixture["add_one_"+schema_name])
     print("DATA", data)
     response = send_request(method=method, url=URL, data=data['request_body'], params=params)
     print(response.json())

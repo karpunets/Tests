@@ -1,6 +1,6 @@
 import json, re, random, string, codecs, os
 import Data.URLs_MAP as URLs
-from Data.standard_data import ROOT_user_id,ROOT_group_id
+from Data.test_data import ROOT_user_id,ROOT_group_id
 
 def random_string():
     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(random.randint(3,10)))
@@ -12,15 +12,26 @@ def make_test_data(json_name, method, data = {}, params = {}, fixture_params = {
     # Определяем откуда брать json файл
     path = 'Test_data/%s.json' % json_name
     json_file = open(path, encoding="utf8").read()
+    # TODO: Вынести в отдельный модуль
+    if "#" in str(data.values()):
+        for key,val in iter(data.items()):
+            if type(val) == str and val.startswith("#"):
+                data[key] = get_function_value(val, fixture_params)
+    if len(params)>0:
+        if len(data) == 0:
+            delete_data = True
+        #TODO: Вынести в отдельный модуль
+        if "#" in str(params.values()):
+            for key, val in iter(params.items()):
+                if type(val) == str and val.startswith("#"):
+                    params[key] = get_function_value(val, fixture_params)
+        data["$params"] = params
+            # key = i.group(0)
+            # if key not in data.keys():
+            #     data[key] = get_function_value(key, fixture_params)
     # Доп. ф-ция для использования рекурсии
     def helpful(json_file, data, fixture_params):
         dictTypeInData = False
-        if "#" in json_file:
-            replace = re.finditer(r"(\#[A-Za-z_]+)+(\(+([0-9]+),+([0-9]+)\)+)?", json_file)
-            for i in replace:
-                key = i.group(0)
-                if key not in data.keys():
-                    data[key] = get_function_value(key, fixture_params)
         if len(data) > 0:
             for key, val in iter(data.items()):
                 try:
@@ -42,10 +53,7 @@ def make_test_data(json_name, method, data = {}, params = {}, fixture_params = {
         if dictTypeInData == True:
             json_file = helpful(json_file, data, fixture_params)
         return json_file
-    if len(params)>0:
-        if len(data) == 0:
-            delete_data = True
-        data["$params"] = params
+
     result = helpful(json_file, data, fixture_params)
     # Вместо не переданных параметров подставляем null
     result = re.sub(r'(\"?\$[\w]+\"?)', 'null', result)
@@ -137,6 +145,8 @@ def equal_schema(response, schema, assert_keys_quantity=True):
     return True
 
 
+
+
 # Получаем и преобразуем JSON файл, согласно переданным параметрам
 
 def get_from_csv(fileName):
@@ -188,4 +198,3 @@ def convert_to_utf_8(fileName):
     out.close()
     return new_file_path
 
-print(make_test_data("integration", method="POST", data={"$name":"#random_str","$url":"#random_str","$login":"#random_str","$password":"#random_str"}))

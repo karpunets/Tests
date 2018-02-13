@@ -14,7 +14,9 @@ def add_one_integration(send_request):
                                                     '$login': random_string(),
                                                     '$password': None})
     response = send_request(url=sesl_integration, data=data['request_body'])
-    yield response.json()
+    to_return = response.json()
+    to_return['integrationId'] = response.json()['id']
+    yield to_return
     send_request(method = "DELETE", url=sesl_integration, params={'id':response.json()['id']})
 
 
@@ -58,7 +60,7 @@ def add_one_map(send_request, add_one_integration):
                                             "$title": random_string(),
                                             "$position": 1,
                                             "$integrationId": exitsting_integration['id']})
-    response = send_request(sesl_mapfield, data['request'])
+    response = send_request(sesl_mapfield, data['request_body'])
     return response.json()
 
 @pytest.fixture(scope="function")
@@ -67,7 +69,7 @@ def add_integration_with_password(send_request, clear_result):
                                                     '$url': random_string(),
                                                     '$login': random_string(),
                                                     '$password': random_string()})
-    response = send_request(url=sesl_integration, data=data['request'])
+    response = send_request(url=sesl_integration, data=data['request_body'])
     yield response.json()
     clear_result['url'], clear_result['id'] = sesl_integration, response.json()['id']
 
@@ -78,7 +80,7 @@ def add_one_tag(send_request, add_one_integration):
     data = make_test_data("tag",method = "POST", data={"$tag":random_string(),
                                        "$integrationId":integrationId,
                                        "$position": "1"})
-    response = send_request(sesl_tag, data['request'])
+    response = send_request(sesl_tag, data['request_body'])
     yield response.json()
     send_request(method = "DELETE", url = sesl_tag, params = {'id':response.json()['id']})
 
@@ -93,7 +95,7 @@ def add_two_tags(send_request, add_one_integration):
         data = make_test_data("tag", {"$tag":random_string(),
                                            "$integrationId":integrationId,
                                            "$position": str(position)})
-        response = send_request(sesl_tag, data['request'])
+        response = send_request(sesl_tag, data['request_body'])
         position+=1
         results.append(response.json())
     yield iter(results)
