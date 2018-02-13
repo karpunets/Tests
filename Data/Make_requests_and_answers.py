@@ -1,13 +1,13 @@
 import json, re, random, string, codecs, os
 import Data.URLs_MAP as URLs
-from Data.Test_data import ROOT_user_id,ROOT_group_id
+from Data.standard_data import ROOT_user_id,ROOT_group_id
 
 def random_string():
     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(random.randint(3,10)))
 
 
 # Получаем и преобразуем JSON файл, согласно переданным параметрам
-def make_test_data(json_name, method = None, data = {}, params = {}, fixture_params = {}):
+def make_test_data(json_name, method, data = {}, params = {}, fixture_params = {}):
     delete_data = False
     # Определяем откуда брать json файл
     path = 'Test_data/%s.json' % json_name
@@ -40,7 +40,7 @@ def make_test_data(json_name, method = None, data = {}, params = {}, fixture_par
         json_file = json_file.replace("'", '"')
         #Если подставили dict и в нем нужно заменить значения, делаем рекурсию
         if dictTypeInData == True:
-            json_file = helpful(json_file, data)
+            json_file = helpful(json_file, data, fixture_params)
         return json_file
     if len(params)>0:
         if len(data) == 0:
@@ -53,7 +53,7 @@ def make_test_data(json_name, method = None, data = {}, params = {}, fixture_par
     if delete_data == True:
         result[method]['request_body'] = {}
     # return {'request':json_file['request'], 'schema':json_file['schema']} if default==False else json_file
-    return result[method]
+    return result[method] if method != None else result
 
 
 def get_function_value(function_name, fixture):
@@ -63,7 +63,6 @@ def get_function_value(function_name, fixture):
                     "#ROOT_user_id":lambda: ROOT_user_id,
                     "#ROOT_group_id":lambda: ROOT_group_id,
                     "#fixture_value": lambda : fixture[get_value.group("param")] if get_value.group("param") in fixture.keys() else None}
-    print(get_value.group("param"))
     result = function_map[get_value.group("function_name")]()
     return result
 
@@ -164,7 +163,8 @@ def get_from_csv(fileName):
                 for param in ['Request_Data', 'Parameters', 'Response']:
                     param_index = row_names.index(param)
                     if payload[param_index]!="-":
-                        payload[param_index] = json.loads(payload[param_index].strip('"'))
+                        payload[param_index] = payload[param_index].strip('"')
+                        payload[param_index] = json.loads(payload[param_index])
                     else:
                         payload[param_index] = {}
                 payload[row_names.index("URL_name")] = getattr(URLs,payload[row_names.index("URL_name")])
@@ -182,9 +182,10 @@ def convert_to_utf_8(fileName):
     csv_file = "Test_data/%s.csv" % fileName
     f = codecs.open(csv_file, 'r', 'cp1251')
     u = f.read()  # now the contents have been transformed to a Unicode string
-    new_file_path = fileName + "_converted.csv"
+    new_file_path = csv_file + "_converted.csv"
     out = codecs.open(new_file_path, 'w', 'utf-8')
     out.write(u)  # and now the contents have been output as UTF-8
     out.close()
     return new_file_path
 
+print(make_test_data("integration", method="POST", data={"$name":"#random_str","$url":"#random_str","$login":"#random_str","$password":"#random_str"}))
