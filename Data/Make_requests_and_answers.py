@@ -7,25 +7,24 @@ def random_string():
 
 
 # Получаем и преобразуем JSON файл, согласно переданным параметрам
-def make_test_data(json_name, method, data = {}, params = {}, fixture_params = {}):
-    delete_data = False
+def make_test_data(json_name, method, data = {}):
+    # delete_data = False
     # Определяем откуда брать json файл
     path = 'Test_data/%s.json' % json_name
     json_file = open(path, encoding="utf8").read()
-    # TODO: Вынести в отдельный модуль
-    if "#" in str(data.values()):
-        for key,val in iter(data.items()):
-            if type(val) == str and val.startswith("#"):
-                data[key] = get_function_value(val, fixture_params)
-    if len(params)>0:
-        if len(data) == 0:
-            delete_data = True
-        #TODO: Вынести в отдельный модуль
-        if "#" in str(params.values()):
-            for key, val in iter(params.items()):
-                if type(val) == str and val.startswith("#"):
-                    params[key] = get_function_value(val, fixture_params)
-        data["$params"] = params
+
+    # if "#" in str(data.values()):
+    #     for key,val in iter(data.items()):
+    #         if type(val) == str and val.startswith("#"):
+    #             data[key] = get_function_value(val, fixture_params)
+    # if len(params)>0:
+    #     if len(data) == 0:
+    #         delete_data = True
+    #     if "#" in str(params.values()):
+    #         for key, val in iter(params.items()):
+    #             if type(val) == str and val.startswith("#"):
+    #                 params[key] = get_function_value(val, fixture_params)
+    #     data["$params"] = params
             # key = i.group(0)
             # if key not in data.keys():
             #     data[key] = get_function_value(key, fixture_params)
@@ -54,12 +53,12 @@ def make_test_data(json_name, method, data = {}, params = {}, fixture_params = {
             json_file = helpful(json_file, data, fixture_params)
         return json_file
 
-    result = helpful(json_file, data, fixture_params)
+    result = helpful(json_file, data)
     # Вместо не переданных параметров подставляем null
     result = re.sub(r'(\"?\$[\w]+\"?)', 'null', result)
     result = json.loads(result)
-    if delete_data == True:
-        result[method]['request_body'] = {}
+    # if delete_data == True:
+    #     result[method]['request_body'] = {}
     # return {'request':json_file['request'], 'schema':json_file['schema']} if default==False else json_file
     return result[method] if method != None else result
 

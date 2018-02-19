@@ -39,8 +39,8 @@ def test_add_integration_without_data(send_request):
 def test_edit_integration(send_request, add_one_integration):
     integrationId = add_one_integration['id']
     data = make_test_data('put_integration', data={'$integrationId':integrationId,
-                                             '$name':random_string(),
-                                             '$url':random_string(),
+                                             '$name': random_string(),
+                                             '$url': random_string(),
                                              '$login':random_string(),
                                              '$password':random_string()})
     response = send_request(url = sesl_integration, data=data['request'], method = "PUT")
