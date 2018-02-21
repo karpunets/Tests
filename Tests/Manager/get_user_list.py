@@ -1,8 +1,7 @@
-import pytest, allure, json, requests
+import allure
+
 import Data.URLs_MAP as URL
-
-from Data.Make_requests_and_answers import JSON_generator as _
-
+from bin.Make_requests_and_answers import JSON_generator as _
 
 name = 'get_user_list'
 

@@ -1,8 +1,8 @@
-import json, pytest, requests
-import Data.URLs_MAP as URL
-
-from Data.Make_requests_and_answers import JSON_generator as _
 import Data.Test_data as get
+import pytest
+
+import Data.URLs_MAP as URL
+from bin.Make_requests_and_answers import JSON_generator as _
 
 headers = URL.headers
 

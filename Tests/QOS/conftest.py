@@ -1,14 +1,16 @@
-import json, pytest, requests, random, string, time, allure
+import pytest
+import random
+import string
+import time
+
 import Data.URLs_MAP as URL
-
-from Data.Make_requests_and_answers import make_test_data
-from Data.Make_requests_and_answers import random_string
-
+from bin.Make_requests_and_answers import parse
+from bin.Make_requests_and_answers import random_string
 
 
 @pytest.fixture(scope="module")
 def setup_add_criterias(send_request):
-    criteria_names = make_test_data('criteria_names', default=True)
+    criteria_names = parse('criteria_names', default=True)
     group_and_criteria_id = {}
     for criteria_groups in criteria_names:
         payload = {"groups": [{"id": 2}], "name": criteria_groups}
@@ -37,7 +39,7 @@ def setup_add_template(setup_add_criterias, send_request):
                "$dateCreate": date_now(),
                "$version": str(random.randint(1, 255))}
     # Получаем сущность template
-    template = make_test_data('template', payload)
+    template = parse('template', payload)
     # Получаем ID и групы критериев
     group_and_criteria_id = setup_add_criterias
     max_criterias_number = 0
@@ -78,7 +80,7 @@ def setup_add_template(setup_add_criterias, send_request):
                                 '$criteria_group_id': random_criteria_and_group[0],
                                 '$weight': random_weight,
                                 '$position': j}
-                data = make_test_data('template_criteria', new_criteria)
+                data = parse('template_criteria', new_criteria)
                 templateSections[i - 1]["templateCriterias"].append(data)
             number_of_criterias = number_of_criterias - randomed_criterias_number
             count += 1
@@ -97,7 +99,7 @@ def setup_add_template(setup_add_criterias, send_request):
                                 '$criteria_group_id': random_criteria_and_group[0],
                                 '$weight': random_weight,
                                 '$position': j}
-                data = make_test_data('template_criteria', new_criteria)
+                data = parse('template_criteria', new_criteria)
                 templateSections[i - 1]["templateCriterias"].append(data)
     template["templateSections"] = templateSections
     response = send_request(URL.edit_template, template)
@@ -134,7 +136,7 @@ def add_criteria(send_request, add_group, delete_group_and_criteria):
     group_id = next(add_group)['id']
     criterias = []
     for i in range(2):
-        data = make_test_data('post_criteria', {'$name': random_string(),
+        data = parse('post_criteria', {'$name': random_string(),
                                                 '$criteriagroupId': group_id,
                                                 '$description': random_string()})
         response = send_request(URL.criteria, data['request'])

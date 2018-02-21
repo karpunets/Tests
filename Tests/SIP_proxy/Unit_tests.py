@@ -1,9 +1,9 @@
-import pytest, allure, json, requests, random, os
+import os
+import pytest
+import random
+import requests
+
 import Data.URLs_MAP as URL
-import Data.Test_data as get
-
-from Data.Make_requests_and_answers import JSON_generator as _
-
 
 
 @pytest.fixture(scope='function')

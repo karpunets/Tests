@@ -1,9 +1,10 @@
-import pytest, allure, json, requests, random
+import allure
+import pytest
+import random
+import requests
+
 import Data.URLs_MAP as URL
-import Data.Test_data as get
-
-from Data.Make_requests_and_answers import JSON_generator as _
-
+from bin.Make_requests_and_answers import JSON_generator as _
 
 
 class Tests_add_campaign_and_result_codes:

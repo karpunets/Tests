@@ -7,7 +7,7 @@ def random_string():
 
 
 # Получаем и преобразуем JSON файл, согласно переданным параметрам
-def make_test_data(json_name, method, data = {}):
+def parse(json_name, method, data = {}):
     # delete_data = False
     # Определяем откуда брать json файл
     path = 'Test_data/%s.json' % json_name
@@ -29,7 +29,7 @@ def make_test_data(json_name, method, data = {}):
             # if key not in data.keys():
             #     data[key] = get_function_value(key, fixture_params)
     # Доп. ф-ция для использования рекурсии
-    def helpful(json_file, data, fixture_params):
+    def replace(json_file, data):
         dictTypeInData = False
         if len(data) > 0:
             for key, val in iter(data.items()):
@@ -50,10 +50,10 @@ def make_test_data(json_name, method, data = {}):
         json_file = json_file.replace("'", '"')
         #Если подставили dict и в нем нужно заменить значения, делаем рекурсию
         if dictTypeInData == True:
-            json_file = helpful(json_file, data, fixture_params)
+            json_file = replace(json_file, data)
         return json_file
 
-    result = helpful(json_file, data)
+    result = replace(json_file, data)
     # Вместо не переданных параметров подставляем null
     result = re.sub(r'(\"?\$[\w]+\"?)', 'null', result)
     result = json.loads(result)
@@ -63,15 +63,15 @@ def make_test_data(json_name, method, data = {}):
     return result[method] if method != None else result
 
 
-def get_function_value(function_name, fixture):
-    get_value = re.match(r'(?P<function_name>\#[A-Za-z_]+)(\(+(?P<from>[0-9]+),+(?P<to>[0-9]+)\)+)?(\(+(?P<param>[A-Za-z0-9]+)\)+)?', function_name)
-    function_map = {"#random_str":lambda: random_string(),
-                    "#random_int":lambda: random.randint(int(get_value.group("from")),int(get_value.group("to"))),
-                    "#ROOT_user_id":lambda: ROOT_user_id,
-                    "#ROOT_group_id":lambda: ROOT_group_id,
-                    "#fixture_value": lambda : fixture[get_value.group("param")] if get_value.group("param") in fixture.keys() else None}
-    result = function_map[get_value.group("function_name")]()
-    return result
+# def get_function_value(function_name, fixture):
+#     get_value = re.match(r'(?P<function_name>\#[A-Za-z_]+)(\(+(?P<from>[0-9]+),+(?P<to>[0-9]+)\)+)?(\(+(?P<param>[A-Za-z0-9]+)\)+)?', function_name)
+#     function_map = {"#random_str":lambda: random_string(),
+#                     "#random_int":lambda: random.randint(int(get_value.group("from")),int(get_value.group("to"))),
+#                     "#ROOT_user_id":lambda: ROOT_user_id,
+#                     "#ROOT_group_id":lambda: ROOT_group_id,
+#                     "#fixture_value": lambda : fixture[get_value.group("param")] if get_value.group("param") in fixture.keys() else None}
+#     result = function_map[get_value.group("function_name")]()
+#     return result
 
 # def get_fixture_param(param, fixture):
 #     result = None
