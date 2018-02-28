@@ -1,16 +1,29 @@
 import requests, json
 
 
-class Client:
-    session = requests.Session
-    session.headers = {'content-type': "application/json;charset=UTF-8"}
-    session.auth = ("Root", "Smidle098adm!")
+class Client(object):
 
-    def get(req_url, req_params):
-        return session.get(url=req_url, params=req_params)
+    def __init__(self, url, params, data):
+        self.session = requests.Session()
+        self.headers = {'content-type': "application/json;charset=UTF-8"}
+        self.auth = ("Root", "Smidle098adm!")
+        self.url = url
+        self.params = params
+        self.data = json.dumps(data)
 
 
+    def get(self):
+        return self.session.get(url=self.url, params=self.params, headers = self.headers)
+
+    def post(self):
+        return self.session.post(url=self.url, params=self.params, headers=self.headers)
+
+    def put(self):
+        return self.session.put(url=self.url, params=self.params, data=self.data, headers=self.headers)
+
+    def delete(self):
+        return self.session.delete(url=self.url, params=self.params, data=self.data, headers=self.headers)
 
 
-
-print(Client.get(req_url="http://172.22.2.66:8080/SmiddleQualityService/qos/report/metadata", req_params={}))
+par = Client("http://172.22.2.66:8080/SmiddleQualityService/qos/report/metadata", params={})
+print(par.get())
