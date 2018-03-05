@@ -1,4 +1,5 @@
 import json
+from urllib.parse import urljoin
 from definition import PROPERTIES_DIR
 from Data import URLs_MAP
 
@@ -18,8 +19,8 @@ class URL:
     def get(name):
         server = Property.get("server")
         url = getattr(URLs_MAP, name)
-        server_addr = server['server']
-        new_url = server_addr.join(url)
+        server_addr = "http://"+ server['server']
+        new_url = urljoin(server_addr, url)
         return new_url
 
 
