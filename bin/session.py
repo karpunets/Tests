@@ -1,6 +1,16 @@
 import requests, json
 
 
+class Authorization(object):
+    def __init__(self, principal, credential):
+        self.principal = principal
+        self.credential = credential
+
+    def token(self):
+        headers = {"Content-Type":"application/json"}
+        response = requests.post()
+
+
 class Client(object):
 
     def __init__(self, url, params, data):

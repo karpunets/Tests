@@ -4,18 +4,21 @@ server = 'http://172.22.2.66:8080'
 #     'authorization': "Basic QVBJX2F1dG90ZXN0X1JPT1Q6QVBJX2F1dG90ZXN0X1JPT1Q="}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h"  "Basic cm9vdDpyb290"
 # authorization = ('API_autotest_ROOT', 'API_autotest_ROOT')
 
-headers = {
-    'content-type': "application/json;charset=UTF-8",
-    'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h"  "Basic cm9vdDpyb290"
-authorization = ('Root', 'Smidle098adm!')
+# headers = {
+#     'content-type': "application/json;charset=UTF-8",
+#     'authorization': "Basic cm9vdDpTbWlkbGUwOThhZG0h"}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h"  "Basic cm9vdDpyb290"
+# authorization = ('Root', 'Smidle098adm!')
 
 
-ROOT = "Basic QVBJX2F1dG90ZXN0X1JPT1Q6QVBJX2F1dG90ZXN0X1JPT1Q="
-ADMINISTRATOR = "Basic QVBJX2F1dG90ZXN0X0FETUlOSVNUUkFUT1I6QVBJX2F1dG90ZXN0X0FETUlOSVNUUkFUT1I="
-USER = "Basic QVBJX2F1dG90ZXN0X1VTRVI6QVBJX2F1dG90ZXN0X1VTRVI="
-SUPERVISOR = "Basic QVBJX2F1dG90ZXN0X1NVUEVSVklTT1I6QVBJX2F1dG90ZXN0X1NVUEVSVklTT1I="
+# ROOT = "Basic QVBJX2F1dG90ZXN0X1JPT1Q6QVBJX2F1dG90ZXN0X1JPT1Q="
+# ADMINISTRATOR = "Basic QVBJX2F1dG90ZXN0X0FETUlOSVNUUkFUT1I6QVBJX2F1dG90ZXN0X0FETUlOSVNUUkFUT1I="
+# USER = "Basic QVBJX2F1dG90ZXN0X1VTRVI6QVBJX2F1dG90ZXN0X1VTRVI="
+# SUPERVISOR = "Basic QVBJX2F1dG90ZXN0X1NVUEVSVklTT1I6QVBJX2F1dG90ZXN0X1NVUEVSVklTT1I="
+
+#AuthorizationServer
+token = "%s/SmiddleAuthorizationServer/sas/token"%server
 # ADMIN
-get_user_list = '%s/SmiddleManager/adm/management/get_user_list' % server
+get_user_list = '/SmiddleManager/adm/management/get_user_list'
 add_user = '%s/SmiddleManager/adm/management/add_user' % server
 delete_user = '%s/SmiddleManager/adm/management/delete_user' % server
 edit_user = '%s/SmiddleManager/adm/management/edit_user' % server
@@ -38,8 +41,7 @@ delete_domain = '%s/SmiddleManager/adm/admin/delete_domain' % server
 get_role_list = '%s/SmiddleManager/adm/management/get_role_list' % server
 get_group_list = '%s/SmiddleManager/adm/management/get_group_list' % server
 get_domain_list = '%s/SmiddleManager/adm/management/get_domain_list' % server
-get_user_group_roles = '%s/SmiddleManager/adm/management/user_group_roles' \
-                       '' % server
+get_user_group_roles = '%s/SmiddleManager/adm/management/user_group_roles' % server
 get_Manager_settings = '%s/SmiddleManager/adm/admin/settings' % server
 Manager_manifest = '%s/SmiddleManager/adm/admin/manifest' % server
 add_role_access = '%s/SmiddleManager/adm/management/add_role_access' % server
