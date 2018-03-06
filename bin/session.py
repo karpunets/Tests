@@ -13,17 +13,31 @@ class Authorization(object):
 
 class Client(object):
 
-    def __init__(self, url, params, data):
-        self.session = requests.Session()
-        self.headers = {'content-type': "application/json;charset=UTF-8"}
-        self.auth = ("Root", "Smidle098adm!")
-        self.url = url
-        self.params = params
-        self.data = json.dumps(data)
+
+    session = requests.Session()
+    headers = {'content-type': "application/json;charset=UTF-8"}
+    auth = ("Root", "Smidle098adm!")
 
 
-    def get(self):
-        return self.session.get(url=self.url, params=self.params, headers = self.headers)
+
+    # @staticmethod
+    # def getInstance():
+    #     if (Client.s == None):
+    #         Client.s = Client("http://172.22.2.66:8080/SmiddleQualityService/qos/report/metadata", params={})
+    #     return Client.s
+    #
+    # def __init__(self, url, params, data):
+    #     requests.request()
+    #     self.session = requests.Session()
+    #     self.headers = {'content-type': "application/json;charset=UTF-8"}
+    #     self.auth = ("Root", "Smidle098adm!")
+    #     self.url = url
+    #     self.params = params
+    #     self.data = json.dumps(data)
+
+
+    def get(url, params):
+        return Client.session.get(url=url, params=params, headers = Client.headers)
 
     def post(self):
         return self.session.post(url=self.url, params=self.params, headers=self.headers)

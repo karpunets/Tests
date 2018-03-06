@@ -7,7 +7,7 @@ def random_string():
 
 
 # Получаем и преобразуем JSON файл, согласно переданным параметрам
-def parse(json_name, method, data = {}):
+def parse(json_name, data = {}):
     # delete_data = False
     # Определяем откуда брать json файл
     path = 'Test_data/%s.json' % json_name
@@ -60,7 +60,7 @@ def parse(json_name, method, data = {}):
     # if delete_data == True:
     #     result[method]['request_body'] = {}
     # return {'request':json_file['request'], 'schema':json_file['schema']} if default==False else json_file
-    return result[method] if method != None else result
+    return result
 
 
 # def get_function_value(function_name, fixture):

@@ -1,4 +1,4 @@
-server = 'http://172.22.2.66:8080'
+server = 'http://172.22.2.63:8080'
 # headers = {
 #     'content-type': "application/json;charset=UTF-8",
 #     'authorization': "Basic QVBJX2F1dG90ZXN0X1JPT1Q6QVBJX2F1dG90ZXN0X1JPT1Q="}  # "Basic cm9vdDpTbWlkbGUwOThhZG0h"  "Basic cm9vdDpyb290"
@@ -115,3 +115,9 @@ agent = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter/agent" % server
 sesl_integration = "%s/SmiddleExtendedSmartLabel/sesl/integration"%server
 sesl_mapfield = "%s/SmiddleExtendedSmartLabel/sesl/integration/mapfield"%server
 sesl_tag = "%s/SmiddleExtendedSmartLabel/sesl/integration/tag"%server
+
+#SVC
+svc_users = "%s/SmiddleVideoConference/svc/users"%server
+svc_users_sync = "%s/SmiddleVideoConference/svc/users/sync"%server
+svc_conference = "%s/SmiddleVideoConference/svc/conference"%server
+svc_conference_start = "%s/SmiddleVideoConference/svc/conference/start"%server

@@ -18,8 +18,10 @@ class Property:
 class URL:
     def get(name):
         server = Property.get("server")
+        server_addr = server['server']
         url = getattr(URLs_MAP, name)
-        server_addr = "http://"+ server['server']
+        if "http" not in server_addr:
+            server_addr ="http://" + server_addr
         new_url = urljoin(server_addr, url)
         return new_url
 

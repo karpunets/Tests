@@ -1,0 +1,14 @@
+{
+  "request": {
+      "name": "$name",
+      "email": "$email",
+      "userType": "$userType"
+  }
+  ,
+  "schema":{
+      "id":{"type":"number"},
+      "name": "$name",
+      "email": "$email",
+      "userType": "$userType"
+    }
+}

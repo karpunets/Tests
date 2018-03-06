@@ -1,3 +1,4 @@
 {"server":"172.22.2.66",
 "principial":"root",
-"credential":"root"}
+"credential":"root",
+"auth_server": true}
