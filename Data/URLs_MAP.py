@@ -121,3 +121,5 @@ svc_users = "%s/SmiddleVideoConference/svc/users"%server
 svc_users_sync = "%s/SmiddleVideoConference/svc/users/sync"%server
 svc_conference = "%s/SmiddleVideoConference/svc/conference"%server
 svc_conference_start = "%s/SmiddleVideoConference/svc/conference/start"%server
+svc_users_search = "%s/SmiddleVideoConference/svc/users/search"%server
+svc_conference_search = "%s/SmiddleVideoConference/svc/conference/search"%server
