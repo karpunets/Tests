@@ -42,6 +42,9 @@ def parse(json_name, data = {}):
                         if '"%s"' % key in json_file:
                             key = '"%s"' % key
                         val = str(val)
+                    if type(val) == list:
+                        key = '"%s"' % key
+                        val = "%s"%val
                     json_file = json_file.replace(key, val)
                 # Возникает если передать None(null)
                 except TypeError:

@@ -1,5 +1,14 @@
-{
+{"request":{
       "name": "$name",
       "description": "$description",
       "users": "$users"
+    },
+"schema":{"id":{"type":"number"},
+      "name": "$name",
+      "description": "$description",
+      "users": "$users",
+      "created":{"type":"number"},
+      "updatable":{"type":"boolean"},
+      "link":{"type":"string"}
     }
+}

@@ -10,8 +10,8 @@ def get_role():
     # Если не передали используем рут роль
     except KeyError:
         role_name_from_jenkins = 'ROOT'
-    roles = {'ROOT': "Basic cm9vdDpTbWlkbGUwOThhZG0h",
-             # "Basic QVBJX2F1dG90ZXN0X1JPT1Q6QVBJX2F1dG90ZXN0X1JPT1Q="
+    roles = {'ROOT':"Basic Yml0Ym9rX3Rlc3Q6Yml0Ym9rX3Rlc3Q=",
+             # "Basic QVBJX2F1dG90ZXN0X1JPT1Q6QVBJX2F1dG90ZXN0X1JPT1Q=",  "Basic cm9vdDpTbWlkbGUwOThhZG0h"
              'ADMINISTRATOR': "Basic QVBJX2F1dG90ZXN0X0FETUlOSVNUUkFUT1I6QVBJX2F1dG90ZXN0X0FETUlOSVNUUkFUT1I=",
              'USER': "Basic QVBJX2F1dG90ZXN0X1VTRVI6QVBJX2F1dG90ZXN0X1VTRVI=",
              'SUPERVISOR': "Basic QVBJX2F1dG90ZXN0X1NVUEVSVklTT1I6QVBJX2F1dG90ZXN0X1NVUEVSVklTT1I="}

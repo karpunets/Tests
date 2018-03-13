@@ -1,0 +1,20 @@
+{
+  "request": {
+    "id": "$id",
+    "name": "$name",
+    "description": "$description",
+    "created": "$created",
+    "updatable": true,
+    "link": "$link",
+    "users": "$users"
+  },
+  "schema": {
+    "id": "$id",
+    "name": "$name",
+    "description": "$description",
+    "created": {"type":"number"},
+    "updatable": true,
+    "link": {"type":"string"},
+    "users": "$users"
+  }
+}

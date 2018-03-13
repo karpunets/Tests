@@ -102,6 +102,7 @@ from bin.Make_requests_and_answers import parse, equal_schema, random_string
 #     response_delete = send_request(method = "DELETE", url = URL.svc_users, params={'id':user['id']})
 #     assert response_delete.status_code == 200
 #     response_sync = send_request(url = URL.svc_users_sync, data = {})
+#     print(response_sync.json())
 #     assert response_sync.status_code == 200
 #     params = {"page_number": 1, "page_size": 100, "order": "ASC", "sortedField": "name"}
 #     response_get = send_request(URL.svc_users, method="GET", params=params)
@@ -122,24 +123,23 @@ from bin.Make_requests_and_answers import parse, equal_schema, random_string
 #     assert response.status_code == 200
 #     assert equal_schema(response.json(), data['schema'])
 #
-
-
-@allure.feature('Позитивный тест')
-@allure.story('Редактируем пользователя')
-def test_edit_user(send_request, add_user):
-    existing_user_email = next(add_user)['email']
-    user_id = next(add_user)['id']
-    data = parse("put_users", {"$id":user_id,
-                               "$email":existing_user_email,
-                               "$name":random_string(),
-                               "$userType":"DEVICE"})
-    response = send_request(method = "PUT", url = URL.svc_users, data=data['request'])
-    print(response.json())
-    assert response.status_code == 200
-    assert equal_schema(response.json(), data['schema'])
-
-
-
+#
+#
+# @allure.feature('Позитивный тест')
+# @allure.story('Редактируем пользователя с существующим email')
+# def test_edit_user_on_existing_email(send_request, add_user):
+#     existing_user_email = next(add_user)['email']
+#     user_id = next(add_user)['id']
+#     data = parse("put_users", {"$id":user_id,
+#                                "$email":existing_user_email,
+#                                "$name":random_string(),
+#                                "$userType":"DEVICE"})
+#     response = send_request(method = "PUT", url = URL.svc_users, data=data['request'])
+#     except_response = {'SVC_ENTITY_WITH_SUCH_FIELD_EXIST_EXCEPTION': 'SVCEntityWithSuchFieldAlreadyExistException: User with email="%s" already exists'%existing_user_email}
+#     assert response.status_code == 500
+#     assert response.json() == except_response
+#
+#
 #
 # @allure.feature('Позитивный тест')
 # @allure.story('Удаляем пользователя с неизвестным id')
@@ -151,21 +151,107 @@ def test_edit_user(send_request, add_user):
 #     assert response.json() == expected_answer
 
 
-
-
-
-# def test_add_user_with_cms_user_email(send_request, get_deleted_cms_user):
-#     user_email = get_deleted_cms_user['email']
-#     data = parse('post_users', {'$name': random_string(),
-#                                 '$email':user_email,
-#                                 '$userType':"DEVICE"})
-#     response_add = send_request(URL.svc_users, data['request'])
-#     print(response_add.json())
-#     response_sync = send_request(url=URL.svc_users_sync, data={})
-#     print(response_sync.json())
+# @allure.feature('Позитивный тест')
+# @allure.story('Создаем конференцию')
+# def test_add_conference(send_request, delete_conference, get_users):
+#     users = get_users['device'] + get_users["cms_user"]
+#     data = parse('post_conference', {'$name':random_string(),
+#                                 '$description':random_string(),
+#                                 '$users':users})
+#     response = send_request(URL.svc_conference, data['request'])
+#     assert response.status_code == 200
+#     delete_conference.append(response.json()['id'])
+#     assert equal_schema(response.json(), data['schema'])
 #
-# def test_get(send_request):
-#     params = {"page_number": 1, "page_size": 100, "order": "ASC", "sortedField": "name"}
-#     data = {"value": "a."}
-#     response = send_request(url=URL.svc_users_search, data=data, params=params)
+#
+# @allure.feature('Позитивный тест')
+# @allure.story('Создаем конференцию без пользователей')
+# def test_add_conference_without_users(send_request, delete_conference):
+#     data = parse('post_conference', {'$name':random_string(),
+#                                     '$description':random_string()})
+#     response = send_request(URL.svc_conference, data['request'])
+#     assert response.status_code == 200
+#     delete_conference.append(response.json()['id'])
+#     assert equal_schema(response.json(), data['schema'])
+
+
+# @allure.feature('Позитивный тест')
+# @allure.story('Создаем конференцию с пустым именем')
+# def test_add_conference_with_empty_name(send_request, get_users):
+#     users = get_users['device'] + get_users["cms_user"]
+#     data = parse('post_conference', {'$name':None,
+#                                     '$description':None,
+#                                      "$users":users})
+#     response = send_request(URL.svc_conference, data['request'])
+#     expected_response = {'SVC_VALIDATION_CONFERENCE_NAME_EMPTY': 'Conference name is empty'}
+#     assert response.status_code == 400
+#     assert response.json() == expected_response
+
+
+# @allure.feature('Позитивный тест')
+# @allure.story('Создаем конференцию с пустым именем')
+# def test_add_conference_with_existing_name(send_request, add_conference, get_users):
+#     existing_name = add_conference['name']
+#     users = get_users['device'] + get_users["cms_user"]
+#     data = parse('post_conference', {'$name':existing_name,
+#                                     '$description':random_string(),
+#                                      "$users":users})
+#     response = send_request(URL.svc_conference, data['request'])
+#     expected_response = {'SVC_ENTITY_WITH_SUCH_FIELD_EXIST_EXCEPTION': 'SVCEntityWithSuchFieldAlreadyExistException: Conference with name="%s" already exists'%existing_name}
+#     assert response.status_code == 500
+#     assert response.json() == expected_response
+#
+# @allure.feature('Позитивный тест')
+# @allure.story('Редактируем конференцию')
+# def test_edit_conference(send_request, get_users, add_conference):
+#     users = get_users['device'] + get_users["cms_user"]
+#     conf_id = next(add_conference)['id']
+#     data = parse('put_conference', {"$id":conf_id,
+#                                      '$name':random_string(),
+#                                 '$description':random_string(),
+#                                 '$users':users})
+#     response = send_request(URL.svc_conference, method="PUT", data=data['request'])
+#     assert response.status_code == 200
+#     assert equal_schema(response.json(), data['schema'])
+#
+# @allure.feature('Позитивный тест')
+# @allure.story('Редактируем имя конференции на уже существующее')
+# def test_edit_conference_name_on_existing(send_request, get_users, add_conference):
+#     users = get_users['device'] + get_users["cms_user"]
+#     existing_name = next(add_conference)['name']
+#     conf_id = next(add_conference)['id']
+#     data = parse('put_conference', {"$id":conf_id,
+#                                      '$name':existing_name,
+#                                 '$description':random_string(),
+#                                 '$users':users})
+#     response = send_request(URL.svc_conference, method="PUT", data=data['request'])
+#     expect_response = {'SVC_ENTITY_WITH_SUCH_FIELD_EXIST_EXCEPTION': 'SVCEntityWithSuchFieldAlreadyExistException: Conference with name="%s" already exists.'%existing_name}
+#     assert response.status_code == 500
+#     assert response.json() == expect_response
+
+
+# @allure.feature('Позитивный тест')
+# @allure.story('Редактируем имя конференции на уже существующее')
+# def test_edit_conference_with_unknown_id(send_request, get_users):
+#     users = get_users['device'] + get_users["cms_user"]
+#     conf_id = random.randint(1,9999999)
+#     print(conf_id)
+#     data = parse('put_conference', {"$id":conf_id,
+#                                      '$name':random_string(),
+#                                 '$description':random_string(),
+#                                 '$users':users})
+#     response = send_request(URL.svc_conference, method = "PUT", data = data['request'])
 #     print(response.json())
+#     expect_response = {'SVC_REQUEST_VALIDATION_EXCEPTION': 'SVCRequestValidationException: Unable to update conference. Conference with id=%d not found.'%conf_id}
+#     assert response.status_code == 500
+#     assert response.json() == expect_response
+
+
+
+@allure.feature('Позитивный тест')
+@allure.story('Редактируем имя конференции на уже существующее')
+def test_delete_conference_with_unknown_id(send_request, add_conference):
+    conf = next(add_conference)
+    response = send_request(URL.svc_conference, method = "DELETE", params = {"id":conf['id']})
+    print(response.json())
+    assert response.status_code == 200
