@@ -16,7 +16,12 @@ server = 'http://172.22.2.63:8080'
 # SUPERVISOR = "Basic QVBJX2F1dG90ZXN0X1NVUEVSVklTT1I6QVBJX2F1dG90ZXN0X1NVUEVSVklTT1I="
 
 #AuthorizationServer
-token = "%s/SmiddleAuthorizationServer/sas/token"%server
+token = "/SmiddleAuthorizationServer/sas/token"
+
+#ADM 2.0
+current_user = "/SmiddleManager/adm/management/users/current"
+groups = "/SmiddleManager/adm/management/groups"
+
 # ADMIN
 get_user_list = '/SmiddleManager/adm/management/get_user_list'
 add_user = '%s/SmiddleManager/adm/management/add_user' % server

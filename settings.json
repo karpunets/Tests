@@ -1,4 +1,4 @@
-{"server":"172.22.2.66",
-"principial":"root",
+{"server":"10.100.70.11:8080",
+"principal":"root",
 "credential":"root",
 "auth_server": true}

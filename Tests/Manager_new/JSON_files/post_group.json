@@ -1,0 +1,7 @@
+{"request":{
+    "name": "$name",
+    "parent": {
+        "groupId": "$parentGroupId"
+    }
+},
+"schema":{}}

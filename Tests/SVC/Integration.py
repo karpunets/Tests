@@ -1,7 +1,7 @@
 import allure
 import pytest
 import random, json, time
-from Data.test_data import ROOT_group_id, ROOT_user_id
+
 
 import Data.URLs_MAP as URL
 from bin.Make_requests_and_answers import parse, equal_schema, random_string
