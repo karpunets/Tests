@@ -3,14 +3,14 @@ import random
 
 from Data.URLs_MAP import sesl_integration, sesl_mapfield, sesl_tag
 from bin.Make_requests_and_answers import equal_schema
-from bin.Make_requests_and_answers import parse
+from bin.Make_requests_and_answers import parseRequest
 from bin.Make_requests_and_answers import random_string
 
 
 @allure.feature('SESL')
 @allure.story('Добавляем интеграцию')
 def test_add_integration(send_request, clear_result):
-    data = parse('post_integration', data={'$name':random_string(),
+    data = parseRequest('post_integration', data={'$name':random_string(),
                                              '$url':random_string(),
                                              '$login':random_string(),
                                              '$password':random_string()})
@@ -23,7 +23,7 @@ def test_add_integration(send_request, clear_result):
 @allure.feature('SESL')
 @allure.story('Добавляем интеграцию с пустыми значениями')
 def test_add_integration_without_data(send_request):
-    data = parse('post_integration', data={'$name':None,
+    data = parseRequest('post_integration', data={'$name':None,
                                              '$url':None,
                                              '$login':None,
                                              '$password':None})
@@ -38,7 +38,7 @@ def test_add_integration_without_data(send_request):
 @allure.story('Редактируем интегратор')
 def test_edit_integration(send_request, add_one_integration):
     integrationId = add_one_integration['id']
-    data = parse('put_integration', data={'$integrationId':integrationId,
+    data = parseRequest('put_integration', data={'$integrationId':integrationId,
                                              '$name': random_string(),
                                              '$url': random_string(),
                                              '$login':random_string(),
@@ -53,7 +53,7 @@ def test_edit_integration(send_request, add_one_integration):
 @allure.story('Добавляем интеграцию с существующим именем')
 def test_add_integration_with_existing_name(send_request, add_one_integration):
     existing_name = add_one_integration['name']
-    data = parse('post_integration', data={'$name':existing_name,
+    data = parseRequest('post_integration', data={'$name':existing_name,
                                              '$url':random_string(),
                                              '$login':random_string(),
                                              '$password':random_string()})
@@ -68,7 +68,7 @@ def test_add_integration_with_existing_name(send_request, add_one_integration):
 def test_edit_integration_on_existing_name(send_request, add_two_integrations):
     integration = next(add_two_integrations)
     existing_name = next(add_two_integrations)['name']
-    data = parse('put_integration', data={'$integrationId':integration['id'],
+    data = parseRequest('put_integration', data={'$integrationId':integration['id'],
                                              '$name':existing_name,
                                              '$url':integration['url'],
                                              '$login':random_string(),
@@ -83,7 +83,7 @@ def test_edit_integration_on_existing_name(send_request, add_two_integrations):
 @allure.story('Редактируем интегратор на пустые значения')
 def test_edit_integration_on_empty_fields(send_request, add_one_integration):
     integration = add_one_integration
-    data = parse('put_integration', data={'$integrationId':integration['id'],
+    data = parseRequest('put_integration', data={'$integrationId':integration['id'],
                                              '$name':None,
                                              '$url':None,
                                              '$login':None,
@@ -98,7 +98,7 @@ def test_edit_integration_on_empty_fields(send_request, add_one_integration):
 @allure.feature('SESL')
 @allure.story('Редактируем интегратор не передавая integrationId')
 def test_edit_integration_with_null_integrationId(send_request):
-    data = parse('put_integration', data={'$integrationId':None,
+    data = parseRequest('put_integration', data={'$integrationId':None,
                                              '$name':random_string(),
                                              '$url':random_string(),
                                              '$login':random_string(),
@@ -113,7 +113,7 @@ def test_edit_integration_with_null_integrationId(send_request):
 @allure.story('Редактируем интегратор с не известным integrationId')
 def test_edit_integration_with_unknown_integrationId(send_request):
     randomId = random.randint(1,9999999)
-    data = parse('put_integration', data={'$integrationId':randomId,
+    data = parseRequest('put_integration', data={'$integrationId':randomId,
                                              '$name':random_string(),
                                              '$url':random_string(),
                                              '$login':random_string(),
@@ -200,7 +200,7 @@ def test_delete_interation_by_unknown_integration_id(send_request):
 @allure.story('Добавляем маппинг с коректными параметрами')
 def test_add_mapping(send_request, add_one_integration):
     exitsting_integration = add_one_integration
-    data = parse("post_mapfield", {"$databaseColumn":random_string(),
+    data = parseRequest("post_mapfield", {"$databaseColumn":random_string(),
                                                     "$title":random_string(),
                                                     "$position":1,
                                                     "$integrationId":exitsting_integration['id']})
@@ -213,7 +213,7 @@ def test_add_mapping(send_request, add_one_integration):
 @allure.story('Добавляем маппинг с пустыми полями')
 def test_add_mapping_with_empty_fields(send_request, add_one_integration):
     exitsting_integration = add_one_integration
-    data = parse("post_mapfield", {"$databaseColumn":None,
+    data = parseRequest("post_mapfield", {"$databaseColumn":None,
                                                     "$title":None,
                                                     "$position":None,
                                                     "$integrationId":exitsting_integration['id']})
@@ -228,7 +228,7 @@ def test_add_mapping_with_empty_fields(send_request, add_one_integration):
 @allure.feature('SESL')
 @allure.story('Добавляем маппинг с неизвестным|null integrationId')
 def test_add_mapping_with_unknown_integrationId(send_request):
-    data = parse("post_mapfield", {"$databaseColumn":random_string(),
+    data = parseRequest("post_mapfield", {"$databaseColumn":random_string(),
                                                     "$title":random_string(),
                                                     "$position":random.randint(3,999),
                                                     "$integrationId":random.randint(1,999999)})
@@ -242,7 +242,7 @@ def test_add_mapping_with_unknown_integrationId(send_request):
 @allure.story('Добавляем маппинг, проверяем правильность присвоения к integration профилю')
 def test_add_mapping_check_integration_response(send_request, add_one_integration):
     exitsting_integration = add_one_integration
-    data = parse("post_mapfield", {"$databaseColumn":random_string(),
+    data = parseRequest("post_mapfield", {"$databaseColumn":random_string(),
                                                     "$title":random_string(),
                                                     "$position":random.randint(3,999),
                                                     "$integrationId":exitsting_integration['id']})
@@ -255,7 +255,7 @@ def test_add_mapping_check_integration_response(send_request, add_one_integratio
 @allure.story('Добавляем маппинг с уже существующими параметрами')
 def test_add_mapping_with_existing_title_position_databaseColumn(send_request, add_one_map):
     existing_mapping = add_one_map
-    data = parse("post_mapfield", {"$databaseColumn":existing_mapping['databaseColumn'],
+    data = parseRequest("post_mapfield", {"$databaseColumn":existing_mapping['databaseColumn'],
                                                     "$title":existing_mapping['title'],
                                                     "$position":existing_mapping['position'],
                                                     "$integrationId":existing_mapping['integration']['id']})
@@ -272,7 +272,7 @@ def test_add_mapping_with_existing_title_position_databaseColumn(send_request, a
 @allure.story('Изменяем маппинг на валидные данные')
 def test_edit_mapping(send_request, add_one_map):
     existing_mapping = add_one_map
-    data = parse("put_mapfield", {"$databaseColumn":random_string(),
+    data = parseRequest("put_mapfield", {"$databaseColumn":random_string(),
                                             "$mapfieldId":existing_mapping['id'],
                                             "$title":random_string(),
                                             "$position":random.randint(3,999)})
@@ -284,7 +284,7 @@ def test_edit_mapping(send_request, add_one_map):
 @allure.story('Изменяем маппинг на пустые значения')
 def test_edit_mapping_on_empty_values(send_request, add_one_map):
     existing_mapping = add_one_map
-    data = parse("put_mapfield", {"$mapfieldId":existing_mapping['id'],
+    data = parseRequest("put_mapfield", {"$mapfieldId":existing_mapping['id'],
                                             "$databaseColumn":None,
                                             "$title":None,
                                             "$position":None})
@@ -300,7 +300,7 @@ def test_edit_mapping_on_empty_values(send_request, add_one_map):
 @allure.story('Изменяем маппинг с неизвестным\пустым ID')
 def test_edit_mapping_with_unknown_id(send_request):
     randomId= random.randint(1,999999)
-    data = parse("put_mapfield", {"$mapfieldId":randomId,
+    data = parseRequest("put_mapfield", {"$mapfieldId":randomId,
                                             "$databaseColumn":random_string(),
                                             "$title":random_string(),
                                             "$position":random.randint(3,999)})
@@ -316,7 +316,7 @@ def test_edit_mapping_with_unknown_id(send_request):
 def test_edit_mapping_on_already_exist_fields(send_request, add_two_maps):
     existing_mapping = next(add_two_maps)
     to_change_mapping = next(add_two_maps)
-    data = parse("put_mapfield", {"$databaseColumn":existing_mapping['databaseColumn'],
+    data = parseRequest("put_mapfield", {"$databaseColumn":existing_mapping['databaseColumn'],
                                             "$mapfieldId":to_change_mapping['id'],
                                             "$title":existing_mapping['title'],
                                             "$position":existing_mapping['position']})
@@ -438,7 +438,7 @@ def test_get_integration_check_password(send_request, add_integration_with_passw
 @allure.story('Добавляем тег')
 def test_add_tag(send_request, add_one_integration, clear_result):
     integrationId = add_one_integration['id']
-    data = parse("post_tag", {"$tag":random_string(),
+    data = parseRequest("post_tag", {"$tag":random_string(),
                                        "$position":str(random.randint(3,99)),
                                        "$integrationId":integrationId})
     response = send_request(sesl_tag, data['request'])
@@ -450,7 +450,7 @@ def test_add_tag(send_request, add_one_integration, clear_result):
 @allure.feature('SESL')
 @allure.story('Добавляем тег без $integrationId')
 def test_add_tag_without_integrationId(send_request):
-    data = parse("post_tag", {"$tag":random_string(),
+    data = parseRequest("post_tag", {"$tag":random_string(),
                                        "$position": str(random.randint(3,99)),
                                        "$integrationId":None})
     response = send_request(sesl_tag, data['request'])
@@ -463,7 +463,7 @@ def test_add_tag_without_integrationId(send_request):
 @allure.story('Добавляем тег без поля tag')
 def test_add_tag_without_tag_name(send_request, add_one_integration):
     integrationId = add_one_integration['id']
-    data = parse("post_tag", {"$integrationId":integrationId,
+    data = parseRequest("post_tag", {"$integrationId":integrationId,
                                        "$position": str(random.randint(3,99))})
     response = send_request(sesl_tag, data['request'])
     expected_answer = {'SESL_VALIDATION_INTEGRATION_TAG_TAG_EMPTY': 'Integration tag is empty'}
@@ -475,7 +475,7 @@ def test_add_tag_without_tag_name(send_request, add_one_integration):
 @allure.story('Добавляем тег с не верным integrationId')
 def test_add_tag_with_unknown_integrationId(send_request):
     randomId = random.randint(1,99999)
-    data = parse("post_tag", {"$tag":random_string(),
+    data = parseRequest("post_tag", {"$tag":random_string(),
                                        "$position": "1",
                                        "$integrationId":randomId})
     response = send_request(sesl_tag, data['request'])
@@ -489,7 +489,7 @@ def test_add_tag_with_unknown_integrationId(send_request):
 def test_add_tag_with_few_integrations(send_request, add_two_integrations, clear_result):
     first_integration = next(add_two_integrations)
     second_integration = next(add_two_integrations)
-    data = parse("post_tag", {"$tag":random_string(),
+    data = parseRequest("post_tag", {"$tag":random_string(),
                                        "$position": "1",
                                        "$integrationId":first_integration['id']})
     #Добавляем еще одну интеграцию в список
@@ -517,7 +517,7 @@ def test_add_tag_with_existing_name(send_request, add_one_tag):
 @allure.story('Добавляем тег с существующим integrationId')
 def test_add_tag_with_existing_in_other_tag_integrationId(send_request, add_one_tag, clear_result):
     integrationId = add_one_tag['positionIntegrations']["1"]['id']
-    data = parse("post_tag", {"$tag":random_string(),
+    data = parseRequest("post_tag", {"$tag":random_string(),
                                        "$integrationId":integrationId,
                                        "$position": str(random.randint(3,99))})
     response = send_request(sesl_tag, data['request'])
@@ -541,7 +541,7 @@ def test_add_tag_without_positionIntegrations(send_request, clear_result):
 @allure.story('Добавляем тег, c двумя однаковыми integrationId')
 def test_add_two_tags_integrationId_which_already_exist_in_tag(send_request, add_one_integration):
     integrationId = add_one_integration['id']
-    data = parse("post_tag", {"$tag":random_string(),
+    data = parseRequest("post_tag", {"$tag":random_string(),
                                        "$position":"1",
                                        "$integrationId":integrationId})
     data['request']['positionIntegrations']["2"]= {'id': integrationId}
@@ -555,7 +555,7 @@ def test_add_two_tags_integrationId_which_already_exist_in_tag(send_request, add
 @allure.story('Редактируем тег')
 def test_edit_tag(send_request, add_one_tag):
     tag_for_edit = add_one_tag
-    data = parse("put_tag", {"$id":tag_for_edit['id'],
+    data = parseRequest("put_tag", {"$id":tag_for_edit['id'],
                                       "$tag":random_string(),
                                       "$position":"2",
                                       "$integrationId":tag_for_edit['positionIntegrations']['1']['id']})
@@ -568,7 +568,7 @@ def test_edit_tag(send_request, add_one_tag):
 @allure.story('Редактируем тег, удаляем integrationId(передаем пустое)')
 def test_edit_tag_integrationId_on_empty(send_request, add_one_tag):
     exsist_tag = add_one_tag
-    data = parse("put_tag", {"$id":exsist_tag['id'],
+    data = parseRequest("put_tag", {"$id":exsist_tag['id'],
                                       "$position": "2",
                                       "$tag":random_string()})
     response = send_request(sesl_tag, data['request'], method = "PUT")
@@ -581,7 +581,7 @@ def test_edit_tag_integrationId_on_empty(send_request, add_one_tag):
 @allure.story('Редактируем тег с пустым tag')
 def test_edit_tag_with_empty_tag(send_request, add_one_tag):
     exsist_tag = add_one_tag
-    data = parse("put_tag", {"$id":exsist_tag['id'],
+    data = parseRequest("put_tag", {"$id":exsist_tag['id'],
                                       "$tag":None,
                                       "$position": "2",
                                       "$integrationId":exsist_tag['positionIntegrations']['1']['id']})
@@ -597,7 +597,7 @@ def test_edit_tag_with_empty_tag(send_request, add_one_tag):
 def test_edit_tag_with_unknown_tag_id(send_request, add_one_tag):
     tag_for_edit = add_one_tag
     randomId = random.randint(1,99999)
-    data = parse("put_tag", {"$id":randomId,
+    data = parseRequest("put_tag", {"$id":randomId,
                                       "$tag":random_string(),
                                       "$position": "2",
                                       "$integrationId":tag_for_edit['positionIntegrations']['1']['id']})
@@ -612,7 +612,7 @@ def test_edit_tag_with_unknown_tag_id(send_request, add_one_tag):
 def test_edit_tag_on_existitng_tag_name(send_request, add_two_tags):
     tag_for_edit = next(add_two_tags)
     exist_tag_name = next(add_two_tags)['tag']
-    data = parse("put_tag", {"$id":tag_for_edit['id'],
+    data = parseRequest("put_tag", {"$id":tag_for_edit['id'],
                                       "$tag":exist_tag_name,
                                       "$position": "2",
                                       "$integrationId":tag_for_edit['positionIntegrations']['1']['id']})
@@ -638,7 +638,7 @@ def test_get_tag_check_positionIntegration_after_deleting_integration(send_reque
 def test_edit_tag_on_existitng_integrationId(send_request, add_two_tags):
     exist_integratioId = next(add_two_tags)['positionIntegrations']['1']['id']
     exist_tag = next(add_two_tags)
-    data = parse("put_tag", {"$id":exist_tag['id'],
+    data = parseRequest("put_tag", {"$id":exist_tag['id'],
                                       "$tag":random_string(),
                                       "$position": "2",
                                       "$integrationId":exist_integratioId})
@@ -700,7 +700,7 @@ def test_delete_tag_by_unknown_id(send_request):
 def test_add_tag_check_integration(send_request, add_one_integration, clear_result):
     integration = add_one_integration
     position = str(random.randint(3,99))
-    data = parse("post_tag", {"$tag":random_string(),
+    data = parseRequest("post_tag", {"$tag":random_string(),
                                        "$position":position,
                                        "$integrationId":integration['id']})
     response = send_request(sesl_tag, data['request'])

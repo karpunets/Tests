@@ -9,16 +9,19 @@ def get_token():
     return response.json()
 
 
+def rootGroupId():
+    response = Client.get("groups")
+    if "ROOT" in response.json()[0]["name"]:
+        return response.json()[0]["groupId"]
+
 
 class Client(object):
-
 
     def update_headers(session):
         headers = {'content-type': "application/json;charset=UTF-8"}
         auth_token = get_token()
         headers[auth_token['name']] = auth_token['token']
         session.headers = headers
-
 
     def get(url, params=None, id=None):
         return Client.session.get(url=getUrl(url, id), params=params)

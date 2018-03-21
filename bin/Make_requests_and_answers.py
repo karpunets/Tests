@@ -1,33 +1,18 @@
-import json, re, random, string, codecs, os
+import json, re, random, string, codecs, os, time
 import Data.URLs_MAP as URLs
 from Data.test_data import ROOT_user_id,ROOT_group_id
 
 def random_string():
     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(random.randint(3,10)))
 
+def date_now():
+    return round(time.time() * 1000)
 
 # Получаем и преобразуем JSON файл, согласно переданным параметрам
-def parse(json_name, data = {}):
-    # delete_data = False
+def parseRequest(json_name, data = {}):
     # Определяем откуда брать json файл
     path = 'Test_data/%s.json' % json_name
     json_file = open(path, encoding="utf8").read()
-
-    # if "#" in str(data.values()):
-    #     for key,val in iter(data.items()):
-    #         if type(val) == str and val.startswith("#"):
-    #             data[key] = get_function_value(val, fixture_params)
-    # if len(params)>0:
-    #     if len(data) == 0:
-    #         delete_data = True
-    #     if "#" in str(params.values()):
-    #         for key, val in iter(params.items()):
-    #             if type(val) == str and val.startswith("#"):
-    #                 params[key] = get_function_value(val, fixture_params)
-    #     data["$params"] = params
-            # key = i.group(0)
-            # if key not in data.keys():
-            #     data[key] = get_function_value(key, fixture_params)
     # Доп. ф-ция для использования рекурсии
     def replace(json_file, data):
         dictTypeInData = False
@@ -65,23 +50,6 @@ def parse(json_name, data = {}):
     # return {'request':json_file['request'], 'schema':json_file['schema']} if default==False else json_file
     return result
 
-
-# def get_function_value(function_name, fixture):
-#     get_value = re.match(r'(?P<function_name>\#[A-Za-z_]+)(\(+(?P<from>[0-9]+),+(?P<to>[0-9]+)\)+)?(\(+(?P<param>[A-Za-z0-9]+)\)+)?', function_name)
-#     function_map = {"#random_str":lambda: random_string(),
-#                     "#random_int":lambda: random.randint(int(get_value.group("from")),int(get_value.group("to"))),
-#                     "#ROOT_user_id":lambda: ROOT_user_id,
-#                     "#ROOT_group_id":lambda: ROOT_group_id,
-#                     "#fixture_value": lambda : fixture[get_value.group("param")] if get_value.group("param") in fixture.keys() else None}
-#     result = function_map[get_value.group("function_name")]()
-#     return result
-
-# def get_fixture_param(param, fixture):
-#     result = None
-#     get_value = re.match(r'(\#fixture_value)(\(+(?P<param>[A-Za-z0-9]+)\)+)', param)
-#     if get_value.group("param") in fixture.keys():
-#         result = fixture[get_value.group("param")]
-#     return result
 
 
 def equal_schema(response, schema, assert_keys_quantity=True):

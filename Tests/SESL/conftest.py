@@ -1,13 +1,13 @@
 import pytest
 
 from Data.URLs_MAP import sesl_integration, sesl_mapfield, sesl_tag
-from bin.Make_requests_and_answers import parse
+from bin.Make_requests_and_answers import parseRequest
 from bin.Make_requests_and_answers import random_string
 
 
 @pytest.fixture(scope="function")
 def add_one_integration(send_request):
-    data = parse('integration', method ="POST", data={'$name': random_string(),
+    data = parseRequest('integration', method ="POST", data={'$name': random_string(),
                                                     '$url': random_string(),
                                                     '$login': random_string(),
                                                     '$password': None})
@@ -24,7 +24,7 @@ def add_one_integration(send_request):
 def add_two_integrations(send_request):
     results = []
     for i in range(2):
-        data = parse('integration', method ="POST", data={'$name': random_string(),
+        data = parseRequest('integration', method ="POST", data={'$name': random_string(),
                                                         '$url': random_string(),
                                                         '$login': random_string(),
                                                         '$password': None})
@@ -42,7 +42,7 @@ def add_two_maps(send_request, add_one_integration):
     result = []
     position = 1
     for i in range(2):
-        data = parse("mapfield", method ="POST", data = {"$databaseColumn":random_string(),
+        data = parseRequest("mapfield", method ="POST", data = {"$databaseColumn":random_string(),
                                                         "$title":random_string(),
                                                         "$position":str(position),
                                                         "$integrationId":exitsting_integration['id']})
@@ -54,7 +54,7 @@ def add_two_maps(send_request, add_one_integration):
 @pytest.fixture(scope="function")
 def add_one_map(send_request, add_one_integration):
     exitsting_integration = add_one_integration
-    data = parse("mapfield", method="POST", data = {"$databaseColumn": random_string(),
+    data = parseRequest("mapfield", method="POST", data = {"$databaseColumn": random_string(),
                                             "$title": random_string(),
                                             "$position": 1,
                                             "$integrationId": exitsting_integration['id']})
@@ -63,7 +63,7 @@ def add_one_map(send_request, add_one_integration):
 
 @pytest.fixture(scope="function")
 def add_integration_with_password(send_request, clear_result):
-    data = parse('integration', data={'$name': random_string(),
+    data = parseRequest('integration', data={'$name': random_string(),
                                                     '$url': random_string(),
                                                     '$login': random_string(),
                                                     '$password': random_string()})
@@ -75,7 +75,7 @@ def add_integration_with_password(send_request, clear_result):
 @pytest.fixture(scope="function")
 def add_one_tag(send_request, add_one_integration):
     integrationId = add_one_integration['id']
-    data = parse("tag", method ="POST", data={"$tag":random_string(),
+    data = parseRequest("tag", method ="POST", data={"$tag":random_string(),
                                        "$integrationId":integrationId,
                                        "$position": "1"})
     response = send_request(sesl_tag, data['request_body'])
@@ -90,7 +90,7 @@ def add_two_tags(send_request, add_one_integration):
     position = 1
     for i in range(2):
         integrationId = add_one_integration['id']
-        data = parse("tag", {"$tag":random_string(),
+        data = parseRequest("tag", {"$tag":random_string(),
                                            "$integrationId":integrationId,
                                            "$position": str(position)})
         response = send_request(sesl_tag, data['request_body'])

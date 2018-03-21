@@ -4,7 +4,7 @@ import string
 import time
 
 import Data.URLs_MAP as URL
-from bin.Make_requests_and_answers import parse
+from bin.Make_requests_and_answers import parseRequest
 from bin.Make_requests_and_answers import random_string
 
 
@@ -21,7 +21,7 @@ def delete_user(send_request):
 def add_user(send_request):
     users = []
     for i in range(2):
-        data = parse('post_users', {'$name':random_string(),
+        data = parseRequest('post_users', {'$name':random_string(),
                                     '$email':random_string(),
                                     '$userType':"DEVICE"})
         response = send_request(URL.svc_users, data['request'])
@@ -81,14 +81,14 @@ def add_conference(send_request, get_users):
     # users = get_users['cms_user'] + get_users['device']
     users= get_users['obj_list']
     for i in range(2):
-        data = parse('post_conference', {'$name':random_string(),
+        data = parseRequest('post_conference', {'$name':random_string(),
                                     '$description':random_string(),
                                     '$users':users})
         print("ADD_CONF_FIXTURE_DATA", data['request'])
         response = send_request(URL.svc_conference, data['request'])
         print(response.json())
         confs.append(response.json())
-    # data = parse('post_conference', {'$name':random_string(),
+    # data = parseRequest('post_conference', {'$name':random_string(),
     #                                 '$description':random_string(),
     #                                 '$users':users})
     # response = send_request(URL.svc_conference, data['request'])

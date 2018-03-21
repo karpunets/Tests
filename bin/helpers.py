@@ -21,7 +21,9 @@ def getUrl(name, id=None):
         server_addr = "http://" + server_addr
     new_url = urljoin(server_addr, url)
     if id is not None:
+        new_url = new_url +"/"
         new_url = urljoin(new_url, id)
     return new_url
 
 
+print(getUrl("groups", id="eaa06e59-904c-436e-8c8c-9ebdddfb3bcf"))
