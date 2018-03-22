@@ -2,6 +2,10 @@ import json, re, random, string, codecs, os, time
 import Data.URLs_MAP as URLs
 from Data.test_data import ROOT_user_id,ROOT_group_id
 
+
+# TODO: Избавится от файла, перенести в сессии или helpers
+
+
 def random_string():
     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(random.randint(3,10)))
 
@@ -9,11 +13,13 @@ def date_now():
     return round(time.time() * 1000)
 
 # Получаем и преобразуем JSON файл, согласно переданным параметрам
+# TODO: Вынести в helpers добавить возможность добавлять ключи, которые не начинаются с символа $
 def parseRequest(json_name, data = {}):
     # Определяем откуда брать json файл
     path = 'Test_data/%s.json' % json_name
     json_file = open(path, encoding="utf8").read()
     # Доп. ф-ция для использования рекурсии
+    # TODO: Вынести replace в helpers, rename on replce_string_on
     def replace(json_file, data):
         dictTypeInData = False
         if len(data) > 0:
@@ -40,14 +46,10 @@ def parseRequest(json_name, data = {}):
         if dictTypeInData == True:
             json_file = replace(json_file, data)
         return json_file
-
     result = replace(json_file, data)
     # Вместо не переданных параметров подставляем null
     result = re.sub(r'(\"?\$[\w]+\"?)', 'null', result)
     result = json.loads(result)
-    # if delete_data == True:
-    #     result[method]['request_body'] = {}
-    # return {'request':json_file['request'], 'schema':json_file['schema']} if default==False else json_file
     return result
 
 
