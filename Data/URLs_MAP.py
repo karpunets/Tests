@@ -21,6 +21,7 @@ token = "/SmiddleAuthorizationServer/sas/token"
 #ADM 2.0
 current_user = "/SmiddleManager/adm/management/users/current"
 groups = "/SmiddleManager/adm/management/groups"
+roles = "/SmiddleManager/adm/management/roles"
 
 # ADMIN
 get_user_list = '/SmiddleManager/adm/management/get_user_list'

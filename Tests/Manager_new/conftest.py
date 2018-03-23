@@ -18,7 +18,7 @@ def group():
 
 @pytest.fixture(scope="module")
 def imutableGroupWithChild():
-    groupsId = deque([])
+    groupsId = deque([], maxlen=5)
     data = parseRequest('post_group', {"$name": random_string(),
                                        "$parentGroupId": rootGroupId()})
     responseParent = Client.post("groups", data['request'])

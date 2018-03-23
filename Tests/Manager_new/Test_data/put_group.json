@@ -1,15 +1,10 @@
 {"request":{
-    "groupId":"$groupId",
-    "name": "$name",
-    "parent": {
-        "groupId": "$parentGroupId"
-    }
+    "name": "$name"
 },
     "schema": {
         "name": "$name",
         "groupId":"$groupId",
         "cid":{"type":"number"},
         "children":{"type":"array"}
-
     }
 }

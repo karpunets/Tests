@@ -53,7 +53,7 @@ def parseRequest(json_name, data = {}):
     return result
 
 
-
+#TODO: Продумать как обьеденить со стандартным assert для илспользования multiassert
 def equal_schema(response, schema, assert_keys_quantity=True):
     # Переменная для сбора ошибок
     not_equal = []

@@ -87,14 +87,33 @@ from bin.Make_requests_and_answers import parseRequest, equal_schema, random_str
 
 # @allure.feature('Функциональный тест')
 # @allure.story('Редактируем группу')
-# @pytest.mark.xfail
-# def test_edit_group(group, imutableGroup):
-#     newParentGroupId = imutableGroup['groupId']
-#     data = parseRequest("put_group",{ "$name":random_string()})
-#     print(data)
+# def test_edit_group(group):
+#     data = parseRequest("put_group",{ "$name":random_string(),
+#                                       "$groupId":group['groupId']})
+#     response = Client.put("groups", data = data['request'], id = group['groupId'])
+#     assert response.status_code == 200 and equal_schema(response.json(), data['schema'])
+
+
+# @allure.feature('Функциональный тест')
+# @allure.story('Редактируем группу на пустое имя')
+# def test_edit_group_on_empty_name(group):
+#     data = parseRequest("put_group",{ "$name":None,
+#                                       "$groupId":group['groupId']})
 #     response = Client.put("groups", data = data['request'], id = group['groupId'])
 #     print(response.json())
-#     assert equal_schema(response.json(), data['schema']) and response.status_code == 200
+#     expectedResponse = {'ADM_VALIDATION_GROUP_NAME': 'NAME not specified'}
+#     assert (response.status_code, response.json())== (400, expectedResponse)
+
+
+# @allure.feature('Функциональный тест')
+# @allure.story('Редактируем группу с неизвестным groupId')
+# def test_edit_group_with_unknown_groupId(group):
+#     unknownGroupId = random_string()
+#     data = parseRequest("put_group",{ "$name":random_string(),
+#                                       "$groupId":group['groupId']})
+#     response = Client.put("groups", data = data['request'], id = unknownGroupId)
+#     expectedResponse = {'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'CommonRequestedResourcesNotFound: GROUP by groupId=%s not found'%unknownGroupId}
+#     assert (response.status_code, response.json()) == (400, expectedResponse)
 
 
 # @allure.feature('Функциональный тест')
