@@ -34,6 +34,13 @@ def imutableGroupWithChild():
 
 
 @pytest.fixture(scope="function")
+def deleteRole():
+    roleIdList = []
+    yield roleIdList
+    for id in roleIdList:
+        Client.delete('roles', id=id)
+
+@pytest.fixture(scope="function")
 def deleteGroup():
     groupIdList = []
     yield groupIdList
