@@ -24,6 +24,3 @@ def getUrl(name, id=None):
         new_url = new_url +"/"
         new_url = urljoin(new_url, id)
     return new_url
-
-
-print(getUrl("groups", id="eaa06e59-904c-436e-8c8c-9ebdddfb3bcf"))

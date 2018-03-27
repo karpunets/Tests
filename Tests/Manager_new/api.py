@@ -2,7 +2,7 @@ import allure
 import pytest
 from bin.session import Client
 from bin.session import rootGroupId
-
+from bin.session import getHeadersForUser
 from bin.Make_requests_and_answers import parseRequest, equal_schema, random_string
 
 
@@ -142,25 +142,57 @@ from bin.Make_requests_and_answers import parseRequest, equal_schema, random_str
 
 
 class TestRoles():
-    url  = "roles"
+    # TODO: добавить интеграционный тест, в котором в пользователя будет назначина группа, ниже RootChild
+    # TODO: добавить тестк, в котором пользователь будет находится в двух RootChild
+
+    url = "roles"
 
     # @allure.feature('Функциональний тест')
-    # @allure.story('Создаем роль')
-    # def test_add_role(self, imutableGroupWithChild, deleteRole):
+    # @allure.story('Создаем роль с первым child от рута')
+    # def test_add_role_with_first_root_child(self, imutableGroupWithChild, deleteRole):
     #     data = parseRequest('post_roles', {"$name":random_string(),
     #                                         "$groupId":imutableGroupWithChild['groupId']})
     #     response = Client.post(TestRoles.url, data['request'])
     #     deleteRole.append(response.json()['roleId'])
-    #     print(data, response.json())
-    #     assert equal_schema(response.json(), data['schema']) and response.status_code == 200
+    #     assert equal_schema(response.json(), data['schema']) and response.status_code == 201
+    #
+    # @allure.feature('Функциональний тест')
+    # @allure.story('Создаем роль')
+    # def test_add_role_without_name(self, imutableGroupWithChild):
+    #     data = parseRequest('post_roles', {"$name": None,
+    #                                        "$groupId": imutableGroupWithChild['groupId']})
+    #     response = Client.post(TestRoles.url, data['request'])
+    #     expectedResponse = {'ADM_VALIDATION_ROLE_NAME': 'NAME not specified'}
+    #     assert (response.status_code, response.json()) == (400, expectedResponse)
+    #
+    #
+    # @allure.feature('Функциональний тест')
+    # @allure.story('Создаем роль с root групой')
+    # def test_add_role_with_root_group(self, deleteRole):
+    #     data = parseRequest('post_roles', {"$name":random_string(),
+    #                                         "$groupId":rootGroupId()})
+    #     response = Client.post(TestRoles.url, data['request'])
+    #     deleteRole.append(response.json()['roleId'])
+    #     assert equal_schema(response.json(), data['schema']) and response.status_code == 201
+    #
+    #
+    # @allure.feature('Функциональний тест')
+    # @allure.story('Создаем роль вторым по вложености child')
+    # @pytest.mark.xfail
+    # def test_add_role_with_second_child(self, imutableGroupWithChild, deleteRole):
+    #     childGroupId = imutableGroupWithChild['children'][0]['groupId']
+    #     data = parseRequest('post_roles', {"$name": random_string(),
+    #                                        "$groupId": childGroupId})
+    #     response = Client.post(TestRoles.url, data['request'])
+    #     deleteRole.append(response.json()['roleId'])
+    #     assert (response.status_code, response.json()['group']['groupId']) == (201, imutableGroupWithChild['groupId'])
 
     @allure.feature('Функциональний тест')
-    @allure.story('Создаем роль')
-    def test_add_role_without_name(self, imutableGroupWithChild, deleteRole):
-        data = parseRequest('post_roles', {"$name": None,
-                                           "$groupId": imutableGroupWithChild['groupId']})
-        response = Client.get("current_user", data['request'])
+    @allure.story('Создаем роль без группы')
+    def test_add_role_without_group(self, deleteRole):
+        data = parseRequest('post_roles', {"$name":random_string(),
+                                            "$groupId":None})
+        response = Client.post(TestRoles.url, data['request'])
         print(response.json())
-        # expectedResponse = {'ADM_VALIDATION_ROLE_NAME': 'NAME not specified'}
-        # print(data, response.json())
-        # assert equal_schema(response.json(), data['schema']) and response.status_code == 200
+        deleteRole.append(response.json()['roleId'])
+        assert equal_schema(response.json(), data['schema']) and response.status_code == 201
