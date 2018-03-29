@@ -6,8 +6,8 @@ from bin.session import getHeadersForUser
 from bin.Make_requests_and_answers import parseRequest, equal_schema, random_string
 
 
-# class TestGroups():
-#     url = "groups"
+class TestGroups:
+    url = "groups"
 #
 #     @allure.feature('Функциональный тест')
 #     @allure.story('Получаем все группы')
@@ -37,14 +37,16 @@ from bin.Make_requests_and_answers import parseRequest, equal_schema, random_str
 #             'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'CommonRequestedResourcesNotFound: GROUP by groupId=%s not found' % unknownId}
 #         assert (response.status_code, response.json()) == (400, exceptedResponse)
 #
-#     @allure.feature('Функциональный тест')
-#     @allure.story('Создаем группу')
-#     def test_addGroup(self, deleteGroup):
-#         data = parseRequest("post_group", {"$name": random_string(),
-#                                            "$parentGroupId": rootGroupId()})
-#         response = Client.post(TestGroups.url, data['request'])
-#         deleteGroup.append(response.json()['groupId'])
-#         assert equal_schema(response.json(), data['schema']) and response.status_code == 201
+    @allure.feature('Функциональный тест')
+    @allure.story('Создаем группу')
+    @pytest.mark.idToDelete
+    def test_addGroup(self, deleteGroup):
+        data = parseRequest("post_group", {"$name": random_string(),
+                                           "$parentGroupId": rootGroupId()})
+        response = Client.post(TestGroups.url, data['request'])
+        idToDelete = "qq"
+        deleteGroup.append(response.json()['groupId'])
+        assert equal_schema(response.json(), data['schema']) and response.status_code == 201
 #
 #     @allure.feature('Проверка валидации')
 #     @allure.story('Создаем группу без имени')
@@ -243,10 +245,10 @@ class TestRoles():
     #     assert (response.status_code, response.json()) == (200, role)
 
 
-    @allure.feature('Функциональний тест')
-    @allure.story('Удаляем роль с неизвестным id')
-    def test_delete_role_by_unknown_id(self):
-        unknownRoleId = random_string()
-        response = Client.delete(TestRoles.url, id=unknownRoleId)
-        expectedResponse = {'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'CommonRequestedResourcesNotFound: ROLE by roleId=%s not found'%unknownRoleId}
-        assert (response.status_code, response.json()) == (400, expectedResponse)
+    # @allure.feature('Функциональний тест')
+    # @allure.story('Удаляем роль с неизвестным id')
+    # def test_delete_role_by_unknown_id(self):
+    #     unknownRoleId = random_string()
+    #     response = Client.delete(TestRoles.url, id=unknownRoleId)
+    #     expectedResponse = {'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'CommonRequestedResourcesNotFound: ROLE by roleId=%s not found'%unknownRoleId}
+    #     assert (response.status_code, response.json()) == (400, expectedResponse)

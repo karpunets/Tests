@@ -51,8 +51,12 @@ def deleteRole():
         Client.delete('roles', id=id)
 
 @pytest.fixture(scope="function")
-def deleteGroup():
+def deleteGroup(request):
+    url = getattr(request.cls, "url")
+    print("fixture_url", url)
     groupIdList = []
     yield groupIdList
+    func_response = getattr(request.function, "idToDelete")
+    print("IDTODELETE", func_response)
     for id in groupIdList:
         Client.delete('groups', id=id)
