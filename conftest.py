@@ -1,5 +1,7 @@
-import json, pytest, requests, os, random, string, time, re
-import Data.URLs_MAP as URL
+import pytest
+import requests
+import os
+from json import dumps
 
 
 @pytest.fixture(scope='session')
@@ -28,12 +30,11 @@ def get_role():
 def send_request(get_role):
     def some_request(url, data=None, method='POST', params=None):
         headers = get_role['headers']
-        payload = json.dumps(data)
+        payload = dumps(data)
         response = requests.request(method, url, data=payload, headers=headers, params=params)
         return response
 
     return some_request
-
 
 
 @pytest.fixture(scope='function')

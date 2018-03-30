@@ -8,8 +8,8 @@ from bin.Make_requests_and_answers import parseRequest, random_string
 
 @pytest.fixture(scope="function")
 def group():
-    data = parseRequest('post_group', {"$name":random_string(),
-                                "$parentGroupId":rootGroupId()})
+    data = parseRequest('post_group', {"$name": random_string(),
+                                       "$parentGroupId": rootGroupId()})
     response = Client.post("groups", data['request'])
     yield response.json()
     Client.delete("groups", id=response.json()['groupId'])
@@ -37,26 +37,16 @@ def imutableGroupWithChild():
 def role(group):
     url = "roles"
     data = parseRequest('post_roles', {"$name": random_string(),
-                                       "$groupId":group['groupId']})
+                                       "$groupId": group['groupId']})
     response = Client.post(url, data['request'])
     yield response.json()
     Client.delete(url, id=response.json()['roleId'])
 
 
 @pytest.fixture(scope="function")
-def deleteRole():
-    roleIdList = []
-    yield roleIdList
-    for id in roleIdList:
-        Client.delete('roles', id=id)
-
-@pytest.fixture(scope="function")
-def deleteGroup(request):
+def clear_data(request):
     url = getattr(request.cls, "url")
-    print("fixture_url", url)
-    groupIdList = []
-    yield groupIdList
-    func_response = getattr(request.function, "idToDelete")
-    print("IDTODELETE", func_response)
-    for id in groupIdList:
-        Client.delete('groups', id=id)
+    group_id_list = []
+    yield group_id_list
+    for id_to_delete in group_id_list:
+        Client.delete(url, id=id_to_delete)
