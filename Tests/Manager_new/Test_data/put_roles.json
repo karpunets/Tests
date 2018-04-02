@@ -1,0 +1,28 @@
+{
+  "request": {
+    "roleId":"$roleId",
+    "name": "$name",
+    "isSystem": false,
+    "sessionLiveTimeSec": 300,
+    "group": {
+      "groupId": "$groupId"
+    },
+    "tasks": null,
+    "roleTemplateId": null,
+    "system": false
+  },
+  "schema": {
+    "name": "$name",
+    "isSystem": false,
+    "sessionLiveTimeSec": 300,
+    "group": {
+      "name": {"type":"string"},
+      "cid": {"type":"number"},
+      "groupId": "$groupId"
+    },
+    "tasks": null,
+    "roleTemplateId": null,
+    "system": false,
+    "roleId": "$roleId"
+  }
+}

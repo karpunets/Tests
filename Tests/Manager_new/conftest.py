@@ -15,9 +15,8 @@ def group():
     Client.delete("groups", id=response.json()['groupId'])
 
 
-
 @pytest.fixture(scope="module")
-def imutableGroupWithChild():
+def immutable_group_with_child():
     groupsId = deque([], maxlen=5)
     data = parseRequest('post_group', {"$name": random_string(),
                                        "$parentGroupId": rootGroupId()})
@@ -38,6 +37,16 @@ def role(group):
     url = "roles"
     data = parseRequest('post_roles', {"$name": random_string(),
                                        "$groupId": group['groupId']})
+    response = Client.post(url, data['request'])
+    yield response.json()
+    Client.delete(url, id=response.json()['roleId'])
+
+
+@pytest.fixture(scope="module")
+def immutable_role(immutable_group_with_child):
+    url = "roles"
+    data = parseRequest('post_roles', {"$name": random_string(),
+                                       "$groupId": immutable_group_with_child['groupId']})
     response = Client.post(url, data['request'])
     yield response.json()
     Client.delete(url, id=response.json()['roleId'])
