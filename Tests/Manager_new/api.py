@@ -198,21 +198,32 @@ class TestRoles():
         data = parseRequest('post_roles', {"$name":random_string(),
                                             "$groupId":None})
         response = Client.post(TestRoles.url, data['request'])
+        expected_response = {'ADM_VALIDATION_ROLE_GROUP_EMPTY': 'GROUP not specified'}
+        assert (response.status_code, response.json()) == (400, expected_response)
+
+    # Не правильный текст валидации
+    @allure.feature('Функциональний тест')
+    @allure.story('Создаем роль с неизвестной групой')
+    def test_add_role_with_unknown_group(self):
+        unknown_group_id = random_string()
+        data = parseRequest('post_roles', {"$name":random_string(),
+                                           "$groupId": unknown_group_id})
+        response = Client.post(TestRoles.url, data['request'])
         print(response.json())
-        assert equal_schema(response.json(), data['schema']) and response.status_code == 201
+        expected_response = {'ADM_VALIDATION_GROUP_NOT_FOUND': 'Group by the following group id not found: %s'%unknown_group_id}
+        assert (response.status_code, response.json()) == (400, expected_response)
+
 
     # Имя роли должно быть уникальным только для компании
     @allure.feature('Функциональний тест')
     @allure.story('Создаем роль с сущесвующим именем')
-    @pytest.mark.xfail
-    def test_add_role_with_existing_name(self, immutable_group_with_child, clear_data, role):
-        existingName = role['name']
-        data = parseRequest('post_roles', {"$name":existingName,
+    def test_add_role_with_existing_name(self, immutable_group_with_child, role):
+        existing_name = role['name']
+        data = parseRequest('post_roles', {"$name":existing_name,
                                             "$groupId":immutable_group_with_child['groupId']})
         response = Client.post(TestRoles.url, data['request'])
-        print(response.json())
-        clear_data.append(response.json()['roleId'])
-        assert equal_schema(response.json(), data['schema']) and response.status_code == 201
+        expected_response = {'COMMON_ENTITY_WITH_SUCH_FIELD_EXISTS': 'CommonEntityWithSuchFieldExists: Name is not unique'}
+        assert (response.status_code, response.json()) == (400, expected_response)
 
     @allure.feature('Функциональний тест')
     @allure.story('Получаем все роли')
@@ -250,7 +261,7 @@ class TestRoles():
 
     @allure.feature('Функциональний тест')
     @allure.story('Редактируем роль')
-    def test_put_role(self, role, immutable_group_with_child):
+    def test_edit_role(self, role, immutable_group_with_child):
         data = parseRequest('put_roles', {"$roleId":role['roleId'],
                              "$name": random_string(),
                              "$groupId": immutable_group_with_child['groupId']
@@ -261,7 +272,7 @@ class TestRoles():
 
     @allure.feature('Функциональний тест')
     @allure.story('Редактируем роль на пустое имя')
-    def test_put_role_on_empty_name(self, role, immutable_group_with_child):
+    def test_edit_role_on_empty_name(self, role, immutable_group_with_child):
         data = parseRequest('put_roles', {"$roleId":role['roleId'],
                              "$name": None,
                              "$groupId": immutable_group_with_child['groupId']
@@ -272,7 +283,8 @@ class TestRoles():
 
     @allure.feature('Функциональний тест')
     @allure.story('Редактируем роль на не существующую групу')
-    def test_put_role_on_unknown_group(self, role):
+    @pytest.mark.xfail
+    def test_edit_role_on_unknown_group(self, role):
         unknown_group_id = random_string()
         data = parseRequest('put_roles', {"$roleId": role['roleId'],
                                           "$name": random_string(),
@@ -285,7 +297,7 @@ class TestRoles():
 
     @allure.feature('Функциональний тест')
     @allure.story('Редактируем имя роли на существующее')
-    def test_put_role_on_unknown_group(self, role, immutable_role):
+    def test_edit_role_on_unknown_group(self, role, immutable_role):
         existing_name = immutable_role['name']
         data = parseRequest('put_roles', {"$roleId": role['roleId'],
                                           "$name": existing_name,
