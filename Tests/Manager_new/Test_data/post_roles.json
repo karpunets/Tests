@@ -5,10 +5,7 @@
     "sessionLiveTimeSec": 300,
     "group": {
       "groupId": "$groupId"
-    },
-    "tasks": null,
-    "roleTemplateId": null,
-    "system": false
+    }
   },
   "schema": {
     "name": "$name",

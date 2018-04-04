@@ -22,6 +22,8 @@ token = "/SmiddleAuthorizationServer/sas/token"
 current_user = "/SmiddleManager/adm/management/users/current"
 groups = "/SmiddleManager/adm/management/groups"
 roles = "/SmiddleManager/adm/management/roles"
+users = "/SmiddleManager/adm/management/users"
+users_search = "/SmiddleManager/adm/management/users/search"
 
 # ADMIN
 get_user_list = '/SmiddleManager/adm/management/get_user_list'

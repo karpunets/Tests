@@ -1,0 +1,52 @@
+{
+  "request": {
+    "agentId": "$agentId",
+    "login": "$login",
+    "loginAD": "$loginAD",
+    "lname": "$lname",
+    "fname": "$fname",
+    "pname": "$pname",
+    "email": "$email",
+    "phone": "$phone",
+    "fax": "$fax",
+    "enabled": true,
+    "deleted": false,
+    "groups": [
+      {
+        "groupId": "$groupId"
+      }
+    ],
+    "roles": [
+      {
+        "roleId": "$roleId"
+      }
+    ],
+    "userGroupRoles": null
+  },
+  "schema": {
+    "userId": {
+      "type": "string"
+    },
+    "agentId": "$agentId",
+    "login": "$login",
+    "loginAD": "$loginAD",
+    "lname": "$lname",
+    "fname": "$fname",
+    "pname": "$pname",
+    "email": "$email",
+    "phone": "$phone",
+    "fax": "$fax",
+    "dateCreate": {"type":"number"},
+    "enabled": true,
+    "deleted": false,
+    "groups": {
+      "type": "array"
+    },
+    "roles": {
+      "type": "array"
+    },
+    "userGroupRoles": null,
+    "domain": null,
+    "imgUrl": null
+  }
+}
