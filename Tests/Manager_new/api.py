@@ -321,7 +321,7 @@ class TestUsers:
                                            "$roleId":immutable_role['roleId']})
         response = Client.post(TestUsers.url, data['request'])
         clear_data.append(response.json()['userId'])
-        assert equal_schema(response.json(), data['schema']) and response.status_code == 200
+        assert equal_schema(response.json(), data['schema']) and response.status_code == 201
 
 
     @allure.feature('функциональный тест')
@@ -344,3 +344,69 @@ class TestUsers:
         print(response.json())
         clear_data.append(response.json()['userId'])
         assert equal_schema(response.json(), data['schema']) and response.status_code == 201
+
+    @allure.feature('функциональный тест')
+    @allure.story('Создаем пользователя с уже существующим login')
+    def test_add_user_with_existing_login(self, immutable_role, immutable_group_with_child, immutable_user):
+        existing_login = immutable_user['login']
+        data = parseRequest("post_users", {"$login": existing_login,
+                                           "$fname": random_string(),
+                                           "$lname": random_string(),
+                                           "$groupId": immutable_group_with_child['groupId'],
+                                           "$roleId": immutable_role['roleId']})
+        response = Client.post(TestUsers.url, data['request'])
+        expected_response = {'COMMON_ENTITY_WITH_SUCH_FIELD_EXISTS': 'CommonEntityWithSuchFieldExists: LOGIN or USER ID should be unique.'}
+        assert (response.status_code, response.json()) == (409, expected_response)
+
+    @allure.feature('функциональный тест')
+    @allure.story('Создаем пользователя с существующими полями (кроме уникальных)')
+    def test_add_user_with_existing_fields_which_are_not_unique(self, clear_data, immutable_role, immutable_group_with_child, immutable_user):
+        existing_field = immutable_user
+        data = parseRequest("post_users", {"$login":random_string(),
+                                           "$fname":existing_field['fname'],
+                                           "$lname":existing_field['lname'],
+                                           "$groupId":immutable_group_with_child['groupId'],
+                                           "$roleId":immutable_role['roleId'],
+                                           "$agentId": random_string(),
+                                           "$loginAD": existing_field['loginAD'],
+                                           "$pname": existing_field['pname'],
+                                           "$email": existing_field['email'],
+                                           "$phone": str(random.randint(1111111, 999999999)),
+                                           "$fax": existing_field['phone']
+                                       })
+        response = Client.post(TestUsers.url, data['request'])
+        print(response.json())
+        clear_data.append(response.json()['userId'])
+        assert equal_schema(response.json(), data['schema']) and response.status_code == 201
+
+    @allure.feature('функциональный тест')
+    @allure.story('Создаем пользователя с уже существующим phone')
+    @pytest.mark.xfail
+    def test_add_user_with_existing_phone(self, immutable_role, immutable_group_with_child, immutable_user):
+        existing_phone = immutable_user['phone']
+        data = parseRequest("post_users", {"$login": random_string(),
+                                           "$fname": random_string(),
+                                           "$lname": random_string(),
+                                           "$groupId": immutable_group_with_child['groupId'],
+                                           "$roleId": immutable_role['roleId'],
+                                           "$phone": existing_phone})
+        response = Client.post(TestUsers.url, data['request'])
+        print(response.json())
+        expected_response = {'COMMON_EXCEPTION': 'CommonException: Not deleted user with phone = %s already exist!'%existing_phone}
+        assert (response.status_code, response.json()) == (409, expected_response)
+
+
+    @allure.feature('функциональный тест')
+    @allure.story('Создаем пользователя с уже существующим phone')
+    def test_add_user_with_existing_phone(self, immutable_role, immutable_group_with_child, immutable_user):
+        existing_agentId = immutable_user['agentId']
+        data = parseRequest("post_users", {"$login": random_string(),
+                                           "$fname": random_string(),
+                                           "$lname": random_string(),
+                                           "$groupId": immutable_group_with_child['groupId'],
+                                           "$roleId": immutable_role['roleId'],
+                                           "$agentId": existing_agentId})
+        response = Client.post(TestUsers.url, data['request'])
+        print(response.json())
+        expected_response = {'COMMON_ENTITY_WITH_SUCH_FIELD_EXISTS': 'CommonEntityWithSuchFieldExists: AGENT ID =%s already exists'%existing_agentId}
+        assert (response.status_code, response.json()) == (409, expected_response)

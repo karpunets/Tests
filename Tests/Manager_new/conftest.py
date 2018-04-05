@@ -1,4 +1,5 @@
 import pytest
+import random
 from collections import deque
 from bin.session import Client, rootGroupId
 
@@ -26,8 +27,8 @@ def immutable_user(immutable_group_with_child, immutable_role):
                                            "$agentId": random_string(),
                                            "$loginAD": random_string(),
                                            "$pname": random_string(),
-                                           "$email": random_string(),
-                                           "$phone": random_string(),
+                                           "$email": random_string()+'@.com.ua',
+                                           "$phone": str(random.randint(11111, 99999999)),
                                            "$fax": random_string()
                                        })
     response = Client.post("users", data['request'])
