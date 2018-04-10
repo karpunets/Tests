@@ -81,3 +81,22 @@ def clear_data(request):
     yield group_id_list
     for id_to_delete in group_id_list:
         Client.delete(url, id=id_to_delete)
+
+@pytest.fixture(scope='module')
+def immutable_deleted_user(immutable_group_with_child, immutable_role):
+    data = parseRequest("post_users", {"$login":random_string(),
+                                           "$fname":random_string(),
+                                           "$lname":random_string(),
+                                           "$groupId":immutable_group_with_child['groupId'],
+                                           "$roleId":immutable_role['roleId'],
+                                           "$agentId": random_string(),
+                                           "$loginAD": random_string(),
+                                           "$pname": random_string(),
+                                           "$email": random_string()+'@.com.ua',
+                                           "$phone": str(random.randint(11111, 99999999)),
+                                           "$fax": random_string()
+                                       })
+    data['request']['deleted'] = True
+    response = Client.post("users", data['request'])
+    yield response.json()
+    Client.delete("users", id=response.json()['userId'])
