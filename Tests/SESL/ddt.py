@@ -2,7 +2,7 @@ import allure
 import pytest
 
 from bin.Make_requests_and_answers import get_from_csv
-from bin.Make_requests_and_answers import parseRequest, equal_schema
+from bin.Make_requests_and_answers import parse_request, equal_schema
 
 
 @allure.feature('Позитивный тест')
@@ -13,7 +13,7 @@ def test_add_criteria(send_request, add_one_integration, add_one_map, add_one_ta
     fixture = {"add_one_integration":add_one_integration,
                "add_one_map":add_one_map,
                "add_one_tag":add_one_tag}
-    data = parseRequest(json_name= schema_name, method=method, data = payload, params=params, fixture_params=fixture["add_one_" + schema_name])
+    data = parse_request(json_name= schema_name, method=method, data = payload, params=params, fixture_params=fixture["add_one_" + schema_name])
     print("DATA", data)
     response = send_request(method=method, url=URL, data=data['request_body'], params=params)
     print(response.json())

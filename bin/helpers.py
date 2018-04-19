@@ -24,3 +24,24 @@ def getUrl(name, id=None):
         new_url = new_url +"/"
         new_url = urljoin(new_url, id)
     return new_url
+
+
+def make_user_group_roles(group_roles_obj):
+    """
+    :param group_roles_obj: {"groupId":"roleId"} :type roleId: str or list
+    :return: [{'group': {'groupId': str}, 'roles': [{'roleId': str}], 'applyRolesRecursively': False}]
+    """
+    userGroupRoles = []
+    for groupId in group_roles_obj:
+        result = {}
+        roles = []
+        result['group'] = {"groupId": groupId}
+        if isinstance(group_roles_obj[groupId], list):
+            for roleId in group_roles_obj[groupId]:
+                roles.append({'roleId':roleId})
+        else:
+            roles.append({'roleId':group_roles_obj[groupId]})
+        result['roles'] = roles
+        result["applyRolesRecursively"] = False
+        userGroupRoles.append(result)
+    return userGroupRoles

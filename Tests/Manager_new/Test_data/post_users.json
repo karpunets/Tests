@@ -11,17 +11,12 @@
     "fax": "$fax",
     "enabled": true,
     "deleted": false,
-    "groups": [
-      {
-        "groupId": "$groupId"
-      }
-    ],
     "roles": [
       {
         "roleId": "$roleId"
       }
     ],
-    "userGroupRoles": null
+    "userGroupRoles": "$userGroupRoles"
   },
   "schema": {
     "userId": {
@@ -45,7 +40,7 @@
     "roles": {
       "type": "array"
     },
-    "userGroupRoles": null,
+    "userGroupRoles": {"type":"array"},
     "domain": null,
     "imgUrl": null
   }

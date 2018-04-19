@@ -12,39 +12,44 @@ def random_string():
 def date_now():
     return round(time.time() * 1000)
 
+
 # Получаем и преобразуем JSON файл, согласно переданным параметрам
 # TODO: Вынести в helpers добавить возможность добавлять ключи, которые не начинаются с символа $
-def parseRequest(json_name, data = {}):
+def parse_request(json_name, data={}):
     # Определяем откуда брать json файл
     path = 'Test_data/%s.json' % json_name
     json_file = open(path, encoding="utf8").read()
     # Доп. ф-ция для использования рекурсии
-    # TODO: Вынести replace в helpers, rename on replce_string_on
+    # TODO: Вынести replace в helpers, rename on replace_string_on
+
     def replace(json_file, data):
         dictTypeInData = False
         if len(data) > 0:
             for key, val in iter(data.items()):
                 try:
-                    if type(val) == int or type(val) == dict:
+                    if isinstance(val, (int, dict)):
                         # Если в параметрах есть dict и в нем нужно подставить параметры
-                        if type(val) == dict and key in json_file:
+                        if isinstance(val, dict) and key in json_file:
                             dictTypeInData = True
-                        # Для того что бы подставить int число в строку
+                        # Для того, чтобы подставить int число в строку
                         if '"%s"' % key in json_file:
                             key = '"%s"' % key
                         val = str(val)
-                    if type(val) == list:
+                    if isinstance(val, list):
                         key = '"%s"' % key
                         val = "%s"%val
                     json_file = json_file.replace(key, val)
+
                 # Возникает если передать None(null)
                 except TypeError:
                     continue
-        #Для преобразования методом json.loads должны быть везде двойные кавычки
+        # Для преобразования методом json.loads должны быть везде двойные кавычки
         json_file = json_file.replace("'", '"')
-        #Если подставили dict и в нем нужно заменить значения, делаем рекурсию
-        if dictTypeInData == True:
+        # Если подставили dict и в нем нужно заменить значения, делаем рекурсию
+        if dictTypeInData:
             json_file = replace(json_file, data)
+        json_file = json_file.replace("False", 'false')
+        json_file = json_file.replace("True", 'true')
         return json_file
     result = replace(json_file, data)
     # Вместо не переданных параметров подставляем null

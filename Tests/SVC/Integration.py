@@ -4,13 +4,13 @@ import random, json, time
 
 
 import Data.URLs_MAP as URL
-from bin.Make_requests_and_answers import parseRequest, equal_schema, random_string
+from bin.Make_requests_and_answers import parse_request, equal_schema, random_string
 
 
 @allure.feature('Позитивный тест')
 @allure.story('Создаем нового пользователя с userType = DEVICE')
 def test_add_user_with_DEVICE_userType(send_request, delete_user):
-    data = parseRequest('post_users', {'$name':random_string(),
+    data = parse_request('post_users', {'$name':random_string(),
                                 '$email':random_string(),
                                 '$userType':"DEVICE"})
     response = send_request(URL.svc_users, data['request'])
@@ -24,7 +24,7 @@ def test_add_user_with_DEVICE_userType(send_request, delete_user):
 @allure.story('Создаем нового пользователя с существующим email')
 def test_add_user_with_existing_email(send_request, add_user):
     existing_email = next(add_user)['email']
-    data = parseRequest('post_users', {'$name':random_string(),
+    data = parse_request('post_users', {'$name':random_string(),
                                 '$email':existing_email,
                                 '$userType':"DEVICE"})
     response = send_request(URL.svc_users, data['request'])
@@ -37,7 +37,7 @@ def test_add_user_with_existing_email(send_request, add_user):
 @allure.feature('Позитивный тест')
 @allure.story('Создаем нового пользователя с userType = CMS_USER')
 def test_add_user_with_CMS_USER_userType(send_request):
-    data = parseRequest('post_users', {'$name':random_string(),
+    data = parse_request('post_users', {'$name':random_string(),
                                 '$email':random_string(),
                                 '$userType':"CMS_USER"})
     response = send_request(URL.svc_users, data['request'])
@@ -49,7 +49,7 @@ def test_add_user_with_CMS_USER_userType(send_request):
 @allure.feature('Позитивный тест')
 @allure.story('Создаем нового пользователя без имени i email')
 def test_add_user_without_name_and_email(send_request):
-    data = parseRequest('post_users', {'$name':None,
+    data = parse_request('post_users', {'$name':None,
                                 '$email':None,
                                 '$userType':"DEVICE"})
     response = send_request(URL.svc_users, data['request'])
@@ -117,7 +117,7 @@ def test_sync_users(send_request, get_cms_user):
 @allure.story('Редактируем пользователя')
 def test_edit_user(send_request, add_user):
     user_id = next(add_user)['id']
-    data = parseRequest("put_users", {"$id":user_id,
+    data = parse_request("put_users", {"$id":user_id,
                                "$email":random_string(),
                                "$name":random_string(),
                                "$userType":"DEVICE"})
@@ -133,7 +133,7 @@ def test_edit_user(send_request, add_user):
 def test_edit_user_on_existing_email(send_request, add_user):
     existing_user_email = next(add_user)['email']
     user_id = next(add_user)['id']
-    data = parseRequest("put_users", {"$id":user_id,
+    data = parse_request("put_users", {"$id":user_id,
                                "$email":existing_user_email,
                                "$name":random_string(),
                                "$userType":"DEVICE"})
@@ -169,7 +169,7 @@ def test_delete_user(send_request, add_user):
 @allure.story('Создаем конференцию')
 def test_add_conference(send_request, delete_conference, get_users):
     users = get_users["cms_user"]
-    data = parseRequest('post_conference', {'$name':random_string(),
+    data = parse_request('post_conference', {'$name':random_string(),
                                 '$description':random_string(),
                                 '$users':users})
     print("DATA___________", data)
@@ -183,7 +183,7 @@ def test_add_conference(send_request, delete_conference, get_users):
 @allure.story('Создаем конференцию')
 def test_add_conference_with_DEVICE_user_only(send_request, delete_conference, add_user):
     device_user = [next(add_user)]
-    data = parseRequest('post_conference', {'$name':random_string(),
+    data = parse_request('post_conference', {'$name':random_string(),
                                 '$description':random_string(),
                                 '$users':device_user})
     print("DATA___________", data)
@@ -197,7 +197,7 @@ def test_add_conference_with_DEVICE_user_only(send_request, delete_conference, a
 @allure.story('Создаем конференцию')
 def test_add_conference_with_CMS_USER_only(send_request, delete_conference, get_users):
     users = get_users["cms_user"]
-    data = parseRequest('post_conference', {'$name':random_string(),
+    data = parse_request('post_conference', {'$name':random_string(),
                                 '$description':random_string(),
                                 '$users':users})
     print("DATA___________", data)
@@ -211,7 +211,7 @@ def test_add_conference_with_CMS_USER_only(send_request, delete_conference, get_
 @allure.feature('Позитивный тест')
 @allure.story('Создаем конференцию без пользователей')
 def test_add_conference_without_users(send_request, delete_conference):
-    data = parseRequest('post_conference', {'$name':random_string(),
+    data = parse_request('post_conference', {'$name':random_string(),
                                     '$description':random_string()})
     response = send_request(URL.svc_conference, data['request'])
     assert response.status_code == 200
@@ -223,7 +223,7 @@ def test_add_conference_without_users(send_request, delete_conference):
 @allure.story('Создаем конференцию с пустым именем')
 def test_add_conference_with_empty_name(send_request, get_users):
     users = get_users['device'] + get_users["cms_user"]
-    data = parseRequest('post_conference', {'$name':None,
+    data = parse_request('post_conference', {'$name':None,
                                     '$description':None,
                                      "$users":users})
     response = send_request(URL.svc_conference, data['request'])
@@ -237,7 +237,7 @@ def test_add_conference_with_empty_name(send_request, get_users):
 def test_add_conference_with_existing_name(send_request, add_conference, get_users):
     existing_name = next(add_conference)['name']
     users = get_users['device'] + get_users["cms_user"]
-    data = parseRequest('post_conference', {'$name':existing_name,
+    data = parse_request('post_conference', {'$name':existing_name,
                                     '$description':random_string(),
                                      "$users":users})
     response = send_request(URL.svc_conference, data['request'])
@@ -252,7 +252,7 @@ def test_edit_conference(send_request, get_users, add_conference):
     conf = next(add_conference)
     print("CONF______", conf)
     conf_id = conf['id']
-    data = parseRequest('put_conference', {"$id":conf_id,
+    data = parse_request('put_conference', {"$id":conf_id,
                                      '$name':random_string(),
                                 '$description':random_string(),
                                 '$users':users})
@@ -268,7 +268,7 @@ def test_edit_conference_name_on_existing(send_request, get_users, add_conferenc
     users = get_users["cms_user"]
     existing_name = next(add_conference)['name']
     conf_id = next(add_conference)['id']
-    data = parseRequest('put_conference', {"$id":conf_id,
+    data = parse_request('put_conference', {"$id":conf_id,
                                      '$name':existing_name,
                                 '$description':random_string(),
                                 '$users':users})
@@ -284,7 +284,7 @@ def test_edit_conference_with_unknown_id(send_request, get_users):
     users = get_users['device'] + get_users["cms_user"]
     conf_id = random.randint(1,9999999)
     print(conf_id)
-    data = parseRequest('put_conference', {"$id":conf_id,
+    data = parse_request('put_conference', {"$id":conf_id,
                                      '$name':random_string(),
                                 '$description':random_string(),
                                 '$users':users})
@@ -301,7 +301,7 @@ def test_edit_conference_users_on_empty(send_request, add_conference):
     conf = next(add_conference)
     print(conf)
     conf_id = conf['id']
-    data = parseRequest('put_conference', {"$id":conf_id,
+    data = parse_request('put_conference', {"$id":conf_id,
                                      '$name':random_string(),
                                 '$description':random_string(),
                                 '$users':[]})
@@ -326,7 +326,7 @@ def test_delete_conference(send_request, add_conference):
 def test_add_conference_with_only_id_in_users(send_request, delete_conference, add_user):
     users = [{'id':next(add_user)['id']}]
     print(users)
-    data = parseRequest('post_conference', {'$name':random_string(),
+    data = parse_request('post_conference', {'$name':random_string(),
                                 '$description':random_string(),
                                 '$users':users})
     print("DATA___________", data)

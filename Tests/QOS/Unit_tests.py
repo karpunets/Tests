@@ -4,13 +4,13 @@ import random
 from Data.test_data import ROOT_group_id, ROOT_user_id
 
 import Data.URLs_MAP as URL
-from bin.Make_requests_and_answers import parseRequest, equal_schema, random_string
+from bin.Make_requests_and_answers import parse_request, equal_schema, random_string
 
 
 @allure.feature('Позитивный тест')
 @allure.story('Добавляем новую групу')
 def test_add_group(send_request, delete_group_and_criteria):
-    data = parseRequest('post_criteria_group', {'$name':random_string()})
+    data = parse_request('post_criteria_group', {'$name':random_string()})
     response = send_request(URL.criteria_group, data['request'])
     instance = response.json()
     delete_group_and_criteria['criteriaGroupId'].append(instance['id'])
@@ -22,7 +22,7 @@ def test_add_group(send_request, delete_group_and_criteria):
 @allure.story('Добавляем новую групу с существующим именем')
 def test_add_group_with_existing_name(send_request, add_group):
     existing_group_name = next(add_group)['name']
-    data = parseRequest('post_criteria_group', {'$name': existing_group_name})
+    data = parse_request('post_criteria_group', {'$name': existing_group_name})
     response = send_request(URL.criteria_group, data['request'])
     answer = {"QOS_ENTITY_WITH_SUCH_FIELD_EXISTS":"QoSEntityWithSuchFieldExists: NAME"}
     assert response.status_code == 500
@@ -32,7 +32,7 @@ def test_add_group_with_existing_name(send_request, add_group):
 @allure.feature('Позитивный тест')
 @allure.story('Добавляем новую групу без имени')
 def test_add_group_without_name(send_request):
-    data = parseRequest('post_criteria_group', {'$name': None})
+    data = parse_request('post_criteria_group', {'$name': None})
     response = send_request(URL.criteria_group, data['request'])
     answer = {'QOS_TEMPLATE_CRITERIA_GROUP_NAME': 'NAME length from 1 to 255 characters.'}
     assert response.status_code == 400
@@ -44,7 +44,7 @@ def test_add_group_without_name(send_request):
 @allure.story('Добавляем критерий')
 def test_add_criteria(send_request, add_group, delete_group_and_criteria):
     group_id = next(add_group)['id']
-    data = parseRequest('post_criteria', {'$name': random_string(),
+    data = parse_request('post_criteria', {'$name': random_string(),
                                        '$criteriagroupId': group_id,
                                        '$description':random_string()})
     response = send_request(URL.criteria, data['request'])
@@ -58,7 +58,7 @@ def test_add_criteria(send_request, add_group, delete_group_and_criteria):
 @allure.story('Добавляем критерий с уже существующим именем')
 def test_add_criteria_with_existing_name(send_request, add_criteria, delete_group_and_criteria):
     existing_criteria = next(add_criteria)
-    data = parseRequest('post_criteria', {'$name': existing_criteria['name'],
+    data = parse_request('post_criteria', {'$name': existing_criteria['name'],
                                        '$criteriagroupId': existing_criteria['criteriaGroup']['id'],
                                        '$description':random_string()})
     response = send_request(URL.criteria, data['request'])
@@ -73,7 +73,7 @@ def test_add_criteria_with_existing_name(send_request, add_criteria, delete_grou
 @allure.story('Добавляем критерий без имени и описания')
 def test_add_criteria_without_description_and_name(send_request, add_group):
     group_id = next(add_group)['id']
-    data = parseRequest('post_criteria', {'$criteriagroupId': group_id})
+    data = parse_request('post_criteria', {'$criteriagroupId': group_id})
     response = send_request(URL.criteria, data['request'])
 
     answer = {'QOS_TEMPLATE_CRITERIA_DESCRIPTION': 'DESCRIPTION length from 1 to 1024 characters. Сriteria id=[null]',
@@ -86,7 +86,7 @@ def test_add_criteria_without_description_and_name(send_request, add_group):
 @allure.story('Добавляем критерий без ID групы критериев (criteriaGroupID)')
 
 def test_add_criteria_without_criteria_group(send_request):
-    data = parseRequest('post_criteria', {'$name': random_string(),
+    data = parse_request('post_criteria', {'$name': random_string(),
                                        '$description': random_string(),
                                             "$criteriagroupId":None})
     response = send_request(URL.criteria, data['request'])
@@ -99,7 +99,7 @@ def test_add_criteria_without_criteria_group(send_request):
 @allure.story('Добавляем критерий с не верным ID групы критериев (criteriaGroupID)')
 def test_add_criteria_with_incorrect_criteria_group(send_request):
     random_id = random.randint(0, 9999999999)
-    data = parseRequest('post_criteria', {'$name': random_string(),
+    data = parse_request('post_criteria', {'$name': random_string(),
                                        '$description': random_string(),
                                        '$criteriagroupId': random_id})
     response = send_request(URL.criteria, data['request'])
@@ -115,7 +115,7 @@ def test_add_criteria_with_incorrect_criteria_group(send_request):
 @allure.story('Редактируем имя группы')
 def test_edit_criteria_group(add_group, send_request):
     group_id = next(add_group)['id']
-    data = parseRequest('put_criteria_group', {'$name': random_string(),
+    data = parse_request('put_criteria_group', {'$name': random_string(),
                                            '$criteriaGroupId':group_id,
                                            '$groupId':ROOT_group_id})
     response = send_request(URL.criteria_group, data['request'], method = "PUT")
@@ -129,7 +129,7 @@ def test_edit_criteria_group(add_group, send_request):
 
 def test_edit_criteria_group_with_unknown_id(send_request):
     randomId = random.randint(1,9999)
-    data = parseRequest('put_criteria_group', {'$name': random_string(),
+    data = parse_request('put_criteria_group', {'$name': random_string(),
                                            '$criteriaGroupId':randomId,
                                            '$groupId':ROOT_group_id})
     response = send_request(URL.criteria_group, data['request'], method = "PUT")
@@ -143,7 +143,7 @@ def test_edit_criteria_group_with_unknown_id(send_request):
 @allure.story('Редактируем имя группы на пустое')
 def test_edit_criteria_group_name_on_empty(add_group, send_request):
     group_id = next(add_group)['id']
-    data = parseRequest('put_criteria_group', {'$name': None,
+    data = parse_request('put_criteria_group', {'$name': None,
                                            '$criteriaGroupId':group_id,
                                            '$groupId':ROOT_group_id})
     response = send_request(URL.criteria_group, data['request'], method = "PUT")
@@ -158,7 +158,7 @@ def test_edit_criteria_group_name_on_empty(add_group, send_request):
 def test_edit_criteria_group_name_on_existing(add_group, send_request):
     existing_name = next(add_group)['name']
     group_id = next(add_group)['id']
-    data = parseRequest('put_criteria_group', {'$name': existing_name,
+    data = parse_request('put_criteria_group', {'$name': existing_name,
                                            '$criteriaGroupId':group_id,
                                            '$groupId':ROOT_group_id})
     response = send_request(URL.criteria_group, data['request'], method = "PUT")
@@ -172,7 +172,7 @@ def test_edit_criteria_group_name_on_existing(add_group, send_request):
 @allure.story('Редактируем имя и описание критерия')
 def test_edit_criteria_name_and_description(send_request, add_criteria):
     criteria_for_edit = next(add_criteria)
-    data = parseRequest('put_criteria', {'$criteriaId': criteria_for_edit['id'],
+    data = parse_request('put_criteria', {'$criteriaId': criteria_for_edit['id'],
                                         '$name': random_string(),
                                        '$criteriaGroupId': criteria_for_edit['criteriaGroup']['id'],
                                        '$description':random_string()})
@@ -187,7 +187,7 @@ def test_edit_criteria_name_and_description(send_request, add_criteria):
 def test_edit_criteria_on_existing_name_and_description(send_request, add_criteria):
     existing_criteria = next(add_criteria)
     criteria_for_edit = next(add_criteria)
-    data = parseRequest('put_criteria', {'$criteriaId': criteria_for_edit['id'],
+    data = parse_request('put_criteria', {'$criteriaId': criteria_for_edit['id'],
                                         '$name': existing_criteria['name'],
                                        '$criteriaGroupId': criteria_for_edit['criteriaGroup']['id'],
                                        '$description':existing_criteria['description']})
@@ -203,7 +203,7 @@ def test_edit_criteria_on_existing_name_and_description(send_request, add_criter
 def test_edit_criteria_with_unknown_id(send_request, add_criteria):
     unknown_criteria_id = random.randint(1,99999999)
     criteria_for_edit = next(add_criteria)
-    data = parseRequest('put_criteria', {'$criteriaId': unknown_criteria_id,
+    data = parse_request('put_criteria', {'$criteriaId': unknown_criteria_id,
                                            '$name': random_string(),
                                            '$criteriaGroupId': criteria_for_edit['criteriaGroup']['id'],
                                            '$description':random_string()})
@@ -218,7 +218,7 @@ def test_edit_criteria_with_unknown_id(send_request, add_criteria):
 def test_edit_criteria_name_and_description_on_empty(send_request, add_criteria):
     criteria_for_edit = next(add_criteria)
     criteria_id = criteria_for_edit['id']
-    data = parseRequest('put_criteria', {'$criteriaId': criteria_id,
+    data = parse_request('put_criteria', {'$criteriaId': criteria_id,
                                            '$name': None,
                                            '$criteriaGroupId': criteria_for_edit['criteriaGroup']['id'],
                                            '$description': None})
@@ -234,7 +234,7 @@ def test_edit_criteria_name_and_description_on_empty(send_request, add_criteria)
 def test_edit_criteria_on_existing_criteriaGroup(send_request, add_group, add_criteria):
     criteria_group_id_without_criteria = next(add_group)['id']
     criteria_for_edit = next(add_criteria)
-    data = parseRequest('put_criteria', {'$criteriaId': criteria_for_edit['id'],
+    data = parse_request('put_criteria', {'$criteriaId': criteria_for_edit['id'],
                                            '$name': random_string(),
                                            '$criteriaGroupId': criteria_group_id_without_criteria,
                                            '$description': random_string()})
@@ -248,7 +248,7 @@ def test_edit_criteria_on_existing_criteriaGroup(send_request, add_group, add_cr
 @allure.story('Редактируем criteriaGroupId критерия на не существующую или пустую')
 def test_edit_criteria_on_unknown_or_empty_criteriaGroup(send_request, add_criteria):
     criteria_for_edit = next(add_criteria)
-    data = parseRequest('put_criteria', {'$criteriaId': criteria_for_edit['id'],
+    data = parse_request('put_criteria', {'$criteriaId': criteria_for_edit['id'],
                                            '$name': random_string(),
                                            '$criteriaGroupId': None,
                                            '$description': random_string()})
@@ -377,7 +377,7 @@ def test_delete_criteria_without_id(send_request):
 @allure.story('Добавляем template')
 def test_add_template(send_request, add_criteria, delete_template):
     criteriaId = next(add_criteria)['id']
-    data = parseRequest("post_template", {"$supervisorId":ROOT_user_id,
+    data = parse_request("post_template", {"$supervisorId":ROOT_user_id,
                                      "$name":random_string(),
                                      "$version":str(random.randint(1,10)),
                                      "$description":random_string(),
@@ -385,9 +385,9 @@ def test_add_template(send_request, add_criteria, delete_template):
                                      "$weight":random.randint(1,100),
                                      "$criteriaPosition":1,
                                      "$section_name":random_string(),
-                                          "$approvalPolicy":"STANDARD",
+                                           "$approvalPolicy":"STANDARD",
                                      "$templateCriteriaPosition":1
-                                          })
+                                           })
     response = send_request(URL.edit_template, data['request'])
     assert response.status_code == 200
     delete_template['templateId'] = response.json()['id']
@@ -398,7 +398,7 @@ def test_add_template(send_request, add_criteria, delete_template):
 @allure.story('Добавляем template')
 def test_add_template(send_request, add_criteria, delete_template):
     criteriaId = next(add_criteria)['id']
-    data = parseRequest("post_template", {"$supervisorId":ROOT_user_id,
+    data = parse_request("post_template", {"$supervisorId":ROOT_user_id,
                                      "$name":random_string(),
                                      "$version":str(random.randint(1,10)),
                                      "$description":random_string(),
@@ -406,9 +406,9 @@ def test_add_template(send_request, add_criteria, delete_template):
                                      "$weight":random.randint(1,100),
                                      "$criteriaPosition":1,
                                      "$section_name":random_string(),
-                                          "$approvalPolicy":"STANDARD",
+                                           "$approvalPolicy":"STANDARD",
                                      "$templateCriteriaPosition":1
-                                          })
+                                           })
     response = send_request(URL.edit_template, data['request'])
     assert response.status_code == 200
     delete_template['templateId'] = response.json()['id']
@@ -418,7 +418,7 @@ def test_add_template(send_request, add_criteria, delete_template):
 @allure.feature('Позитивный тест')
 @allure.story('Добавляем template без имени, версии, id критерии, названия секции')
 def test_add_template_without_name_version_criteriaId_sectionName(send_request):
-    data = parseRequest("post_template", {"$supervisorId":None,
+    data = parse_request("post_template", {"$supervisorId":None,
                                              "$name":None,
                                              "$version":None,
                                              "$description":random_string(),
@@ -426,9 +426,9 @@ def test_add_template_without_name_version_criteriaId_sectionName(send_request):
                                              "$weight":random.randint(1,100),
                                              "$criteriaPosition":1,
                                              "$section_name":None,
-                                          "$approvalPolicy":"STANDARD",
-                                          "$templateCriteriaPosition":1
-                                          })
+                                           "$approvalPolicy":"STANDARD",
+                                           "$templateCriteriaPosition":1
+                                           })
     response = send_request(URL.edit_template, data['request'])
     excepted_response = {'QOS_TEMPLATE_NAME': 'NAME length from 1 to 255 characters.',
                          'QOS_TEMPLATE_SUPERVISOR': 'SUPERVISOR must be specified or SUPERVISOR ID must be > 1.',
@@ -444,7 +444,7 @@ def test_add_template_without_name_version_criteriaId_sectionName(send_request):
 @pytest.mark.xfail
 def test_add_template_without_weight_criteriaPosition_templateCriteria(send_request, add_criteria):
     criteriaId = next(add_criteria)['id']
-    data = parseRequest("post_template", {"$supervisorId":ROOT_user_id,
+    data = parse_request("post_template", {"$supervisorId":ROOT_user_id,
                                          "$name":random_string(),
                                          "$version":str(random.randint(1,10)),
                                          "$description":random_string(),
@@ -452,9 +452,9 @@ def test_add_template_without_weight_criteriaPosition_templateCriteria(send_requ
                                          "$weight":None,
                                          "$criteriaPosition":None,
                                          "$section_name":random_string(),
-                                          "$approvalPolicy":"STANDARD",
-                                          "$templateCriteriaPosition":None
-                                          })
+                                           "$approvalPolicy":"STANDARD",
+                                           "$templateCriteriaPosition":None
+                                           })
     response = send_request(URL.edit_template, data['request'])
     print(response.status_code)
     print(response.json())
