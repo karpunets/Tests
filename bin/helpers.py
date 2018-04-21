@@ -4,7 +4,7 @@ from definition import PROPERTIES_DIR
 from Data import URLs_MAP
 
 
-def getProperty(*args):
+def get_property(*args):
     f = open(PROPERTIES_DIR, encoding="utf-8").read()
     properties = json.loads(f)
     if len(args) != 0:
@@ -13,34 +13,34 @@ def getProperty(*args):
         return  properties
 
 
-def getUrl(name, id=None):
-    server = getProperty("server")
+def get_url(name, id=None):
+    server = get_property("server")
     server_addr = server['server']
     url = getattr(URLs_MAP, name)
     if "http" not in server_addr:
         server_addr = "http://" + server_addr
     new_url = urljoin(server_addr, url)
     if id is not None:
-        new_url = new_url +"/"
+        new_url = new_url + "/"
         new_url = urljoin(new_url, id)
     return new_url
 
 
 def make_user_group_roles(group_roles_obj):
     """
-    :param group_roles_obj: {"groupId":"roleId"} :type roleId: str or list
+    :param group_roles_obj: {'groupId': roleId} :type roleId: str or list
     :return: [{'group': {'groupId': str}, 'roles': [{'roleId': str}], 'applyRolesRecursively': False}]
     """
-    userGroupRoles = []
+    userGroupRoles = list()
     for groupId in group_roles_obj:
-        result = {}
-        roles = []
+        result = dict()
+        roles = list()
         result['group'] = {"groupId": groupId}
         if isinstance(group_roles_obj[groupId], list):
             for roleId in group_roles_obj[groupId]:
                 roles.append({'roleId':roleId})
         else:
-            roles.append({'roleId':group_roles_obj[groupId]})
+            roles.append({'roleId': group_roles_obj[groupId]})
         result['roles'] = roles
         result["applyRolesRecursively"] = False
         userGroupRoles.append(result)

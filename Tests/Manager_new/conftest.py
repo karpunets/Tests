@@ -1,8 +1,8 @@
 import pytest
 import random
 from collections import deque
-from bin.session import Client, rootGroupId
-
+from bin.session import Client, root_group_id
+from bin.helpers import make_user_group_roles
 
 from bin.Make_requests_and_answers import parse_request, random_string
 
@@ -10,25 +10,25 @@ from bin.Make_requests_and_answers import parse_request, random_string
 @pytest.fixture(scope="function")
 def group():
     data = parse_request('post_group', {"$name": random_string(),
-                                       "$parentGroupId": rootGroupId()})
+                                        "$parentGroupId": root_group_id()})
     response = Client.post("groups", data['request'])
     yield response.json()
     Client.delete("groups", id=response.json()['groupId'])
 
 
 @pytest.fixture(scope="module")
-def immutable_user(immutable_group_with_child, immutable_role):
-    data = parse_request("post_users", {"$login":random_string(),
-                                           "$fname":random_string(),
-                                           "$lname":random_string(),
-                                           "$groupId":immutable_group_with_child['groupId'],
-                                           "$roleId":immutable_role['roleId'],
-                                           "$agentId": random_string(),
-                                           "$loginAD": random_string(),
-                                           "$pname": random_string(),
-                                           "$email": random_string()+'@.com.ua',
-                                           "$phone": str(random.randint(11111, 99999999)),
-                                           "$fax": random_string()
+def immutable_user(userGroupRoles, immutable_role):
+    data = parse_request("post_users", {"$login": random_string(),
+                                        "$fname": random_string(),
+                                        "$lname": random_string(),
+                                        "$roleId": immutable_role['roleId'],
+                                        "$agentId": random_string(),
+                                        "$loginAD": random_string(),
+                                        "$pname": random_string(),
+                                        "$email": random_string() + '@.com.ua',
+                                        "$phone": str(random.randint(11111, 99999999)),
+                                        "$fax": random_string(),
+                                        "$userGroupRoles": userGroupRoles
                                         })
     response = Client.post("users", data['request'])
     yield response.json()
@@ -39,11 +39,11 @@ def immutable_user(immutable_group_with_child, immutable_role):
 def immutable_group_with_child():
     groupsId = deque([], maxlen=5)
     data = parse_request('post_group', {"$name": random_string(),
-                                       "$parentGroupId": rootGroupId()})
+                                        "$parentGroupId": root_group_id()})
     responseParent = Client.post("groups", data['request'])
     groupsId.appendleft(responseParent.json()['groupId'])
     dataChild = parse_request('post_group', {"$name": random_string(),
-                                       "$parentGroupId": groupsId[0]})
+                                             "$parentGroupId": groupsId[0]})
     responseChild = Client.post("groups", dataChild['request'])
     response = Client.get("groups", id=groupsId[0])
     groupsId.appendleft(responseChild.json()['groupId'])
@@ -56,7 +56,7 @@ def immutable_group_with_child():
 def role(group):
     url = "roles"
     data = parse_request('post_roles', {"$name": random_string(),
-                                       "$groupId": group['groupId']})
+                                        "$groupId": group['groupId']})
     response = Client.post(url, data['request'])
     yield response.json()
     Client.delete(url, id=response.json()['roleId'])
@@ -66,7 +66,7 @@ def role(group):
 def immutable_role(immutable_group_with_child):
     url = "roles"
     data = parse_request('post_roles', {"$name": random_string(),
-                                       "$groupId": immutable_group_with_child['groupId']})
+                                        "$groupId": immutable_group_with_child['groupId']})
     response = Client.post(url, data['request'])
     yield response.json()
     Client.delete(url, id=response.json()['roleId'])
@@ -80,21 +80,27 @@ def clear_data(request):
     for id_to_delete in group_id_list:
         Client.delete(url, id=id_to_delete)
 
+
 @pytest.fixture(scope='module')
-def immutable_deleted_user(immutable_group_with_child, immutable_role):
-    data = parse_request("post_users", {"$login":random_string(),
-                                           "$fname":random_string(),
-                                           "$lname":random_string(),
-                                           "$groupId":immutable_group_with_child['groupId'],
-                                           "$roleId":immutable_role['roleId'],
-                                           "$agentId": random_string(),
-                                           "$loginAD": random_string(),
+def immutable_deleted_user(immutable_role, userGroupRoles):
+    data = parse_request("post_users", {"$login": random_string(),
+                                        "$fname": random_string(),
+                                        "$lname": random_string(),
+                                        "$roleId": immutable_role['roleId'],
+                                        "$agentId": random_string(),
+                                        "$loginAD": random_string(),
                                         "$pname": random_string(),
-                                        "$email": random_string()+'@.com.ua',
+                                        "$email": random_string() + '@.com.ua',
                                         "$phone": str(random.randint(11111, 99999999)),
-                                        "$fax": random_string()
+                                        "$fax": random_string(),
+                                        "$userGroupRole": userGroupRoles
                                         })
     data['request']['deleted'] = True
     response = Client.post("users", data['request'])
     yield response.json()
     Client.delete("users", id=response.json()['userId'])
+
+
+@pytest.fixture(scope="module")
+def userGroupRoles(immutable_role, immutable_group_with_child):
+    return make_user_group_roles({immutable_group_with_child['groupId']: immutable_role['roleId']})

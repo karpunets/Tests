@@ -81,9 +81,9 @@ def equal_schema(response, schema, assert_keys_quantity=True):
             # Если пара (ключ:значение), не совпадает, но ключ существует в схеме
             if (key, val) not in schema.items() and key in schema.keys():
                 # Если в схеме указана проверка на тип
-                if type(schema[key]) == dict and 'type' in schema[key].keys() and len(schema[key]) == 1:
+                if isinstance(schema[key],dict) and 'type' in schema[key].keys() and len(schema[key]) == 1:
                     # Тип не совпадаем, пишем ошибку
-                    if type(val) != default_types[schema[key]['type']]:
+                    if not isinstance(val, default_types[schema[key]['type']]):
                         not_equal.append(
                             "{{{0}:{1}}} type of value is not equal to schema type({1})!={2}".format(key, val,
                                                                                                      schema[key][
@@ -91,11 +91,11 @@ def equal_schema(response, schema, assert_keys_quantity=True):
                     # Подменяем значение в данных, для более коректного отображения в отчетах Allure
                     response[key] = {'type': default_types[type(val)]}
                 # Если список, проходимся по елементам в списке с применением рекурсии
-                elif type(val) == list:
+                elif isinstance(val, list):
                     for param in val:
                         equal(param, schema[key][val.index(param)])
                 # Если тип значения - обьект, так же применяем рекурсию
-                elif type(val) == dict:
+                elif isinstance(val, dict):
                     equal(response[key], schema[key])
                 else:
                     not_equal.append(

@@ -4,9 +4,9 @@ import allure
 import pytest
 import random
 from bin.session import Client
-from bin.session import rootGroupId
-from bin.session import getHeadersForUser
-from bin.helpers import  make_user_group_roles
+from bin.session import root_group_id
+from bin.session import get_headers_with_credentials
+from bin.helpers import make_user_group_roles
 from bin.Make_requests_and_answers import parse_request, equal_schema, random_string
 
 
@@ -46,7 +46,7 @@ class TestGroups:
     @pytest.mark.idToDelete
     def test_add_group(self, clear_data):
         data = parse_request("post_group", {"$name": random_string(),
-                                           "$parentGroupId": rootGroupId()})
+                                            "$parentGroupId": root_group_id()})
         response = Client.post(TestGroups.url, data['request'])
         clear_data.append(response.json()['groupId'])
         assert equal_schema(response.json(), data['schema']) and response.status_code == 201
@@ -56,7 +56,7 @@ class TestGroups:
     @allure.story('Создаем группу без имени')
     def test_addGroup_without_name(self):
         data = parse_request("post_group", {"$name": None,
-                                           "$parentGroupId": rootGroupId()})
+                                            "$parentGroupId": root_group_id()})
         response = Client.post(TestGroups.url, data['request'])
         exceptedResponse = {'ADM_VALIDATION_GROUP_NAME': 'NAME not specified'}
         assert (response.status_code, response.json()) == (400, exceptedResponse)
@@ -65,7 +65,7 @@ class TestGroups:
     @allure.story('Создаем группу без parentGroupId')
     def test_addGroup_without_group(self):
         data = parse_request("post_group", {"$name": random_string(),
-                                           "$parentGroupId": None})
+                                            "$parentGroupId": None})
         response = Client.post(TestGroups.url, data['request'])
         exceptedResponse = {
             'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'CommonRequestedResourcesNotFound: GROUP by groupId=null not found'}
@@ -76,7 +76,7 @@ class TestGroups:
     def test_addGroup_with_unknown_parentGroupId(self):
         randonGroupId = random_string()
         data = parse_request("post_group", {"$name": random_string(),
-                                           "$parentGroupId": randonGroupId
+                                            "$parentGroupId": randonGroupId
                                             })
         response = Client.post(TestGroups.url, data['request'])
         expectedResponse = {
@@ -88,7 +88,7 @@ class TestGroups:
     def test_addGroup_with_existing_name(self, immutable_group_with_child, clear_data):
         existinGroupName = immutable_group_with_child['name']
         data = parse_request("post_group", {"$name": existinGroupName,
-                                           "$parentGroupId": rootGroupId()})
+                                            "$parentGroupId": root_group_id()})
         response = Client.post(TestGroups.url, data['request'])
         print(response.json())
         clear_data.append(response.json()['groupId'])
@@ -98,7 +98,7 @@ class TestGroups:
     @allure.story('Редактируем группу')
     def test_edit_group(self, group):
         data = parse_request("put_group", {"$name": random_string(),
-                                          "$groupId": group['groupId']})
+                                           "$groupId": group['groupId']})
         response = Client.put(TestGroups.url, data=data['request'], id=group['groupId'])
         assert response.status_code == 200 and equal_schema(response.json(), data['schema'])
 
@@ -106,7 +106,7 @@ class TestGroups:
     @allure.story('Редактируем группу на пустое имя')
     def test_edit_group_on_empty_name(self, group):
         data = parse_request("put_group", {"$name": None,
-                                          "$groupId": group['groupId']})
+                                           "$groupId": group['groupId']})
         response = Client.put(TestGroups.url, data=data['request'], id=group['groupId'])
         print(response.json())
         expectedResponse = {'ADM_VALIDATION_GROUP_NAME': 'NAME not specified'}
@@ -117,7 +117,7 @@ class TestGroups:
     def test_edit_group_with_unknown_groupId(self, group):
         unknownGroupId = random_string()
         data = parse_request("put_group", {"$name": random_string(),
-                                          "$groupId": group['groupId']})
+                                           "$groupId": group['groupId']})
         response = Client.put(TestGroups.url, data=data['request'], id=unknownGroupId)
         expectedResponse = {
             'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'CommonRequestedResourcesNotFound: GROUP by groupId=%s not found' % unknownGroupId}
@@ -148,7 +148,7 @@ class TestGroups:
         assert (response.status_code, response.json()) == (400, expectedResponse)
 
 
-class TestRoles():
+class TestRoles:
     # TODO: добавить интеграционный тест, в котором в пользователя будет назначина группа, ниже RootChild
     # TODO: добавить тест, в котором пользователь будет находится в двух RootChild
 
@@ -158,7 +158,7 @@ class TestRoles():
     @allure.story('Создаем роль с первым child от рута')
     def test_add_role_with_first_root_child(self, immutable_group_with_child, clear_data):
         data = parse_request('post_roles', {"$name": random_string(),
-                                           "$groupId": immutable_group_with_child['groupId']})
+                                            "$groupId": immutable_group_with_child['groupId']})
         response = Client.post(TestRoles.url, data['request'])
         clear_data.append(response.json()['roleId'])
         assert equal_schema(response.json(), data['schema']) and response.status_code == 201
@@ -167,7 +167,7 @@ class TestRoles():
     @allure.story('Создаем роль')
     def test_add_role_without_name(self, immutable_group_with_child):
         data = parse_request('post_roles', {"$name": None,
-                                           "$groupId": immutable_group_with_child['groupId']})
+                                            "$groupId": immutable_group_with_child['groupId']})
         response = Client.post(TestRoles.url, data['request'])
         expectedResponse = {'ADM_VALIDATION_ROLE_NAME': 'NAME not specified'}
         assert (response.status_code, response.json()) == (400, expectedResponse)
@@ -176,7 +176,7 @@ class TestRoles():
     @allure.story('Создаем роль с root групой')
     def test_add_role_with_root_group(self, clear_data):
         data = parse_request('post_roles', {"$name": random_string(),
-                                           "$groupId": rootGroupId()})
+                                            "$groupId": root_group_id()})
         response = Client.post(TestRoles.url, data['request'])
         clear_data.append(response.json()['roleId'])
         assert equal_schema(response.json(), data['schema']) and response.status_code == 201
@@ -186,19 +186,19 @@ class TestRoles():
     def test_add_role_with_second_child(self, immutable_group_with_child, clear_data):
         childGroupId = immutable_group_with_child['children'][0]['groupId']
         data = parse_request('post_roles', {"$name": random_string(),
-                                           "$groupId": childGroupId})
+                                            "$groupId": childGroupId})
         response = Client.post(TestRoles.url, data['request'])
         print(childGroupId, response.json())
         clear_data.append(response.json()['roleId'])
         assert (response.status_code, response.json()['group']['groupId']) == (
-        201, immutable_group_with_child['groupId'])
+            201, immutable_group_with_child['groupId'])
 
     # Не правильный текст валидации
     @allure.feature('Функциональний тест')
     @allure.story('Создаем роль без группы')
     def test_add_role_without_group(self):
         data = parse_request('post_roles', {"$name": random_string(),
-                                           "$groupId": None})
+                                            "$groupId": None})
         response = Client.post(TestRoles.url, data['request'])
         expected_response = {'ADM_VALIDATION_ROLE_GROUP_EMPTY': 'GROUP not specified'}
         assert (response.status_code, response.json()) == (400, expected_response)
@@ -209,7 +209,7 @@ class TestRoles():
     def test_add_role_with_unknown_group(self):
         unknown_group_id = random_string()
         data = parse_request('post_roles', {"$name": random_string(),
-                                           "$groupId": unknown_group_id})
+                                            "$groupId": unknown_group_id})
         response = Client.post(TestRoles.url, data['request'])
         print(response.json())
         expected_response = {
@@ -222,7 +222,7 @@ class TestRoles():
     def test_add_role_with_existing_name(self, immutable_group_with_child, role):
         existing_name = role['name']
         data = parse_request('post_roles', {"$name": existing_name,
-                                           "$groupId": immutable_group_with_child['groupId']})
+                                            "$groupId": immutable_group_with_child['groupId']})
         response = Client.post(TestRoles.url, data['request'])
         expected_response = {
             'COMMON_ENTITY_WITH_SUCH_FIELD_EXISTS': 'CommonEntityWithSuchFieldExists: Name is not unique'}
@@ -268,8 +268,8 @@ class TestRoles():
     @allure.story('Редактируем роль')
     def test_edit_role(self, role, immutable_group_with_child):
         data = parse_request('put_roles', {"$roleId": role['roleId'],
-                                          "$name": random_string(),
-                                          "$groupId": immutable_group_with_child['groupId']
+                                           "$name": random_string(),
+                                           "$groupId": immutable_group_with_child['groupId']
                                            })
         response = Client.put(TestRoles.url, data['request'], id=role['roleId'])
         assert equal_schema(response.json(), data['schema']) and response.status_code == 200
@@ -278,8 +278,8 @@ class TestRoles():
     @allure.story('Редактируем роль на пустое имя')
     def test_edit_role_on_empty_name(self, role, immutable_group_with_child):
         data = parse_request('put_roles', {"$roleId": role['roleId'],
-                                          "$name": None,
-                                          "$groupId": immutable_group_with_child['groupId']
+                                           "$name": None,
+                                           "$groupId": immutable_group_with_child['groupId']
                                            })
         response = Client.put(TestRoles.url, data['request'], id=role['roleId'])
         expected_response = {'ADM_VALIDATION_ROLE_NAME': 'NAME not specified'}
@@ -290,8 +290,8 @@ class TestRoles():
     def test_edit_role_on_unknown_group(self, role):
         unknown_group_id = random_string()
         data = parse_request('put_roles', {"$roleId": role['roleId'],
-                                          "$name": random_string(),
-                                          "$groupId": unknown_group_id
+                                           "$name": random_string(),
+                                           "$groupId": unknown_group_id
                                            })
         response = Client.put(TestRoles.url, data['request'], id=role['roleId'])
         print(response.json())
@@ -304,8 +304,8 @@ class TestRoles():
     def test_edit_role_name_on_existing(self, role, immutable_role):
         existing_name = immutable_role['name']
         data = parse_request('put_roles', {"$roleId": role['roleId'],
-                                          "$name": existing_name,
-                                          "$groupId": role['group']['groupId']
+                                           "$name": existing_name,
+                                           "$groupId": role['group']['groupId']
                                            })
         response = Client.put(TestRoles.url, data['request'], id=role['roleId'])
         print(response.json())
@@ -319,13 +319,11 @@ class TestUsers:
 
     @allure.feature('функциональный тест')
     @allure.story('Создаем пользователя только с обязательными полями')
-    def test_add_user_with_required_fields(self, clear_data, immutable_role, immutable_group_with_child):
-        userGroupRoles = make_user_group_roles({immutable_group_with_child['groupId']:immutable_role['roleId']})
-        print(userGroupRoles)
+    def test_add_user_with_required_fields(self, clear_data, immutable_role, userGroupRoles):
         data = parse_request("post_users", {"$login": random_string(),
-                                           "$fname": random_string(),
-                                           "$lname": random_string(),
-                                           "$roleId": immutable_role['roleId'],
+                                            "$fname": random_string(),
+                                            "$lname": random_string(),
+                                            "$roleId": immutable_role['roleId'],
                                             "$userGroupRoles": userGroupRoles})
         response = Client.post(TestUsers.url, data['request'])
         print(response.json())
@@ -334,18 +332,18 @@ class TestUsers:
 
     @allure.feature('функциональный тест')
     @allure.story('Создаем пользователя со всеми полями')
-    def test_add_user_with_all_fields(self, clear_data, immutable_role, immutable_group_with_child):
+    def test_add_user_with_all_fields(self, clear_data, immutable_role, userGroupRoles):
         data = parse_request("post_users", {"$login": random_string(),
-                                           "$fname": random_string(),
-                                           "$lname": random_string(),
-                                           "$groupId": immutable_group_with_child['groupId'],
-                                           "$roleId": immutable_role['roleId'],
-                                           "$agentId": random_string(),
-                                           "$loginAD": random_string(),
+                                            "$fname": random_string(),
+                                            "$lname": random_string(),
+                                            "$roleId": immutable_role['roleId'],
+                                            "$agentId": random_string(),
+                                            "$loginAD": random_string(),
                                             "$pname": random_string(),
                                             "$email": random_string() + '@.com.ua',
                                             "$phone": str(random.randint(11111, 99999999)),
-                                            "$fax": random_string()
+                                            "$fax": random_string(),
+                                            "$userGroupRoles": userGroupRoles
                                             })
         response = Client.post(TestUsers.url, data['request'])
         print(data['schema'])
@@ -355,30 +353,29 @@ class TestUsers:
 
     @allure.feature('функциональный тест')
     @allure.story('Создаем пользователя с уже существующим login')
-    def test_add_user_with_existing_login(self, immutable_role, immutable_group_with_child, immutable_user):
+    def test_add_user_with_existing_login(self, immutable_role, userGroupRoles, immutable_user):
         existing_login = immutable_user['login']
         data = parse_request("post_users", {"$login": existing_login,
-                                           "$fname": random_string(),
-                                           "$lname": random_string(),
-                                           "$groupId": immutable_group_with_child['groupId'],
-                                           "$roleId": immutable_role['roleId']})
+                                            "$fname": random_string(),
+                                            "$lname": random_string(),
+                                            "$userGroupRoles": userGroupRoles,
+                                            "$roleId": immutable_role['roleId']})
         response = Client.post(TestUsers.url, data['request'])
-        expected_response = {
-            'COMMON_ENTITY_WITH_SUCH_FIELD_EXISTS': 'CommonEntityWithSuchFieldExists: LOGIN or USER ID should be unique.'}
+        expected_response = {'COMMON_ENTITY_WITH_SUCH_FIELD_EXISTS': 'CommonEntityWithSuchFieldExists: Login is not unique'}
         assert (response.status_code, response.json()) == (409, expected_response)
 
     @allure.feature('функциональный тест')
     @allure.story('Создаем пользователя с существующими полями (кроме уникальных)')
     def test_add_user_with_existing_fields_which_are_not_unique(self, clear_data, immutable_role,
-                                                                immutable_group_with_child, immutable_user):
+                                                                userGroupRoles, immutable_user):
         existing_field = immutable_user
         data = parse_request("post_users", {"$login": random_string(),
-                                           "$fname": existing_field['fname'],
-                                           "$lname": existing_field['lname'],
-                                           "$groupId": immutable_group_with_child['groupId'],
-                                           "$roleId": immutable_role['roleId'],
-                                           "$agentId": random_string(),
-                                           "$loginAD": existing_field['loginAD'],
+                                            "$fname": existing_field['fname'],
+                                            "$lname": existing_field['lname'],
+                                            "$userGroupRoles":userGroupRoles,
+                                            "$roleId": immutable_role['roleId'],
+                                            "$agentId": random_string(),
+                                            "$loginAD": existing_field['loginAD'],
                                             "$pname": existing_field['pname'],
                                             "$email": existing_field['email'],
                                             "$phone": str(random.randint(1111111, 999999999)),
@@ -392,14 +389,14 @@ class TestUsers:
     @allure.feature('функциональный тест')
     @allure.story('Создаем пользователя с уже существующим phone')
     @pytest.mark.xfail
-    def test_add_user_with_existing_phone(self, immutable_role, immutable_group_with_child, immutable_user):
+    def test_add_user_with_existing_phone(self, immutable_role, userGroupRoles, immutable_user):
         existing_phone = immutable_user['phone']
         data = parse_request("post_users", {"$login": random_string(),
-                                           "$fname": random_string(),
-                                           "$lname": random_string(),
-                                           "$groupId": immutable_group_with_child['groupId'],
-                                           "$roleId": immutable_role['roleId'],
-                                           "$phone": existing_phone})
+                                            "$fname": random_string(),
+                                            "$lname": random_string(),
+                                            "$userGroupRoles": userGroupRoles,
+                                            "$roleId": immutable_role['roleId'],
+                                            "$phone": existing_phone})
         response = Client.post(TestUsers.url, data['request'])
         print(response.json())
         expected_response = {
@@ -408,14 +405,14 @@ class TestUsers:
 
     @allure.feature('функциональный тест')
     @allure.story('Создаем пользователя с уже существующим agentId')
-    def test_add_user_with_existing_agentId(self, immutable_role, immutable_group_with_child, immutable_user):
+    def test_add_user_with_existing_agentId(self, immutable_role, userGroupRoles, immutable_user):
         existing_agentId = immutable_user['agentId']
         data = parse_request("post_users", {"$login": random_string(),
-                                           "$fname": random_string(),
-                                           "$lname": random_string(),
-                                           "$groupId": immutable_group_with_child['groupId'],
-                                           "$roleId": immutable_role['roleId'],
-                                           "$agentId": existing_agentId})
+                                            "$fname": random_string(),
+                                            "$lname": random_string(),
+                                            "$userGroupRoles": userGroupRoles,
+                                            "$roleId": immutable_role['roleId'],
+                                            "$agentId": existing_agentId})
         response = Client.post(TestUsers.url, data['request'])
         print(response.json())
         expected_response = {
@@ -424,39 +421,52 @@ class TestUsers:
 
     @allure.feature('функциональный тест')
     @allure.story('Создаем пользователя без login, fname, lname')
-    def test_add_user_without_login_fname_lname(self, immutable_role, immutable_group_with_child):
+    def test_add_user_without_login_fname_lname(self, immutable_role, userGroupRoles):
         data = parse_request("post_users", {"$login": None,
-                                           "$fname": None,
-                                           "$lname": None,
-                                           "$groupId": immutable_group_with_child['groupId'],
-                                           "$roleId": immutable_role['roleId']})
+                                            "$fname": None,
+                                            "$lname": None,
+                                            "$userGroupRoles": userGroupRoles,
+                                            "$roleId": immutable_role['roleId']})
         response = Client.post(TestUsers.url, data['request'])
         expected_response = {'ADM_VALIDATION_USER_LAST_NAME_LENGTH': 'LNAME length from 1 to 256',
                              'ADM_VALIDATION_USER_FIRST_NAME_LENGTH': 'FNAME length from 1 to 256',
                              'ADM_VALIDATION_USER_LOGIN_LENGTH': 'LOGIN length from 1 to 256'}
         assert (response.status_code, response.json()) == (400, expected_response)
 
-
     @allure.feature('функциональный тест')
     @allure.story('Создаем пользователя без roleId')
-    def test_add_user_without_groupId_roleId(self, immutable_group_with_child):
+    def test_add_user_without_groupId_roleId(self, userGroupRoles):
         data = parse_request("post_users", {"$login": random_string(),
-                                           "$fname": random_string(),
-                                           "$lname": random_string(),
-                                           "$groupId": immutable_group_with_child['groupId'],
-                                           "$roleId": None})
+                                            "$fname": random_string(),
+                                            "$lname": random_string(),
+                                            "$userGroupRoles": userGroupRoles,
+                                            "$roleId": None})
         response = Client.post(TestUsers.url, data['request'])
-        expected_response = {'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'CommonRequestedResourcesNotFound: ROLE by roleId=null not found'}
+        expected_response = {'ADM_VALIDATION_ROLES_NOT_FOUND': 'Roles by the following role ids not found: null'}
         assert (response.status_code, response.json()) == (400, expected_response)
 
     @allure.feature('функциональный тест')
     @allure.story('Создаем пользователя без groupId')
     def test_add_user_without_groupId(self, immutable_role):
         data = parse_request("post_users", {"$login": random_string(),
-                                           "$fname": random_string(),
-                                           "$lname": random_string(),
-                                           "$groupId": None,
-                                           "$roleId": immutable_role['roleId']})
+                                            "$fname": random_string(),
+                                            "$lname": random_string(),
+                                            "$groupId": None,
+                                            "$roleId": immutable_role['roleId']})
         response = Client.post(TestUsers.url, data['request'])
-        expected_response = {'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'CommonRequestedResourcesNotFound: GROUP by groupId=null not found'}
+        expected_response = {'ADM_VALIDATION_USER_USER_GROUP_ROLES': 'User group roles is empty'}
         assert (response.status_code, response.json()) == (400, expected_response)
+
+    @allure.feature('функциональный тест')
+    @allure.story('Создаем пользователя только с обязательными полями')
+    def test_add_user_check_userGroupRoles(self, clear_data, immutable_role, userGroupRoles):
+        data = parse_request("post_users", {"$login": random_string(),
+                                            "$fname": random_string(),
+                                            "$lname": random_string(),
+                                            "$roleId": immutable_role['roleId'],
+                                            "$userGroupRoles": userGroupRoles})
+        response = Client.post(TestUsers.url, data['request'])
+        print("reponse", response.json()['userGroupRoles'])
+        print("userGroupRoles", userGroupRoles)
+        clear_data.append(response.json()['userId'])
+        assert userGroupRoles[0]['group'] in response.json()['userGroupRoles'][0]['group']
