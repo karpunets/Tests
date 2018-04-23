@@ -4,6 +4,7 @@
     "login": "$login",
     "loginAD": "$loginAD",
     "lname": "$lname",
+    "password":"$password",
     "fname": "$fname",
     "pname": "$pname",
     "email": "$email",

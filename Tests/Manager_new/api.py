@@ -8,6 +8,30 @@ from bin.session import root_group_id
 from bin.session import get_headers_with_credentials
 from bin.helpers import make_user_group_roles
 from bin.Make_requests_and_answers import parse_request, equal_schema, random_string
+from bin.helpers import get_property
+
+
+class TestAuthorizationServer:
+    url = "token"
+
+    @allure.feature('Функциональный тест')
+    @allure.story('Получаем токент для рута')
+    def test_get_token_for_root(self):
+        data = get_property("principal", "credential")
+        response = Client.post(TestAuthorizationServer.url, data)
+        assert (response.status_code, "X-Smiddle-Auth-Token") == (200, response.json()['name'])
+
+    @allure.feature('Функциональный тест')
+    @allure.story('Получаем токент для рута')
+    @pytest.mark.parametrize("role_name, sessionLiveTimeSec",
+                             [("ROOT", 300), ("ADMINISTRATOR", 300), ("SUPERVISOR", 300), ("USER", 300)])
+    def test_get_token_for_root(self, add_user_with_role, role_name, sessionLiveTimeSec):
+        user = add_user_with_role(role_name)
+        data = parse_request("auth", {"$principal":user['login'],
+                                      "$credential":"qwerty",
+                                      "$sessionLiveTimeSec": sessionLiveTimeSec})
+        response = Client.post(TestAuthorizationServer.url, data['request'])
+        assert equal_schema(response.json(), data['schema'])
 
 
 class TestGroups:
@@ -161,6 +185,7 @@ class TestRoles:
                                             "$groupId": immutable_group_with_child['groupId']})
         response = Client.post(TestRoles.url, data['request'])
         clear_data.append(response.json()['roleId'])
+        print(response.json())
         assert equal_schema(response.json(), data['schema']) and response.status_code == 201
 
     @allure.feature('Функциональний тест')
@@ -232,12 +257,14 @@ class TestRoles:
     @allure.story('Получаем все роли')
     def test_get_roles(self, role):
         response = Client.get(TestRoles.url)
+        role.pop("templateRole")
         assert response.status_code == 200 and role in response.json()
 
     @allure.feature('Функциональний тест')
     @allure.story('Получаем конкретную роль по id')
     def test_get_role_by_id(self, role):
         response = Client.get(TestRoles.url, id=role['roleId'])
+        role.pop("templateRole")
         assert (response.status_code, response.json()) == (200, role)
 
     @allure.feature('Функциональний тест')
@@ -252,6 +279,7 @@ class TestRoles:
     @allure.feature('Функциональний тест')
     @allure.story('Удаляем роль')
     def test_delete_role(self, role):
+        role.pop("templateRole")
         response = Client.delete(TestRoles.url, id=role['roleId'])
         assert (response.status_code, response.json()) == (200, role)
 
@@ -361,7 +389,8 @@ class TestUsers:
                                             "$userGroupRoles": userGroupRoles,
                                             "$roleId": immutable_role['roleId']})
         response = Client.post(TestUsers.url, data['request'])
-        expected_response = {'COMMON_ENTITY_WITH_SUCH_FIELD_EXISTS': 'CommonEntityWithSuchFieldExists: Login is not unique'}
+        expected_response = {
+            'COMMON_ENTITY_WITH_SUCH_FIELD_EXISTS': 'CommonEntityWithSuchFieldExists: Login is not unique'}
         assert (response.status_code, response.json()) == (409, expected_response)
 
     @allure.feature('функциональный тест')
@@ -372,7 +401,7 @@ class TestUsers:
         data = parse_request("post_users", {"$login": random_string(),
                                             "$fname": existing_field['fname'],
                                             "$lname": existing_field['lname'],
-                                            "$userGroupRoles":userGroupRoles,
+                                            "$userGroupRoles": userGroupRoles,
                                             "$roleId": immutable_role['roleId'],
                                             "$agentId": random_string(),
                                             "$loginAD": existing_field['loginAD'],
@@ -458,7 +487,7 @@ class TestUsers:
         assert (response.status_code, response.json()) == (400, expected_response)
 
     @allure.feature('функциональный тест')
-    @allure.story('Создаем пользователя только с обязательными полями')
+    @allure.story('Проверяем коррекстность добавления userGroupRoles при создании пользователя')
     def test_add_user_check_userGroupRoles(self, clear_data, immutable_role, userGroupRoles):
         data = parse_request("post_users", {"$login": random_string(),
                                             "$fname": random_string(),
@@ -466,7 +495,15 @@ class TestUsers:
                                             "$roleId": immutable_role['roleId'],
                                             "$userGroupRoles": userGroupRoles})
         response = Client.post(TestUsers.url, data['request'])
-        print("reponse", response.json()['userGroupRoles'])
-        print("userGroupRoles", userGroupRoles)
+        responseUserGroupRoles = response.json()['userGroupRoles']
+        responseGroupRolesSet = set(
+            responseUserGroupRoles[0]['group'].items() | responseUserGroupRoles[0]['roles'][0].items())
+        addedUserGroupRoles = set(userGroupRoles[0]['roles'][0].items() | userGroupRoles[0]['group'].items())
         clear_data.append(response.json()['userId'])
-        assert userGroupRoles[0]['group'] in response.json()['userGroupRoles'][0]['group']
+        assert addedUserGroupRoles.issubset(responseGroupRolesSet)
+
+    @allure.feature('функциональный тест')
+    @allure.story('Проверяем коррекстность добавления userGroupRoles при создании пользователя')
+    def test_get_user(self, immutable_user):
+        response = Client.get(TestUsers.url, id=immutable_user['userId'])
+        assert response.json() == immutable_user

@@ -9,7 +9,6 @@
   },
   "schema": {
     "name": "$name",
-    "isSystem": false,
     "sessionLiveTimeSec": 300,
     "group": {
       "name": {"type":"string"},
@@ -17,7 +16,7 @@
       "groupId": "$groupId"
     },
     "tasks": null,
-    "roleTemplateId": null,
+    "templateRole": null,
     "system": false,
     "roleId": {"type":"string"}
   }

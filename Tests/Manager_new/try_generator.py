@@ -1,5 +1,17 @@
-a = [{'group': {'groupId': 'fddd4e7c-1363-49c5-9b65-faf23c6ab386'}, 'roles': [{'roleId': '8e9069c9-9015-4204-93b9-531d14985b71'}], 'applyRolesRecursively': False}]
+a = [{'group': {'groupId': '850fb30b-c205-4fd1-8d38-01033a68b5af'}, 'roles': [{'roleId': '454a2e9f-2c87-478f-a49c-dcb58bfd0ee3'}], 'applyRolesRecursively': False}]
 
-z = [(key, val) for key, val in set(a[0]['roles'][0].items()) | set(a[0]['group'].items())]
+z = {(key, val) for key, val in set(a[0]['roles'][0].items()) | set(a[0]['group'].items())}
+z2 = set(a[0]['roles'][0].items() | a[0]['group'].items())
 
-print(z)
+b = [{'group': {'name': 'hmSFY52J18', 'groupId': '850fb30b-c205-4fd1-8d38-01033a68b5af'}, 'roles': [{'name': 'lYSNUoOlg', 'system': False, 'roleId': '454a2e9f-2c87-478f-a49c-dcb58bfd0ee3'}]}]
+
+
+
+
+x = {(key, val) for key, val in set(b[0]['group'].items()) | set(b[0]['roles'][0].items())}
+
+print("x", x)
+
+print("z", z)
+print("z2", z2)
+print(z.issubset(x))

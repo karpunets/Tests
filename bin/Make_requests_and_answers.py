@@ -1,13 +1,14 @@
 import json, re, random, string, codecs, os, time
 import Data.URLs_MAP as URLs
-from Data.test_data import ROOT_user_id,ROOT_group_id
+from Data.test_data import ROOT_user_id, ROOT_group_id
 
 
 # TODO: Избавится от файла, перенести в сессии или helpers
 
 
 def random_string():
-    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(random.randint(3,10)))
+    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(random.randint(3, 10)))
+
 
 def date_now():
     return round(time.time() * 1000)
@@ -19,6 +20,7 @@ def parse_request(json_name, data={}):
     # Определяем откуда брать json файл
     path = 'Test_data/%s.json' % json_name
     json_file = open(path, encoding="utf8").read()
+
     # Доп. ф-ция для использования рекурсии
     # TODO: Вынести replace в helpers, rename on replace_string_on
 
@@ -37,7 +39,7 @@ def parse_request(json_name, data={}):
                         val = str(val)
                     if isinstance(val, list):
                         key = '"%s"' % key
-                        val = "%s"%val
+                        val = "%s" % val
                     json_file = json_file.replace(key, val)
 
                 # Возникает если передать None(null)
@@ -51,6 +53,7 @@ def parse_request(json_name, data={}):
         json_file = json_file.replace("False", 'false')
         json_file = json_file.replace("True", 'true')
         return json_file
+
     result = replace(json_file, data)
     # Вместо не переданных параметров подставляем null
     result = re.sub(r'(\"?\$[\w]+\"?)', 'null', result)
@@ -58,11 +61,11 @@ def parse_request(json_name, data={}):
     return result
 
 
-#TODO: Продумать как обьеденить со стандартным assert для илспользования multiassert
+# TODO: Продумать как обьеденить со стандартным assert для илспользования multiassert
 def equal_schema(response, schema, assert_keys_quantity=True):
     # Переменная для сбора ошибок
     not_equal = []
-    #Мапа для преобразований json обьектов в python
+    # Мапа для преобразований json обьектов в python
     default_types = {'string': str,
                      'number': int,
                      'null': None,
@@ -75,13 +78,14 @@ def equal_schema(response, schema, assert_keys_quantity=True):
                      bool: 'boolean',
                      list: 'array'
                      }
+
     # Подпрограмма для использования рекурсии
     def equal(response, schema):
         for (key, val) in response.items():
             # Если пара (ключ:значение), не совпадает, но ключ существует в схеме
             if (key, val) not in schema.items() and key in schema.keys():
                 # Если в схеме указана проверка на тип
-                if isinstance(schema[key],dict) and 'type' in schema[key].keys() and len(schema[key]) == 1:
+                if isinstance(schema[key], dict) and 'type' in schema[key].keys() and len(schema[key]) == 1:
                     # Тип не совпадаем, пишем ошибку
                     if not isinstance(val, default_types[schema[key]['type']]):
                         not_equal.append(
@@ -107,7 +111,7 @@ def equal_schema(response, schema, assert_keys_quantity=True):
         if len(schema) > len(response):
             for key in schema:
                 if key not in response.keys():
-                    not_equal.append('There is no key "{0}" in response keys {1}, but it exist in schema'.format(key, list(response.keys())))
+                    not_equal.append('There is no key "{0}" in response keys {1}, but it exist in schema'.format(key,list(response.keys())))
         else:
             equal(response, schema)
 
@@ -116,12 +120,10 @@ def equal_schema(response, schema, assert_keys_quantity=True):
         equal(response, schema)
     else:
         s = lambda: "more" if len(response) > len(schema) else "less"
-        not_equal.append("Number of keys in  response %s than number of keys in schema"%s())
+        not_equal.append("Number of keys in  response %s than number of keys in schema" % s())
         find_differences(response, schema)
-    assert response == schema,(not_equal)
+    assert response == schema, (not_equal)
     return True
-
-
 
 
 # Получаем и преобразуем JSON файл, согласно переданным параметрам
@@ -132,7 +134,7 @@ def get_from_csv(fileName):
     # Если не передали используем рут роль
     except KeyError:
         role_name_from_jenkins = 'ROOT'
-    #Конвертируем полученный файл
+    # Конвертируем полученный файл
     file_path = convert_to_utf_8(fileName)
     csv_file = open(file_path, encoding="utf-8").readlines()
     count = 0
@@ -140,22 +142,22 @@ def get_from_csv(fileName):
     for line in csv_file:
         if count != 0:
             if role_name_from_jenkins in line:
-                #Заменяем опечатки в CSV файле (одинарные кавычки на двойные и удалем символ переноса строки в конце)
-                line = line.replace('""','"')
-                line = line.replace("'",'"')
+                # Заменяем опечатки в CSV файле (одинарные кавычки на двойные и удалем символ переноса строки в конце)
+                line = line.replace('""', '"')
+                line = line.replace("'", '"')
                 line = line.rstrip("\n")
-                #Разбиваем на строку
+                # Разбиваем на строку
                 payload = line.split(";")
                 # Преобразуем в dict параметры
                 for param in ['Request_Data', 'Parameters', 'Response']:
                     param_index = row_names.index(param)
-                    if payload[param_index]!="-":
+                    if payload[param_index] != "-":
                         payload[param_index] = payload[param_index].strip('"')
                         payload[param_index] = json.loads(payload[param_index])
                     else:
                         payload[param_index] = {}
-                payload[row_names.index("URL_name")] = getattr(URLs,payload[row_names.index("URL_name")])
-                #Собираем параметры в одну сущность
+                payload[row_names.index("URL_name")] = getattr(URLs, payload[row_names.index("URL_name")])
+                # Собираем параметры в одну сущность
                 payload[row_names.index("Status_code")] = int(payload[row_names.index("Status_code")])
                 result.append(tuple(payload))
         else:
@@ -174,4 +176,3 @@ def convert_to_utf_8(fileName):
     out.write(u)  # and now the contents have been output as UTF-8
     out.close()
     return new_file_path
-

@@ -3,7 +3,7 @@ import random
 from collections import deque
 from bin.session import Client, root_group_id
 from bin.helpers import make_user_group_roles
-
+from bin.session import get_role_id
 from bin.Make_requests_and_answers import parse_request, random_string
 
 
@@ -31,7 +31,9 @@ def immutable_user(userGroupRoles, immutable_role):
                                         "$userGroupRoles": userGroupRoles
                                         })
     response = Client.post("users", data['request'])
-    yield response.json()
+    user = response.json()
+    user['dateCreate'] = round(user['dateCreate']/1000) * 1000
+    yield user
     Client.delete("users", id=response.json()['userId'])
 
 
@@ -104,3 +106,34 @@ def immutable_deleted_user(immutable_role, userGroupRoles):
 @pytest.fixture(scope="module")
 def userGroupRoles(immutable_role, immutable_group_with_child):
     return make_user_group_roles({immutable_group_with_child['groupId']: immutable_role['roleId']})
+
+
+@pytest.fixture(scope="function")
+def add_user_with_role(request):
+
+    def _user(role_name):
+        role_id = get_role_id(role_name)
+        user_group_and_role = make_user_group_roles({root_group_id():role_id})
+        data = parse_request("post_users", {"$login": random_string(),
+                                            "$fname": random_string(),
+                                            "$lname": random_string(),
+                                            "$password": "qwerty",
+                                            "$roleId": role_id,
+                                            "$agentId": random_string(),
+                                            "$loginAD": random_string(),
+                                            "$pname": random_string(),
+                                            "$email": random_string() + '@.com.ua',
+                                            "$phone": str(random.randint(11111, 99999999)),
+                                            "$fax": random_string(),
+                                            "$userGroupRoles": user_group_and_role
+                                            })
+        response = Client.post("users", data['request'])
+        user = response.json()
+        user['dateCreate'] = round(user['dateCreate'] / 1000) * 1000
+
+        def fin():
+            print(user['userId'])
+            Client.delete("users", id=user['userId'])
+        request.addfinalizer(fin)
+        return user
+    return _user
