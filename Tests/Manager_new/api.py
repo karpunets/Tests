@@ -22,16 +22,53 @@ class TestAuthorizationServer:
         assert (response.status_code, "X-Smiddle-Auth-Token") == (200, response.json()['name'])
 
     @allure.feature('Функциональный тест')
-    @allure.story('Получаем токент для рута')
+    @allure.story('Получаем токент для разных ролей')
     @pytest.mark.parametrize("role_name, sessionLiveTimeSec",
                              [("ROOT", 300), ("ADMINISTRATOR", 300), ("SUPERVISOR", 300), ("USER", 300)])
-    def test_get_token_for_root(self, add_user_with_role, role_name, sessionLiveTimeSec):
+    def test_get_token_for_system_roles(self, add_user_with_role, role_name, sessionLiveTimeSec):
         user = add_user_with_role(role_name)
-        data = parse_request("auth", {"$principal":user['login'],
-                                      "$credential":"qwerty",
+        data = parse_request("auth", {"$principal": user['login'],
+                                      "$credential": "qwerty",
                                       "$sessionLiveTimeSec": sessionLiveTimeSec})
         response = Client.post(TestAuthorizationServer.url, data['request'])
         assert equal_schema(response.json(), data['schema'])
+
+    @allure.feature('Функциональный тест')
+    @allure.story('Получаем токент с не правильными полномочиями')
+    def test_get_token_with_wrong_credentials(self):
+        data = {"principal": random_string(), "credential": random_string()}
+        response = Client.post(TestAuthorizationServer.url, data)
+        expected_result = {
+            'PRINCIPAL_NOT_FOUND': 'org.springframework.security.core.userdetails.UsernameNotFoundException: Not authorized. No user found'}
+        assert (response.status_code, response.json()) == (500, expected_result)
+
+    @allure.feature('Функциональный тест')
+    @allure.story('Получаем токент с пустыми полномочиями(логин, пароль)')
+    def test_get_token_with_empty_credentials(self):
+        data = {"principal": None, "credential": None}
+        response = Client.post(TestAuthorizationServer.url, data)
+        print(response.json())
+        expected_result = {'PRINCIPAL_EMPTY': 'principal is empty', 'CREDENTIALS_EMPTY': 'credentials is empty'}
+        assert (response.status_code, response.json()) == (400, expected_result)
+
+    @allure.feature('Функциональный тест')
+    @allure.story('Получаем токент для удаленного пользователя')
+    def test_get_token_for_deleted_user(self, immutable_deleted_user):
+        data = parse_request("auth", {"$principal": immutable_deleted_user['login'],
+                                      "$credential": "qwerty"})
+        response = Client.post(TestAuthorizationServer.url, data['request'])
+        expected_response = {'PRINCIPAL_NOT_FOUND': 'org.springframework.security.core.userdetails.UsernameNotFoundException: Not authorized. No user found'}
+        assert (response.json(), response.status_code) == (expected_response, response.status_code)
+
+
+    @allure.feature('Функциональный тест')
+    @allure.story('Получаем токент для пользователя без прав доступа')
+    def test_get_token_for_user_without_credentials(self, immutable_user):
+        data = parse_request("auth", {"$principal": immutable_user['login'],
+                                      "$credential": "qwerty"})
+        response = Client.post(TestAuthorizationServer.url, data['request'])
+        expected_response = {'BAD_CREDENTIALS': 'org.springframework.security.authentication.BadCredentialsException: Not authorized. Wrong credential.'}
+        assert (response.json(), response.status_code) == (expected_response, response.status_code)
 
 
 class TestGroups:
@@ -503,7 +540,37 @@ class TestUsers:
         assert addedUserGroupRoles.issubset(responseGroupRolesSet)
 
     @allure.feature('функциональный тест')
-    @allure.story('Проверяем коррекстность добавления userGroupRoles при создании пользователя')
+    @allure.story('Получаем пользователя по userId')
     def test_get_user(self, immutable_user):
         response = Client.get(TestUsers.url, id=immutable_user['userId'])
-        assert response.json() == immutable_user
+        assert (response.json(), response.status_code) == (immutable_user, 200)
+
+    @allure.feature('функциональный тест')
+    @allure.story('Получаем пользователя по неизвестному id')
+    def test_get_user_with_unknown_id(self):
+        unknownd_user_id = random_string()
+        response = Client.get(TestUsers.url, id=unknownd_user_id)
+        expected_response = {'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'CommonRequestedResourcesNotFound: USER not found by userId=%s'%unknownd_user_id}
+        assert (response.json(), response.status_code) == (expected_response, 400)
+
+    @allure.feature('функциональный тест')
+    @allure.story('Получаем удаленного пользователя по userId')
+    def test_get_deleted_user(self, immutable_deleted_user):
+        response = Client.get(TestUsers.url, id=immutable_deleted_user['userId'])
+        assert (response.json(), response.status_code) == (immutable_deleted_user, 200)
+
+    @allure.feature('функциональный тест')
+    @allure.story('Удаляем пользователя по userId')
+    def test_delete_user(self, user):
+        response = Client.delete(TestUsers.url, id=user['userId'])
+        assert (response.json(), response.status_code) == (user, 200)
+
+    @allure.feature('функциональный тест')
+    @allure.story('Удаляем пользователя по неизвестному userId')
+    def test_delete_user_by_unknown_userId(self):
+        unknown_user_id = random_string()
+        response = Client.delete(TestUsers.url, id=unknown_user_id)
+        expected_response = {'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'CommonRequestedResourcesNotFound: USER not found by userId=%s'%unknown_user_id}
+        assert (response.json(), response.status_code) == (expected_response, 400)
+
+

@@ -1,7 +1,7 @@
 {
   "request": {
     "name": "$name",
-    "isSystem": false,
+    "system": false,
     "sessionLiveTimeSec": 300,
     "group": {
       "groupId": "$groupId"
