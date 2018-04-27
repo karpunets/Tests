@@ -2,12 +2,12 @@
   "request": {
     "roleId":"$roleId",
     "name": "$name",
+    "templateRole": "$templateRole",
     "sessionLiveTimeSec": 300,
     "group": {
       "groupId": "$groupId"
     },
     "tasks": null,
-    "templateRole": null,
     "system": false
   },
   "schema": {
@@ -18,7 +18,6 @@
       "cid": {"type":"number"},
       "groupId": "$groupId"
     },
-    "tasks": null,
     "templateRole": null,
     "system": false,
     "roleId": "$roleId"

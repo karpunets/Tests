@@ -4,7 +4,7 @@ import allure
 import pytest
 import random
 from bin.session import Client
-from bin.session import root_group_id
+from bin.session import root_group_id, root_role_id
 from bin.session import get_headers_with_credentials
 from bin.helpers import make_user_group_roles
 from bin.Make_requests_and_answers import parse_request, equal_schema, random_string
@@ -47,7 +47,6 @@ class TestAuthorizationServer:
     def test_get_token_with_empty_credentials(self):
         data = {"principal": None, "credential": None}
         response = Client.post(TestAuthorizationServer.url, data)
-        print(response.json())
         expected_result = {'PRINCIPAL_EMPTY': 'principal is empty', 'CREDENTIALS_EMPTY': 'credentials is empty'}
         assert (response.status_code, response.json()) == (400, expected_result)
 
@@ -57,9 +56,9 @@ class TestAuthorizationServer:
         data = parse_request("auth", {"$principal": immutable_deleted_user['login'],
                                       "$credential": "qwerty"})
         response = Client.post(TestAuthorizationServer.url, data['request'])
-        expected_response = {'PRINCIPAL_NOT_FOUND': 'org.springframework.security.core.userdetails.UsernameNotFoundException: Not authorized. No user found'}
+        expected_response = {
+            'PRINCIPAL_NOT_FOUND': 'org.springframework.security.core.userdetails.UsernameNotFoundException: Not authorized. No user found'}
         assert (response.json(), response.status_code) == (expected_response, response.status_code)
-
 
     @allure.feature('Функциональный тест')
     @allure.story('Получаем токент для пользователя без прав доступа')
@@ -67,8 +66,21 @@ class TestAuthorizationServer:
         data = parse_request("auth", {"$principal": immutable_user['login'],
                                       "$credential": "qwerty"})
         response = Client.post(TestAuthorizationServer.url, data['request'])
-        expected_response = {'BAD_CREDENTIALS': 'org.springframework.security.authentication.BadCredentialsException: Not authorized. Wrong credential.'}
+        expected_response = {
+            'BAD_CREDENTIALS': 'org.springframework.security.authentication.BadCredentialsException: Not authorized. Wrong credential.'}
         assert (response.json(), response.status_code) == (expected_response, response.status_code)
+
+    @allure.feature('Функциональный тест')
+    @allure.story('Получаем токент для выключеного пользователя')
+    def test_get_token_for_disabled_user(self, add_user_with_role):
+        user = add_user_with_role("ROOT", enabled=False)
+        data = parse_request("auth", {"$principal": user['login'],
+                                      "$credential": "qwerty"})
+        response = Client.post(TestAuthorizationServer.url, data['request'])
+        expected_response = {
+            'USER_DISABLED': 'org.springframework.security.authentication.DisabledException: Account %s disabled.' %
+                             user['login']}
+        assert (response.status_code, response.json()) == (500, expected_response)
 
 
 class TestGroups:
@@ -222,7 +234,6 @@ class TestRoles:
                                             "$groupId": immutable_group_with_child['groupId']})
         response = Client.post(TestRoles.url, data['request'])
         clear_data.append(response.json()['roleId'])
-        print(response.json())
         assert equal_schema(response.json(), data['schema']) and response.status_code == 201
 
     @allure.feature('Функциональний тест')
@@ -244,13 +255,22 @@ class TestRoles:
         assert equal_schema(response.json(), data['schema']) and response.status_code == 201
 
     @allure.feature('Функциональний тест')
+    @allure.story('Создаем роль с templateRole')
+    def test_add_role_with_templateRole(self, clear_data):
+        data = parse_request('post_roles', {"$name": random_string(),
+                                            "$groupId": root_group_id(),
+                                            "$templateRole": {"roleId": root_role_id()}})
+        response = Client.post(TestRoles.url, data['request'])
+        clear_data.append(response.json()['roleId'])
+        assert (response.status_code, response.json()['templateRole']['roleId']) == (201, root_role_id())
+
+    @allure.feature('Функциональний тест')
     @allure.story('Создаем роль вторым по вложености child')
     def test_add_role_with_second_child(self, immutable_group_with_child, clear_data):
         childGroupId = immutable_group_with_child['children'][0]['groupId']
         data = parse_request('post_roles', {"$name": random_string(),
                                             "$groupId": childGroupId})
         response = Client.post(TestRoles.url, data['request'])
-        print(childGroupId, response.json())
         clear_data.append(response.json()['roleId'])
         assert (response.status_code, response.json()['group']['groupId']) == (
             201, immutable_group_with_child['groupId'])
@@ -265,7 +285,6 @@ class TestRoles:
         expected_response = {'ADM_VALIDATION_ROLE_GROUP_EMPTY': 'GROUP not specified'}
         assert (response.status_code, response.json()) == (400, expected_response)
 
-    # Не правильный текст валидации
     @allure.feature('Функциональний тест')
     @allure.story('Создаем роль с неизвестной групой')
     def test_add_role_with_unknown_group(self):
@@ -273,12 +292,11 @@ class TestRoles:
         data = parse_request('post_roles', {"$name": random_string(),
                                             "$groupId": unknown_group_id})
         response = Client.post(TestRoles.url, data['request'])
-        print(response.json())
         expected_response = {
             'ADM_VALIDATION_GROUP_NOT_FOUND': 'Group by the following group id not found: %s' % unknown_group_id}
         assert (response.status_code, response.json()) == (400, expected_response)
 
-    # Имя роли должно быть уникальным только для компании
+
     @allure.feature('Функциональний тест')
     @allure.story('Создаем роль с сущесвующим именем')
     def test_add_role_with_existing_name(self, immutable_group_with_child, role):
@@ -359,7 +377,6 @@ class TestRoles:
                                            "$groupId": unknown_group_id
                                            })
         response = Client.put(TestRoles.url, data['request'], id=role['roleId'])
-        print(response.json())
         expected_response = {
             'ADM_VALIDATION_GROUP_NOT_FOUND': 'Group by the following group id not found: %s' % unknown_group_id}
         assert (response.json(), response.status_code) == (expected_response, 400)
@@ -373,7 +390,6 @@ class TestRoles:
                                            "$groupId": role['group']['groupId']
                                            })
         response = Client.put(TestRoles.url, data['request'], id=role['roleId'])
-        print(response.json())
         expected_response = {
             'COMMON_ENTITY_WITH_SUCH_FIELD_EXISTS': 'CommonEntityWithSuchFieldExists: Name is not unique'}
         assert (response.json(), response.status_code) == (expected_response, 409)
@@ -540,6 +556,18 @@ class TestUsers:
         assert addedUserGroupRoles.issubset(responseGroupRolesSet)
 
     @allure.feature('функциональный тест')
+    @allure.story('Добавляем пользователя, указывая в userGroupRoles роль, которой нет в roleId')
+    def test_add_user_with_role_in_userGroupRoles_which_not_exist_in_roleId(self, clear_data, userGroupRoles):
+        data = parse_request("post_users", {"$login": random_string(),
+                                            "$fname": random_string(),
+                                            "$lname": random_string(),
+                                            "$roleId": root_role_id(),
+                                            "$userGroupRoles": userGroupRoles})
+        response = Client.post(TestUsers.url, data['request'])
+        print(response.json())
+        clear_data.append(response.json()['userId'])
+
+    @allure.feature('функциональный тест')
     @allure.story('Получаем пользователя по userId')
     def test_get_user(self, immutable_user):
         response = Client.get(TestUsers.url, id=immutable_user['userId'])
@@ -550,7 +578,8 @@ class TestUsers:
     def test_get_user_with_unknown_id(self):
         unknownd_user_id = random_string()
         response = Client.get(TestUsers.url, id=unknownd_user_id)
-        expected_response = {'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'CommonRequestedResourcesNotFound: USER not found by userId=%s'%unknownd_user_id}
+        expected_response = {
+            'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'CommonRequestedResourcesNotFound: USER not found by userId=%s' % unknownd_user_id}
         assert (response.json(), response.status_code) == (expected_response, 400)
 
     @allure.feature('функциональный тест')
@@ -570,7 +599,20 @@ class TestUsers:
     def test_delete_user_by_unknown_userId(self):
         unknown_user_id = random_string()
         response = Client.delete(TestUsers.url, id=unknown_user_id)
-        expected_response = {'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'CommonRequestedResourcesNotFound: USER not found by userId=%s'%unknown_user_id}
+        expected_response = {
+            'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'CommonRequestedResourcesNotFound: USER not found by userId=%s' % unknown_user_id}
         assert (response.json(), response.status_code) == (expected_response, 400)
 
+    @allure.feature('функциональный тест')
+    @allure.story('Получаем desabled пользователя')
+    def test_get_user_enabled_false(self, add_user_with_role):
+        disabled_user = add_user_with_role(enabled=False)
+        response = Client.get(TestUsers.url, id=disabled_user['userId'])
+        assert (response.json(), response.status_code) == (disabled_user, 200)
 
+    @allure.feature('функциональный тест')
+    @allure.story('Удаляем disabled пользователя')
+    def test_delete_user_enabled_false(self, add_user_with_role):
+        disabled_user = add_user_with_role(enabled=False)
+        response = Client.delete(TestUsers.url, id=disabled_user['userId'])
+        assert (response.json(), response.status_code) == (disabled_user, 200)

@@ -135,7 +135,8 @@ def userGroupRoles(immutable_role, immutable_group_with_child):
 @pytest.fixture(scope="function")
 def add_user_with_role(request):
 
-    def _user(role_name):
+    def _user(role_name=None, enabled=True):
+        role_name = "ROOT" if role_name is None else role_name
         role_id = get_role_id(role_name)
         user_group_and_role = make_user_group_roles({root_group_id():role_id})
         data = parse_request("post_users", {"$login": random_string(),
@@ -151,12 +152,12 @@ def add_user_with_role(request):
                                             "$fax": random_string(),
                                             "$userGroupRoles": user_group_and_role
                                             })
+        data['request']['enabled'] = enabled
         response = Client.post("users", data['request'])
         user = response.json()
         user['dateCreate'] = round(user['dateCreate'] / 1000) * 1000
 
         def fin():
-            print(user['userId'])
             Client.delete("users", id=user['userId'])
         request.addfinalizer(fin)
         return user
