@@ -7,7 +7,6 @@
     "group": {
       "groupId": "$groupId"
     },
-    "tasks": null,
     "system": false
   },
   "schema": {
@@ -18,7 +17,7 @@
       "cid": {"type":"number"},
       "groupId": "$groupId"
     },
-    "templateRole": null,
+    "templateRole": "$templateRole",
     "system": false,
     "roleId": "$roleId"
   }

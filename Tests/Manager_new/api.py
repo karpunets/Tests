@@ -222,8 +222,6 @@ class TestGroups:
 
 
 class TestRoles:
-    # TODO: добавить интеграционный тест, в котором в пользователя будет назначина группа, ниже RootChild
-    # TODO: добавить тест, в котором пользователь будет находится в двух RootChild
 
     url = "roles"
 
@@ -265,7 +263,7 @@ class TestRoles:
         assert (response.status_code, response.json()['templateRole']['roleId']) == (201, root_role_id())
 
     @allure.feature('Функциональний тест')
-    @allure.story('Создаем роль вторым по вложености child')
+    @allure.story('Создаем роль с вторым по вложености child')
     def test_add_role_with_second_child(self, immutable_group_with_child, clear_data):
         childGroupId = immutable_group_with_child['children'][0]['groupId']
         data = parse_request('post_roles', {"$name": random_string(),
@@ -557,15 +555,16 @@ class TestUsers:
 
     @allure.feature('функциональный тест')
     @allure.story('Добавляем пользователя, указывая в userGroupRoles роль, которой нет в roleId')
-    def test_add_user_with_role_in_userGroupRoles_which_not_exist_in_roleId(self, clear_data, userGroupRoles):
+    def test_add_user_with_role_in_userGroupRoles_which_not_exist_in_roleId(self, userGroupRoles):
         data = parse_request("post_users", {"$login": random_string(),
                                             "$fname": random_string(),
                                             "$lname": random_string(),
                                             "$roleId": root_role_id(),
                                             "$userGroupRoles": userGroupRoles})
         response = Client.post(TestUsers.url, data['request'])
-        print(response.json())
-        clear_data.append(response.json()['userId'])
+        expected_response = {'ADM_VALIDATION_USER_NOT_ALLOWED_ROLE_IN_GROUP': 'Roles in groups by the following role ids not allowed: %s'%userGroupRoles[0]['roles'][0]['roleId']}
+        assert (response.status_code, response.json()) == (400, expected_response)
+
 
     @allure.feature('функциональный тест')
     @allure.story('Получаем пользователя по userId')

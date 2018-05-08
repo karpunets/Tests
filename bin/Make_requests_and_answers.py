@@ -41,7 +41,6 @@ def parse_request(json_name, data={}):
                         key = '"%s"' % key
                         val = "%s" % val
                     json_file = json_file.replace(key, val)
-
                 # Возникает если передать None(null)
                 except TypeError:
                     continue

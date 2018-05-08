@@ -16,7 +16,7 @@
       "cid": {"type":"number"},
       "groupId": "$groupId"
     },
-    "templateRole": null,
+    "templateRole": "$templateRole",
     "system": false,
     "roleId": {"type":"string"}
   }
