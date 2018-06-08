@@ -83,6 +83,23 @@ class TestAuthorizationServer:
         assert (response.status_code, response.json()) == (500, expected_response)
 
 
+    @allure.feature('Функциональный тест')
+    @allure.story('Получаем токент для разных ролей')
+    def test_signin_with_token_check_login(self, add_user_with_role):
+        user = add_user_with_role('ADMINISTRATOR')
+        data = parse_request("auth", {"$principal": user['login'],
+                                      "$credential": "qwerty",
+                                      "$sessionLiveTimeSec": 300})
+        response_auth = Client.post(TestAuthorizationServer.url, data['request'])
+        response_auth = response_auth.json()
+        headers = {'content-type': "application/json;charset=UTF-8"}
+        headers[response_auth['name']] = response_auth['token']
+        response_current_account = Client.get('account', headers = headers)
+        assert user['login'] == response_current_account.json()['login']
+
+
+
+
 class TestGroups:
     url = "groups"
 
@@ -404,6 +421,7 @@ class TestUsers:
                                             "$lname": random_string(),
                                             "$roleId": immutable_role['roleId'],
                                             "$userGroupRoles": userGroupRoles})
+        print(data["request"])
         response = Client.post(TestUsers.url, data['request'])
         print(response.json())
         clear_data.append(response.json()['userId'])
@@ -417,7 +435,7 @@ class TestUsers:
                                             "$lname": random_string(),
                                             "$roleId": immutable_role['roleId'],
                                             "$agentId": random_string(),
-                                            "$loginAD": random_string(),
+                                            "$ADlogin": random_string(),
                                             "$pname": random_string(),
                                             "$email": random_string() + '@.com.ua',
                                             "$phone": str(random.randint(11111, 99999999)),
@@ -455,7 +473,7 @@ class TestUsers:
                                             "$userGroupRoles": userGroupRoles,
                                             "$roleId": immutable_role['roleId'],
                                             "$agentId": random_string(),
-                                            "$loginAD": existing_field['loginAD'],
+                                            "$ADlogin": existing_field['loginAD'],
                                             "$pname": existing_field['pname'],
                                             "$email": existing_field['email'],
                                             "$phone": str(random.randint(1111111, 999999999)),

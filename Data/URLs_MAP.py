@@ -24,7 +24,7 @@ groups = "/SmiddleManager/adm/management/groups"
 roles = "/SmiddleManager/adm/management/roles"
 users = "/SmiddleManager/adm/management/users"
 users_search = "/SmiddleManager/adm/management/users/search"
-
+account = "/SmiddleManager/adm/management/users/current/account"
 # ADMIN
 get_user_list = '/SmiddleManager/adm/management/get_user_list'
 add_user = '%s/SmiddleManager/adm/management/add_user' % server

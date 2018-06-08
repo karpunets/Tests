@@ -23,7 +23,7 @@ def user(userGroupRoles, immutable_role):
                                         "$lname": random_string(),
                                         "$roleId": immutable_role['roleId'],
                                         "$agentId": random_string(),
-                                        "$loginAD": random_string(),
+                                        "$ADlogin": random_string(),
                                         "$pname": random_string(),
                                         "$email": random_string() + '@.com.ua',
                                         "$phone": str(random.randint(11111, 99999999)),
@@ -44,7 +44,7 @@ def immutable_user(userGroupRoles, immutable_role):
                                         "$lname": random_string(),
                                         "$roleId": immutable_role['roleId'],
                                         "$agentId": random_string(),
-                                        "$loginAD": random_string(),
+                                        "$ADlogin": random_string(),
                                         "$pname": random_string(),
                                         "$email": random_string() + '@.com.ua',
                                         "$phone": str(random.randint(11111, 99999999)),
@@ -111,7 +111,7 @@ def immutable_deleted_user(immutable_role, userGroupRoles):
                                         "$lname": random_string(),
                                         "$roleId": immutable_role['roleId'],
                                         "$agentId": random_string(),
-                                        "$loginAD": random_string(),
+                                        "$ADlogin": random_string(),
                                         "$pname": random_string(),
                                         "$password": "qwerty",
                                         "$email": random_string() + '@.com.ua',
@@ -145,7 +145,7 @@ def add_user_with_role(request):
                                             "$password": "qwerty",
                                             "$roleId": role_id,
                                             "$agentId": random_string(),
-                                            "$loginAD": random_string(),
+                                            "$ADlogin": random_string(),
                                             "$pname": random_string(),
                                             "$email": random_string() + '@.com.ua',
                                             "$phone": str(random.randint(11111, 99999999)),
@@ -154,6 +154,7 @@ def add_user_with_role(request):
                                             })
         data['request']['enabled'] = enabled
         response = Client.post("users", data['request'])
+        print(response.json())
         user = response.json()
         user['dateCreate'] = round(user['dateCreate'] / 1000) * 1000
 

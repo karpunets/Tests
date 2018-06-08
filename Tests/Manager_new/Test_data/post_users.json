@@ -2,7 +2,7 @@
   "request": {
     "agentId": "$agentId",
     "login": "$login",
-    "loginAD": "$loginAD",
+    "loginAD": "$ADlogin",
     "lname": "$lname",
     "password":"$password",
     "fname": "$fname",
@@ -25,7 +25,7 @@
     },
     "agentId": "$agentId",
     "login": "$login",
-    "loginAD": "$loginAD",
+    "loginAD": "$ADlogin",
     "lname": "$lname",
     "fname": "$fname",
     "pname": "$pname",
