@@ -1,6 +1,7 @@
 import pytest
 import requests
 import os
+from bin.session import Client
 from json import dumps
 
 
@@ -49,3 +50,12 @@ def clear_result(send_request):
             send_request(url=data['url'], params={'id': int(data['id'])},method = "DELETE")
     except KeyError:
         pass
+
+
+@pytest.fixture(scope="function")
+def clear_data(request):
+    url = getattr(request.cls, "url")
+    group_id_list = []
+    yield group_id_list
+    for id_to_delete in group_id_list:
+        Client.delete(url, id=id_to_delete)

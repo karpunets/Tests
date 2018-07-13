@@ -4,7 +4,7 @@ import random, json, time
 
 
 import Data.URLs_MAP as URL
-from bin.Make_requests_and_answers import parse_request, equal_schema, random_string
+from bin.common import parse_request, equal_schema, random_string
 
 
 @allure.feature('Позитивный тест')

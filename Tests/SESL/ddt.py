@@ -1,8 +1,8 @@
 import allure
 import pytest
 
-from bin.Make_requests_and_answers import get_from_csv
-from bin.Make_requests_and_answers import parse_request, equal_schema
+from bin.common import get_from_csv
+from bin.common import parse_request, equal_schema
 
 
 @allure.feature('Позитивный тест')

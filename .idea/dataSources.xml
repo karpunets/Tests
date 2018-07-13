@@ -15,11 +15,11 @@
         <property name="yearIsDateType" value="false" />
       </driver-properties>
     </data-source>
-    <data-source source="LOCAL" name="ADM@10.100.70.20" uuid="dd8976cb-f613-4769-9338-fa1b0a1633f2">
+    <data-source source="LOCAL" name="SMIDDLE@10.100.90.14" uuid="977991ce-18d1-4fab-b1fe-52a75a9f5816">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://10.100.70.20:3306/ADM</jdbc-url>
+      <jdbc-url>jdbc:mysql://10.100.90.14:3306/SMIDDLE</jdbc-url>
       <driver-properties>
         <property name="autoReconnect" value="true" />
         <property name="zeroDateTimeBehavior" value="convertToNull" />
@@ -29,11 +29,11 @@
         <property name="yearIsDateType" value="false" />
       </driver-properties>
     </data-source>
-    <data-source source="LOCAL" name="SMIDDLE@10.100.90.14" uuid="977991ce-18d1-4fab-b1fe-52a75a9f5816">
+    <data-source source="LOCAL" name="@10.100.70.20" uuid="dce5ee44-316c-4ec0-abf8-51938af0c193">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://10.100.90.14:3306/SMIDDLE</jdbc-url>
+      <jdbc-url>jdbc:mysql://10.100.70.20:3306</jdbc-url>
       <driver-properties>
         <property name="autoReconnect" value="true" />
         <property name="zeroDateTimeBehavior" value="convertToNull" />

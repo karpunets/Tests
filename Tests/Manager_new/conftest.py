@@ -4,7 +4,7 @@ from collections import deque
 from bin.session import Client, root_group_id
 from bin.helpers import make_user_group_roles
 from bin.session import get_role_id
-from bin.Make_requests_and_answers import parse_request, random_string
+from bin.common import parse_request, random_string
 
 
 @pytest.fixture(scope="function")
@@ -95,13 +95,7 @@ def immutable_role(immutable_group_with_child):
     Client.delete(url, id=response.json()['roleId'])
 
 
-@pytest.fixture(scope="function")
-def clear_data(request):
-    url = getattr(request.cls, "url")
-    group_id_list = []
-    yield group_id_list
-    for id_to_delete in group_id_list:
-        Client.delete(url, id=id_to_delete)
+
 
 
 @pytest.fixture(scope='module')

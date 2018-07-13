@@ -4,8 +4,8 @@ import string
 import time
 
 import Data.URLs_MAP as URL
-from bin.Make_requests_and_answers import parse_request
-from bin.Make_requests_and_answers import random_string
+from bin.common import parse_request
+from bin.common import random_string
 
 
 @pytest.fixture(scope="function")

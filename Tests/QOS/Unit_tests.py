@@ -4,7 +4,7 @@ import random
 from Data.test_data import ROOT_group_id, ROOT_user_id
 
 import Data.URLs_MAP as URL
-from bin.Make_requests_and_answers import parse_request, equal_schema, random_string
+from bin.common import parse_request, equal_schema, random_string
 
 
 @allure.feature('Позитивный тест')

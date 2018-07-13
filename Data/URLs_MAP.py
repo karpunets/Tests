@@ -24,6 +24,12 @@ groups = "/SmiddleManager/adm/management/groups"
 roles = "/SmiddleManager/adm/management/roles"
 users = "/SmiddleManager/adm/management/users"
 users_search = "/SmiddleManager/adm/management/users/search"
+AD_search = "/SmiddleManager/adm/management/import/active-directory/users/search"
+domains = "/SmiddleManager/adm/admin/active-directory/domains"
+import_users = "/SmiddleManager/adm/management/import/users"
+ad_users_sources = "/SmiddleManager/adm/admin/active-directory/ad-users-sources"
+tag_to_call = "/SmiddleMicroRecording-CallProvider/smr/call-provider/crm/tag-to-call"
+recover = "/SmiddleManager/adm/management/users/$userId/recover"
 account = "/SmiddleManager/adm/management/users/current/account"
 # ADMIN
 get_user_list = '/SmiddleManager/adm/management/get_user_list'
@@ -83,9 +89,7 @@ delete_dial_list = '%s/SmiddleCampaignManager/cm/dialer/delete_dial_list' % serv
 delete_campaign = '%s/SmiddleCampaignManager/cm/manager/delete_campaign' % server
 remove_result_variant = '%s/SmiddleCampaignManager/cm/manager/remove_result_variant' % server
 
-
 # CAMPAIGN MANAGER UCCX
-
 
 # SMART_CALL_BACK
 fixed_routes = "%s/SmiddleSmartCallback/scb/route/fixed" % server
@@ -113,7 +117,6 @@ criteria = "%s/SmiddleQualityService/qos/template/criteria" % server
 delete_criteria_group = "%s/SmiddleQualityService/qos/template//delete_criteria_group" % server
 edit_template = "%s/SmiddleQualityService/qos/template/edit_template"%server
 delete_template = "%s/SmiddleQualityService/qos/template/delete_template"%server
-# QOS
 questioner = "%s/SmiddleQualityService_CA/qos/ca/questioner" % server
 filter = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter" % server
 abonent = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter/phone/import" % server
@@ -131,3 +134,6 @@ svc_conference = "%s/SmiddleVideoConference/svc/conference"%server
 svc_conference_start = "%s/SmiddleVideoConference/svc/conference/start"%server
 svc_users_search = "%s/SmiddleVideoConference/svc/users/search"%server
 svc_conference_search = "%s/SmiddleVideoConference/svc/conference/search"%server
+
+#SMGE
+connectors = "/MessengerGateway/smc/connectors"

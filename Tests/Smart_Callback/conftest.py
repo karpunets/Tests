@@ -2,7 +2,7 @@ import Data.Test_data as get
 import pytest
 
 import Data.URLs_MAP as URL
-from bin.Make_requests_and_answers import JSON_generator as _
+from bin.common import JSON_generator as _
 
 headers = URL.headers
 

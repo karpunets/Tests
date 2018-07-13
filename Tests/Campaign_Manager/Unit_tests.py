@@ -4,7 +4,7 @@ import random
 import requests
 
 import Data.URLs_MAP as URL
-from bin.Make_requests_and_answers import JSON_generator as _
+from bin.common import JSON_generator as _
 
 
 class Tests_add_campaign_and_result_codes:

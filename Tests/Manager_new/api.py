@@ -7,7 +7,7 @@ from bin.session import Client
 from bin.session import root_group_id, root_role_id
 from bin.session import get_headers_with_credentials
 from bin.helpers import make_user_group_roles
-from bin.Make_requests_and_answers import parse_request, equal_schema, random_string
+from bin.common import parse_request, equal_schema, random_string
 from bin.helpers import get_property
 
 
@@ -82,7 +82,6 @@ class TestAuthorizationServer:
                              user['login']}
         assert (response.status_code, response.json()) == (500, expected_response)
 
-
     @allure.feature('Функциональный тест')
     @allure.story('Получаем токент для разных ролей')
     def test_signin_with_token_check_login(self, add_user_with_role):
@@ -94,10 +93,8 @@ class TestAuthorizationServer:
         response_auth = response_auth.json()
         headers = {'content-type': "application/json;charset=UTF-8"}
         headers[response_auth['name']] = response_auth['token']
-        response_current_account = Client.get('account', headers = headers)
+        response_current_account = Client.get('account', headers=headers)
         assert user['login'] == response_current_account.json()['login']
-
-
 
 
 class TestGroups:
@@ -148,7 +145,8 @@ class TestGroups:
         data = parse_request("post_group", {"$name": None,
                                             "$parentGroupId": root_group_id()})
         response = Client.post(TestGroups.url, data['request'])
-        exceptedResponse = {'ADM_VALIDATION_GROUP_NAME': 'NAME not specified'}
+        print(response.json())
+        exceptedResponse = {'ADM_VALIDATION_GROUP_NAME': 'Group name not specified'}
         assert (response.status_code, response.json()) == (400, exceptedResponse)
 
     @allure.feature('Проверка валидации')
@@ -199,7 +197,7 @@ class TestGroups:
                                            "$groupId": group['groupId']})
         response = Client.put(TestGroups.url, data=data['request'], id=group['groupId'])
         print(response.json())
-        expectedResponse = {'ADM_VALIDATION_GROUP_NAME': 'NAME not specified'}
+        expectedResponse = {'ADM_VALIDATION_GROUP_NAME': 'Group name not specified'}
         assert (response.status_code, response.json()) == (400, expectedResponse)
 
     @allure.feature('Функциональный тест')
@@ -233,13 +231,12 @@ class TestGroups:
     def test_delete_group_with_child(self, immutable_group_with_child):
         groupId = immutable_group_with_child['groupId']
         response = Client.delete(TestGroups.url, id=groupId)
-        expectedResponse = {
-            'COMMON_NOT_ALLOWED_OPERATION': 'CommonNotAllowedOperationException: This group has got children. Kill them first... If you dare...'}
+        print(response.json())
+        expectedResponse = {'COMMON_NOT_ALLOWED_OPERATION': 'CommonNotAllowedOperationException: The group has subgroups'}
         assert (response.status_code, response.json()) == (400, expectedResponse)
 
 
 class TestRoles:
-
     url = "roles"
 
     @allure.feature('Функциональний тест')
@@ -257,7 +254,8 @@ class TestRoles:
         data = parse_request('post_roles', {"$name": None,
                                             "$groupId": immutable_group_with_child['groupId']})
         response = Client.post(TestRoles.url, data['request'])
-        expectedResponse = {'ADM_VALIDATION_ROLE_NAME': 'NAME not specified'}
+        expectedResponse = {'ADM_VALIDATION_ROLE_NAME': 'Role name not specified'}
+        print(response.json())
         assert (response.status_code, response.json()) == (400, expectedResponse)
 
     @allure.feature('Функциональний тест')
@@ -297,7 +295,8 @@ class TestRoles:
         data = parse_request('post_roles', {"$name": random_string(),
                                             "$groupId": None})
         response = Client.post(TestRoles.url, data['request'])
-        expected_response = {'ADM_VALIDATION_ROLE_GROUP_EMPTY': 'GROUP not specified'}
+        print(response.json())
+        expected_response = {'ADM_VALIDATION_ROLE_GROUP_EMPTY': 'Role group not specified'}
         assert (response.status_code, response.json()) == (400, expected_response)
 
     @allure.feature('Функциональний тест')
@@ -310,7 +309,6 @@ class TestRoles:
         expected_response = {
             'ADM_VALIDATION_GROUP_NOT_FOUND': 'Group by the following group id not found: %s' % unknown_group_id}
         assert (response.status_code, response.json()) == (400, expected_response)
-
 
     @allure.feature('Функциональний тест')
     @allure.story('Создаем роль с сущесвующим именем')
@@ -380,7 +378,8 @@ class TestRoles:
                                            "$groupId": immutable_group_with_child['groupId']
                                            })
         response = Client.put(TestRoles.url, data['request'], id=role['roleId'])
-        expected_response = {'ADM_VALIDATION_ROLE_NAME': 'NAME not specified'}
+        print(response.json())
+        expected_response = {'ADM_VALIDATION_ROLE_NAME': 'Role name not specified'}
         assert (response.json(), response.status_code) == (expected_response, 400)
 
     @allure.feature('Функциональний тест')
@@ -526,9 +525,10 @@ class TestUsers:
                                             "$userGroupRoles": userGroupRoles,
                                             "$roleId": immutable_role['roleId']})
         response = Client.post(TestUsers.url, data['request'])
-        expected_response = {'ADM_VALIDATION_USER_LAST_NAME_LENGTH': 'LNAME length from 1 to 256',
-                             'ADM_VALIDATION_USER_FIRST_NAME_LENGTH': 'FNAME length from 1 to 256',
-                             'ADM_VALIDATION_USER_LOGIN_LENGTH': 'LOGIN length from 1 to 256'}
+        print(response.json())
+        expected_response = {'ADM_VALIDATION_USER_LAST_NAME_LENGTH': 'Last name length from 1 to 256',
+                             'ADM_VALIDATION_USER_FIRST_NAME_LENGTH': 'First name length from 1 to 256',
+                             'ADM_VALIDATION_USER_LOGIN_LENGTH': 'Login length from 1 to 104'}
         assert (response.status_code, response.json()) == (400, expected_response)
 
     @allure.feature('функциональный тест')
@@ -580,9 +580,10 @@ class TestUsers:
                                             "$roleId": root_role_id(),
                                             "$userGroupRoles": userGroupRoles})
         response = Client.post(TestUsers.url, data['request'])
-        expected_response = {'ADM_VALIDATION_USER_NOT_ALLOWED_ROLE_IN_GROUP': 'Roles in groups by the following role ids not allowed: %s'%userGroupRoles[0]['roles'][0]['roleId']}
+        expected_response = {
+            'ADM_VALIDATION_USER_NOT_ALLOWED_ROLE_IN_GROUP': 'Roles in groups by the following role ids not allowed: %s' %
+                                                             userGroupRoles[0]['roles'][0]['roleId']}
         assert (response.status_code, response.json()) == (400, expected_response)
-
 
     @allure.feature('функциональный тест')
     @allure.story('Получаем пользователя по userId')
@@ -633,3 +634,8 @@ class TestUsers:
         disabled_user = add_user_with_role(enabled=False)
         response = Client.delete(TestUsers.url, id=disabled_user['userId'])
         assert (response.json(), response.status_code) == (disabled_user, 200)
+
+    @allure.feature('функциональный тест')
+    @allure.story('Удаляем disabled пользователя')
+    def test_recover_deleted_user(self, immutable_deleted_user):
+        None

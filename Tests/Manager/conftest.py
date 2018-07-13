@@ -6,7 +6,7 @@ import Data.Test_data as get
 
 import Data.URLs_MAP as URL
 from Data.Requests_default_map import defaul_request
-from bin.Make_requests_and_answers import JSON_generator
+from bin.common import JSON_generator
 
 
 @pytest.fixture(scope="function")

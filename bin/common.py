@@ -5,6 +5,8 @@ from Data.test_data import ROOT_user_id, ROOT_group_id
 
 # TODO: Избавится от файла, перенести в сессии или helpers
 
+# TODO: Нужно придумать, как сделать проверку по тому, отбрабатывает ли запрос без токена
+
 
 def random_string():
     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(random.randint(3, 10)))

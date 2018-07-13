@@ -2,7 +2,7 @@ import allure
 import pytest
 
 import Data.URLs_MAP as URL
-from bin.Make_requests_and_answers import JSON_generator as _
+
 
 
 @allure.feature('Позитивный тест')
@@ -25,7 +25,6 @@ def test_add_route_with_credential(send_request, credential, clear_result):
 
 @allure.feature('Негативный тест')
 @allure.story('Добавляем новый роут без credentials')
-@pytest.mark.xfail
 def test_add_route_without_credentials(send_request):
     url = URL.fixed_routes
     data = _.get_JSON_request('add_route', **{"internalNumber": "1111",

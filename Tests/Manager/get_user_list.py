@@ -1,7 +1,7 @@
 import allure
 
 import Data.URLs_MAP as URL
-from bin.Make_requests_and_answers import JSON_generator as _
+from bin.common import JSON_generator as _
 
 name = 'get_user_list'
 

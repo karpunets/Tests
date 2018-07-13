@@ -1,8 +1,8 @@
 import pytest
 
 from Data.URLs_MAP import sesl_integration, sesl_mapfield, sesl_tag
-from bin.Make_requests_and_answers import parse_request
-from bin.Make_requests_and_answers import random_string
+from bin.common import parse_request
+from bin.common import random_string
 
 
 @pytest.fixture(scope="function")
