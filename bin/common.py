@@ -1,6 +1,6 @@
 import json, re, random, string, codecs, os, time
 import Data.URLs_MAP as URLs
-from Data.test_data import ROOT_user_id, ROOT_group_id
+from definition import ROOT_DIR
 
 
 # TODO: Избавится от файла, перенести в сессии или helpers
@@ -20,7 +20,10 @@ def date_now():
 # TODO: Вынести в helpers добавить возможность добавлять ключи, которые не начинаются с символа $
 def parse_request(json_name, data={}):
     # Определяем откуда брать json файл
-    path = 'Test_data/%s.json' % json_name
+    if "/" not in json_name:
+        path = 'Test_data/%s.json' % json_name
+    else:
+        path = os.path.normpath(os.path.join(ROOT_DIR, json_name + ".json" ))
     json_file = open(path, encoding="utf8").read()
 
     # Доп. ф-ция для использования рекурсии

@@ -58,22 +58,6 @@ def immutable_user(userGroupRoles, immutable_role):
     Client.delete("users", id=response.json()['userId'])
 
 
-@pytest.fixture(scope="module")
-def immutable_group_with_child():
-    groupsId = deque([], maxlen=5)
-    data = parse_request('post_group', {"$name": random_string(),
-                                        "$parentGroupId": root_group_id()})
-    responseParent = Client.post("groups", data['request'])
-    groupsId.appendleft(responseParent.json()['groupId'])
-    dataChild = parse_request('post_group', {"$name": random_string(),
-                                             "$parentGroupId": groupsId[0]})
-    responseChild = Client.post("groups", dataChild['request'])
-    response = Client.get("groups", id=groupsId[0])
-    groupsId.appendleft(responseChild.json()['groupId'])
-    yield response.json()
-    for id in groupsId:
-        Client.delete("groups", id=id)
-
 
 @pytest.fixture(scope="function")
 def role(group):

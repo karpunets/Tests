@@ -1,5 +1,6 @@
 {
   "request": {
+    "rid":  "$rid",
     "name": "$name",
     "url": "$url",
     "enabled": "$enabled",
@@ -10,7 +11,7 @@
     ]
   },
   "schema": {
-    "rid": {"type":"string"},
+    "rid": "$rid",
     "name": "$name",
     "url": "$url",
     "enabled": false,

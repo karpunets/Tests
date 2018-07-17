@@ -1,0 +1,66 @@
+{
+  "data": {
+    "name": "$name",
+    "group": {
+      "groupId": "$groupId"
+    },
+    "connector": {
+      "rid": "$connectorRid"
+    },
+    "bindAccount": {
+      "connector": {
+        "rid": "$bindAccountRid"
+      }
+    },
+    "messageTemplates": {},
+    "accountRid": null,
+    "properties": [
+      {
+        "name": "CONNECTOR_URL",
+        "value": "$connectorUrl"
+      },
+      {
+        "name": "BOT_NAME",
+        "value": "$botName"
+      },
+      {
+        "name": "AUTH_TOKEN",
+        "value": "$authToken"
+      }
+    ],
+    "enabled": false,
+    "webhook": null
+  },
+  "schema": {
+    "name": "$name",
+    "group": {
+      "groupId": "$groupId"
+    },
+    "connector": {
+      "rid": "$connectorRid"
+    },
+    "bindAccount": {
+      "connector": {
+        "rid": "$bindAccountRid"
+      }
+    },
+    "messageTemplates": {},
+    "accountRid": {"type":"string"},
+    "properties": [
+      {
+        "name": "CONNECTOR_URL",
+        "value": "http://10.10.90.16:8080/Tele"
+      },
+      {
+        "name": "BOT_NAME",
+        "value": "$botName"
+      },
+      {
+        "name": "AUTH_TOKEN",
+        "value": "$authToken"
+      }
+    ],
+    "enabled": false,
+    "webhook": null
+  }
+}

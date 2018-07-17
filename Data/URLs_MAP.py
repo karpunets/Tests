@@ -15,10 +15,10 @@ server = 'http://172.22.2.63:8080'
 # USER = "Basic QVBJX2F1dG90ZXN0X1VTRVI6QVBJX2F1dG90ZXN0X1VTRVI="
 # SUPERVISOR = "Basic QVBJX2F1dG90ZXN0X1NVUEVSVklTT1I6QVBJX2F1dG90ZXN0X1NVUEVSVklTT1I="
 
-#AuthorizationServer
+# AuthorizationServer
 token = "/SmiddleAuthorizationServer/sas/token"
 
-#ADM 2.0
+# ADM 2.0
 current_user = "/SmiddleManager/adm/management/users/current"
 groups = "/SmiddleManager/adm/management/groups"
 roles = "/SmiddleManager/adm/management/roles"
@@ -115,25 +115,26 @@ proxy_settings = "%s/SmiddleSIPProxy/ssp/settings" % server
 criteria_group = "%s/SmiddleQualityService/qos/template/criteria_group" % server
 criteria = "%s/SmiddleQualityService/qos/template/criteria" % server
 delete_criteria_group = "%s/SmiddleQualityService/qos/template//delete_criteria_group" % server
-edit_template = "%s/SmiddleQualityService/qos/template/edit_template"%server
-delete_template = "%s/SmiddleQualityService/qos/template/delete_template"%server
+edit_template = "%s/SmiddleQualityService/qos/template/edit_template" % server
+delete_template = "%s/SmiddleQualityService/qos/template/delete_template" % server
 questioner = "%s/SmiddleQualityService_CA/qos/ca/questioner" % server
 filter = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter" % server
 abonent = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter/phone/import" % server
 agent = "%s/SmiddleQualityService_CA/qos/ca/questioner/filter/agent" % server
 
-#SESL
-sesl_integration = "%s/SmiddleExtendedSmartLabel/sesl/integration"%server
-sesl_mapfield = "%s/SmiddleExtendedSmartLabel/sesl/integration/mapfield"%server
-sesl_tag = "%s/SmiddleExtendedSmartLabel/sesl/integration/tag"%server
+# SESL
+sesl_integration = "%s/SmiddleExtendedSmartLabel/sesl/integration" % server
+sesl_mapfield = "%s/SmiddleExtendedSmartLabel/sesl/integration/mapfield" % server
+sesl_tag = "%s/SmiddleExtendedSmartLabel/sesl/integration/tag" % server
 
-#SVC
-svc_users = "%s/SmiddleVideoConference/svc/users"%server
-svc_users_sync = "%s/SmiddleVideoConference/svc/users/sync"%server
-svc_conference = "%s/SmiddleVideoConference/svc/conference"%server
-svc_conference_start = "%s/SmiddleVideoConference/svc/conference/start"%server
-svc_users_search = "%s/SmiddleVideoConference/svc/users/search"%server
-svc_conference_search = "%s/SmiddleVideoConference/svc/conference/search"%server
+# SVC
+svc_users = "%s/SmiddleVideoConference/svc/users" % server
+svc_users_sync = "%s/SmiddleVideoConference/svc/users/sync" % server
+svc_conference = "%s/SmiddleVideoConference/svc/conference" % server
+svc_conference_start = "%s/SmiddleVideoConference/svc/conference/start" % server
+svc_users_search = "%s/SmiddleVideoConference/svc/users/search" % server
+svc_conference_search = "%s/SmiddleVideoConference/svc/conference/search" % server
 
-#SMGE
+# SMGE
 connectors = "/MessengerGateway/smc/connectors"
+accounts = "/MessengerGateway/smc/accounts"

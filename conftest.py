@@ -1,8 +1,10 @@
 import pytest
 import requests
 import os
-from bin.session import Client
 from json import dumps
+from collections import deque
+from bin.session import Client, root_group_id
+from bin.common import parse_request, random_string
 
 
 @pytest.fixture(scope='session')
@@ -59,3 +61,22 @@ def clear_data(request):
     yield group_id_list
     for id_to_delete in group_id_list:
         Client.delete(url, id=id_to_delete)
+
+@pytest.fixture(scope="module")
+def immutable_group_with_child():
+    """
+    :return: {}
+    """
+    groupsId = deque([], maxlen=5)
+    data = parse_request('Tests/Manager_new/Test_data/post_group', {"$name": random_string(),
+                                        "$parentGroupId": root_group_id()})
+    responseParent = Client.post("groups", data['request'])
+    groupsId.appendleft(responseParent.json()['groupId'])
+    dataChild = parse_request('Tests/Manager_new/Test_data/post_group', {"$name": random_string(),
+                                             "$parentGroupId": groupsId[0]})
+    responseChild = Client.post("groups", dataChild['request'])
+    response = Client.get("groups", id=groupsId[0])
+    groupsId.appendleft(responseChild.json()['groupId'])
+    yield response.json()
+    for id in groupsId:
+        Client.delete("groups", id=id)
