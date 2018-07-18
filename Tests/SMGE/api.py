@@ -208,6 +208,7 @@ class TestConnectors:
 
 
 class TestAccounts:
+    #TODO: Проверять пулы, связать аккаунт, потом удалить связанный акк
     url = "accounts"
 
     @allure.feature('Функциональный тест')

@@ -49,11 +49,3 @@ def make_user_group_roles(group_roles_obj):
     return user_group_roles
 
 
-def get_connector_data(connector_name):
-    map = {"social_miner": {"required": {"$chatUrl": random_string(),
-                                         "$chatFormId": random_string(),
-                                         "$queueTag": random_string()},
-                            "notRequired": {"$record_conversations": False,
-                                            "$show_previous_n_dialogs": random.randint(1, 1000)}},
-           "ECE": {"required": {"$chatUrl": random_string(),
-                                "$entry_point_id":random.randint(1,99999)}}}
