@@ -101,8 +101,8 @@ def immutable_deleted_user(immutable_role, userGroupRoles):
     response = Client.post("users", data['request'])
     user = response.json()
     user['dateCreate'] = round(user['dateCreate']/1000) * 1000
-    yield user
-    Client.delete("users", id=response.json()['userId'])
+    return user
+
 
 
 @pytest.fixture(scope="module")

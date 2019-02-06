@@ -22,7 +22,7 @@ class TestAuthorizationServer:
         assert (response.status_code, "X-Smiddle-Auth-Token") == (200, response.json()['name'])
 
     @allure.feature('Функциональный тест')
-    @allure.story('Получаем токент для разных ролей')
+    @allure.story('Получаем токент для разных системных ролей')
     @pytest.mark.parametrize("role_name, sessionLiveTimeSec",
                              [("ROOT", 300), ("ADMINISTRATOR", 300), ("SUPERVISOR", 300), ("USER", 300)])
     def test_get_token_for_system_roles(self, add_user_with_role, role_name, sessionLiveTimeSec):
@@ -83,7 +83,7 @@ class TestAuthorizationServer:
         assert (response.status_code, response.json()) == (500, expected_response)
 
     @allure.feature('Функциональный тест')
-    @allure.story('Получаем токент для разных ролей')
+    @allure.story('Логинимся с полученым токеном и проверяем соответсвие логина')
     def test_signin_with_token_check_login(self, add_user_with_role):
         user = add_user_with_role('ADMINISTRATOR')
         data = parse_request("auth", {"$principal": user['login'],
@@ -116,8 +116,8 @@ class TestGroups:
     @allure.story('Проверяем есть ли ранеее созданная группа в списке полученных груп')
     def test_get_group_bew_group_in_group_list(self, group):
         response = Client.get(TestGroups.url)
-        rootChilderIds = [group['groupId'] for group in response.json()[0]['children']]
-        assert response.status_code == 200 and group['groupId'] in rootChilderIds
+        rootChildrenIds = [group['groupId'] for group in response.json()[0]['children']]
+        assert response.status_code == 200 and group['groupId'] in rootChildrenIds
 
     @allure.feature('Проверка валидации')
     @allure.story('Получаем группу с неизвестным id')
@@ -232,7 +232,8 @@ class TestGroups:
         groupId = immutable_group_with_child['groupId']
         response = Client.delete(TestGroups.url, id=groupId)
         print(response.json())
-        expectedResponse = {'COMMON_NOT_ALLOWED_OPERATION': 'CommonNotAllowedOperationException: The group has subgroups'}
+        expectedResponse = {
+            'COMMON_NOT_ALLOWED_OPERATION': 'CommonNotAllowedOperationException: The group has subgroups'}
         assert (response.status_code, response.json()) == (400, expectedResponse)
 
 
@@ -622,7 +623,7 @@ class TestUsers:
         assert (response.json(), response.status_code) == (expected_response, 400)
 
     @allure.feature('функциональный тест')
-    @allure.story('Получаем desabled пользователя')
+    @allure.story('Получаем disabled пользователя')
     def test_get_user_enabled_false(self, add_user_with_role):
         disabled_user = add_user_with_role(enabled=False)
         response = Client.get(TestUsers.url, id=disabled_user['userId'])
@@ -638,4 +639,4 @@ class TestUsers:
     @allure.feature('функциональный тест')
     @allure.story('Удаляем disabled пользователя')
     def test_recover_deleted_user(self, immutable_deleted_user):
-        None
+        pass

@@ -17,19 +17,19 @@ class TestConnectors:
                        '/TelegramConnector',
                        '/ViberConnector', '/WebConnector']
 
-    @allure.feature('Функциональный тест')
-    @allure.story('Создаем коннектор')
-    @pytest.mark.parametrize('connector_name', connectors_list)
-    def test_add_connectors(self, clear_data, connector_name):
-        data = parse_request("post_connectors", {"$name": random_string(),
-                                                 "$url": get_property("server")['server'] + connector_name,
-                                                 "$groupId": root_group_id()})
-        print(data)
-        response = Client.post(TestConnectors.url, data['request'])
-        print(response.json())
-        assert response.status_code == 200
-        clear_data.append(response.json()['rid'])
-        assert equal_schema(response.json(), data['schema'])
+    # @allure.feature('Функциональный тест')
+    # @allure.story('Создаем коннектор')
+    # @pytest.mark.parametrize('connector_name', connectors_list)
+    # def test_add_connectors(self, clear_data, connector_name):
+    #     data = parse_request("post_connectors", {"$name": random_string(),
+    #                                              "$url": get_property("server")['server'] + connector_name,
+    #                                              "$groupId": root_group_id()})
+    #     print(data)
+    #     response = Client.post(TestConnectors.url, data['request'])
+    #     print(response.json())
+    #     assert response.status_code == 200
+    #     clear_data.append(response.json()['rid'])
+    #     assert equal_schema(response.json(), data['schema'])
 
     @allure.feature('Функциональный тест')
     @allure.story('Создаем коннектор')
@@ -82,7 +82,7 @@ class TestConnectors:
                                                  "$groupId": root_group_id()})
         response = Client.post(TestConnectors.url, data['request'])
         print(response.json())
-        expected_result = {'SMC_VALIDATION_CONNECTOR_NAME': "Connector URL mustn't be empty"}
+        expected_result = {'SMC_VALIDATION_CONNECTOR_URL': "Connector url mustn't be empty"}
         assert (response.status_code, response.json()) == (400, expected_result)
 
     @allure.feature('Функциональный тест')
@@ -94,7 +94,7 @@ class TestConnectors:
                                                  "$groupId": None})
         response = Client.post(TestConnectors.url, data['request'])
         print(response.json())
-        expected_result = {'SMC_VALIDATION_CONNECTOR_NAME': "Connector group mustn't be empty"}
+        expected_result = {'SMC_VALIDATION_CONNECTOR_GROUP': "Connector group mustn't be empty"}
         assert (response.status_code, response.json()) == (400, expected_result)
 
     @allure.feature('Функциональный тест')
@@ -173,7 +173,7 @@ class TestConnectors:
                                                 })
         response = Client.put(TestConnectors.url, data['request'])
         print(response.json())
-        expected_response = {'SMC_VALIDATION_CONNECTOR_URL': "Connector group mustn't be empty"}
+        expected_response = {'SMC_VALIDATION_CONNECTOR_GROUP': "Connector group mustn't be empty"}
         assert (response.status_code, response.json()) == (400, expected_response)
 
     @allure.feature('Функциональный тест')
@@ -227,3 +227,8 @@ class TestAccounts:
         assert response.status_code == 200
         clear_data.append(response.json()['rid'])
         assert equal_schema(response.json(), data['schema'])
+
+
+class TestTRUMClients:
+    url = "clients"
+

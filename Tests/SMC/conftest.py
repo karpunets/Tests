@@ -5,7 +5,7 @@ from bin.session import Client, root_group_id
 from bin.helpers import make_user_group_roles
 from bin.session import get_role_id
 from bin.common import parse_request, random_string
-
+import pymysql as db
 
 @pytest.fixture(scope='function')
 def connector():
@@ -17,3 +17,6 @@ def connector():
     connector = response.json()
     yield connector
     Client.delete(url, id=connector['rid'])
+
+@pytest.fixture(scope='function')
+def

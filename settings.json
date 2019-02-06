@@ -1,4 +1,9 @@
-{"server":"10.100.70.16:8080",
-"principal":"root",
-"credential":"root",
-"auth_server": true}
+{
+  "server": "10.100.70.16:8080",
+  "DB_address": "10.100.70.20/SMGE",
+  "DB_username": "developer",
+  "DB_password": "Smidle098adm!",
+  "principal": "root",
+  "credential": "root",
+  "auth_server": true
+}

@@ -39,17 +39,25 @@ def get_role_id(role_name):
             return role['roleId']
 
 
-class Client:
+class Client(object):
 
-    def update_headers(session):
+    def __init__(self):
+        self.session = requests.Session()
         headers = {'content-type': "application/json;charset=UTF-8"}
         auth_token = get_token()
         headers[auth_token['name']] = auth_token['token']
-        session.headers = headers
+        self.session.headers = headers
 
-    def get(url, params=None, id=None, headers=None):
+
+    # def update_headers(session):
+    #     headers = {'content-type': "application/json;charset=UTF-8"}
+    #     auth_token = get_token()
+    #     headers[auth_token['name']] = auth_token['token']
+    #     session.headers = headers
+
+    def get(self, url, params=None, id=None, headers=None):
         if headers is None:
-            response = Client.session.get(url=get_url(url, id), params=params)
+            response = self.session.get(url=get_url(url, id), params=params)
         else:
             response = requests.get(url=get_url(url, id), params=params, headers=headers)
         return response
@@ -75,5 +83,19 @@ class Client:
             response = requests.delete(url=get_url(url, id), params=params, data=json.dumps(data), headers=headers)
         return response
 
-    session = requests.Session()
-    update_headers(session)
+    # session = requests.Session()
+    # update_headers(session)
+
+def client():
+    """
+    Returns a :class:`Session` for context-management.
+
+    :rtype: Session
+    """
+
+    return Client()
+
+#
+print(requests.get(url=get_url("groups")))
+# print("qq")
+# print(Client.get(url = "groups"))

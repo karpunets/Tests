@@ -31,6 +31,7 @@ ad_users_sources = "/SmiddleManager/adm/admin/active-directory/ad-users-sources"
 tag_to_call = "/SmiddleMicroRecording-CallProvider/smr/call-provider/crm/tag-to-call"
 recover = "/SmiddleManager/adm/management/users/$userId/recover"
 account = "/SmiddleManager/adm/management/users/current/account"
+
 # ADMIN
 get_user_list = '/SmiddleManager/adm/management/get_user_list'
 add_user = '%s/SmiddleManager/adm/management/add_user' % server
@@ -135,6 +136,10 @@ svc_conference_start = "%s/SmiddleVideoConference/svc/conference/start" % server
 svc_users_search = "%s/SmiddleVideoConference/svc/users/search" % server
 svc_conference_search = "%s/SmiddleVideoConference/svc/conference/search" % server
 
-# SMGE
+# SMC
 connectors = "/MessengerGateway/smc/connectors"
 accounts = "/MessengerGateway/smc/accounts"
+
+#TRUM
+clients = "/TRUM/trum/clients"
+profiles = "/Trum/trum/profiles"
