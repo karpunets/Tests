@@ -1,4 +1,6 @@
-import requests, json
+import json
+import requests
+from requests.sessions import Session
 from bin.helpers import get_property, get_url
 
 
@@ -86,14 +88,6 @@ class Client(object):
     # session = requests.Session()
     # update_headers(session)
 
-def client():
-    """
-    Returns a :class:`Session` for context-management.
-
-    :rtype: Session
-    """
-
-    return Client()
 
 #
 print(requests.get(url=get_url("groups")))
