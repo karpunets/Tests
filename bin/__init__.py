@@ -1,1 +1,3 @@
-from .session import Client
+from .session import Session
+
+request = Session()

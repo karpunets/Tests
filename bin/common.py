@@ -130,47 +130,6 @@ def equal_schema(response, schema, assert_keys_quantity=True):
     return True
 
 
-# Получаем и преобразуем JSON файл, согласно переданным параметрам
-
-def get_from_csv(fileName):
-    try:
-        role_name_from_jenkins = os.environ['role_for_test']
-    # Если не передали используем рут роль
-    except KeyError:
-        role_name_from_jenkins = 'ROOT'
-    # Конвертируем полученный файл
-    file_path = convert_to_utf_8(fileName)
-    csv_file = open(file_path, encoding="utf-8").readlines()
-    count = 0
-    result = []
-    for line in csv_file:
-        if count != 0:
-            if role_name_from_jenkins in line:
-                # Заменяем опечатки в CSV файле (одинарные кавычки на двойные и удалем символ переноса строки в конце)
-                line = line.replace('""', '"')
-                line = line.replace("'", '"')
-                line = line.rstrip("\n")
-                # Разбиваем на строку
-                payload = line.split(";")
-                # Преобразуем в dict параметры
-                for param in ['Request_Data', 'Parameters', 'Response']:
-                    param_index = row_names.index(param)
-                    if payload[param_index] != "-":
-                        payload[param_index] = payload[param_index].strip('"')
-                        payload[param_index] = json.loads(payload[param_index])
-                    else:
-                        payload[param_index] = {}
-                payload[row_names.index("URL_name")] = getattr(URLs, payload[row_names.index("URL_name")])
-                # Собираем параметры в одну сущность
-                payload[row_names.index("Status_code")] = int(payload[row_names.index("Status_code")])
-                result.append(tuple(payload))
-        else:
-            line = line.rstrip("\n")
-            row_names = line.split(";")
-        count += 1
-    return result
-
-
 def convert_to_utf_8(fileName):
     csv_file = "Test_data/%s.csv" % fileName
     f = codecs.open(csv_file, 'r', 'cp1251')

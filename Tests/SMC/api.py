@@ -3,7 +3,7 @@
 import allure
 import pytest
 import random
-from bin.session import Client
+from bin.session import Session
 from bin.session import root_group_id, root_role_id
 from bin.session import get_headers_with_credentials
 from bin.helpers import make_user_group_roles
@@ -38,7 +38,7 @@ class TestConnectors:
         data = parse_request("post_connectors", {"$name": random_string(),
                                                  "$url": "http://" + random_string(),
                                                  "$groupId": group_id})
-        response = Client.post(TestConnectors.url, data['request'])
+        response = Session.post(TestConnectors.url, data['request'])
         print(response.json())
         assert response.status_code == 200
         clear_data.append(response.json()['rid'])
@@ -50,7 +50,7 @@ class TestConnectors:
         data = parse_request("post_connectors", {"$name": random_string(),
                                                  "$url": "http://" + random_string(),
                                                  "$groupId": root_group_id()})
-        response = Client.post(TestConnectors.url, data['request'])
+        response = Session.post(TestConnectors.url, data['request'])
         print(response.json())
         assert response.status_code == 200
         clear_data.append(response.json()['rid'])
@@ -59,7 +59,7 @@ class TestConnectors:
     @allure.feature('Функциональный тест')
     @allure.story('Получаем коннекторы')
     def test_get_connectors(self, connector):
-        response = Client.get(TestConnectors.url)
+        response = Session.get(TestConnectors.url)
         assert response.status_code == 200
         assert connector in response.json()
 
@@ -69,7 +69,7 @@ class TestConnectors:
         data = parse_request("post_connectors", {"$name": None,
                                                  "$url": "http://" + random_string(),
                                                  "$groupId": root_group_id()})
-        response = Client.post(TestConnectors.url, data['request'])
+        response = Session.post(TestConnectors.url, data['request'])
         expected_result = {'SMC_VALIDATION_CONNECTOR_NAME': "Connector name mustn't be empty"}
         assert (response.status_code, response.json()) == (400, expected_result)
 
@@ -80,7 +80,7 @@ class TestConnectors:
         data = parse_request("post_connectors", {"$name": random_string(),
                                                  "$url": None,
                                                  "$groupId": root_group_id()})
-        response = Client.post(TestConnectors.url, data['request'])
+        response = Session.post(TestConnectors.url, data['request'])
         print(response.json())
         expected_result = {'SMC_VALIDATION_CONNECTOR_URL': "Connector url mustn't be empty"}
         assert (response.status_code, response.json()) == (400, expected_result)
@@ -92,7 +92,7 @@ class TestConnectors:
         data = parse_request("post_connectors", {"$name": random_string(),
                                                  "$url": "http://" + random_string(),
                                                  "$groupId": None})
-        response = Client.post(TestConnectors.url, data['request'])
+        response = Session.post(TestConnectors.url, data['request'])
         print(response.json())
         expected_result = {'SMC_VALIDATION_CONNECTOR_GROUP': "Connector group mustn't be empty"}
         assert (response.status_code, response.json()) == (400, expected_result)
@@ -104,7 +104,7 @@ class TestConnectors:
         data = parse_request("post_connectors", {"$name": existing_name,
                                                  "$url": "http://" + random_string(),
                                                  "$groupId": root_group_id()})
-        response = Client.post(TestConnectors.url, data['request'])
+        response = Session.post(TestConnectors.url, data['request'])
         print(response.json())
         assert response.status_code == 200
         clear_data.append(response.json()['rid'])
@@ -118,7 +118,7 @@ class TestConnectors:
         data = parse_request("post_connectors", {"$name": random_string(),
                                                  "$url": existing_url,
                                                  "$groupId": root_group_id()})
-        response = Client.post(TestConnectors.url, data['request'])
+        response = Session.post(TestConnectors.url, data['request'])
         print(response.json())
         expected_result = {'SMC_VALIDATION_CONNECTOR_URL_UNIQUE': "Connector url must be unique"}
         assert (response.status_code, response.json()) == (400, expected_result)
@@ -132,7 +132,7 @@ class TestConnectors:
                                                 "$url": "http://" + random_string(),
                                                 "$groupId": group_id
                                                 })
-        response = Client.put(TestConnectors.url, data['request'])
+        response = Session.put(TestConnectors.url, data['request'])
         print(response.json())
         assert response.status_code == 200
         assert equal_schema(response.json(), data['schema'])
@@ -145,7 +145,7 @@ class TestConnectors:
                                                 "$url": "http://" + random_string(),
                                                 "$groupId": root_group_id()
                                                 })
-        response = Client.put(TestConnectors.url, data['request'])
+        response = Session.put(TestConnectors.url, data['request'])
         print(response.json())
         expected_response = {'SMC_VALIDATION_CONNECTOR_NAME': "Connector name mustn't be empty"}
         assert (response.status_code, response.json()) == (400, expected_response)
@@ -158,7 +158,7 @@ class TestConnectors:
                                                 "$url": None,
                                                 "$groupId": root_group_id()
                                                 })
-        response = Client.put(TestConnectors.url, data['request'])
+        response = Session.put(TestConnectors.url, data['request'])
         print(response.json())
         expected_response = {'SMC_VALIDATION_CONNECTOR_URL': "Connector url mustn't be empty"}
         assert (response.status_code, response.json()) == (400, expected_response)
@@ -171,7 +171,7 @@ class TestConnectors:
                                                 "$url": "http://" + random_string(),
                                                 "$groupId": None
                                                 })
-        response = Client.put(TestConnectors.url, data['request'])
+        response = Session.put(TestConnectors.url, data['request'])
         print(response.json())
         expected_response = {'SMC_VALIDATION_CONNECTOR_GROUP': "Connector group mustn't be empty"}
         assert (response.status_code, response.json()) == (400, expected_response)
@@ -185,7 +185,7 @@ class TestConnectors:
                                                 "$url": "http://" + random_string(),
                                                 "$groupId": root_group_id()
                                                 })
-        response = Client.put(TestConnectors.url, data['request'])
+        response = Session.put(TestConnectors.url, data['request'])
         print(response.json())
         expected_response = {'UNMAPPED_EXCEPTION': 'SMCRequestException: Connector with rid=%s not found' % random_rid}
         assert (response.status_code, response.json()) == (500, expected_response)
@@ -193,7 +193,7 @@ class TestConnectors:
     @allure.feature('Функциональный тест')
     @allure.story('Удаляем коннектор')
     def test_delete_connector(self, connector):
-        response = Client.delete(TestConnectors.url, id=connector['rid'])
+        response = Session.delete(TestConnectors.url, id=connector['rid'])
         print(response.json())
         assert (response.status_code, response.json()) == (200, connector)
 
@@ -201,7 +201,7 @@ class TestConnectors:
     @allure.story('Удаляем коннектор с не правильным id')
     def test_delete_connector_with_unknown_id(self, connector):
         random_id = random_string()
-        response = Client.delete(TestConnectors.url, id=random_id)
+        response = Session.delete(TestConnectors.url, id=random_id)
         expected_response = {'UNMAPPED_EXCEPTION': 'SMCRequestException: Connector with id=%s not found'%random_id}
         print(response.json())
         assert (response.status_code, response.json()) == (500, expected_response)
@@ -222,7 +222,7 @@ class TestAccounts:
                                                  "$botName": "",
                                                  "$authToken": ""
                                                  })
-        response = Client.post(TestConnectors.url, data['request'])
+        response = Session.post(TestConnectors.url, data['request'])
         print(response.json())
         assert response.status_code == 200
         clear_data.append(response.json()['rid'])

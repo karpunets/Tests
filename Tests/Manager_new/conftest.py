@@ -1,7 +1,7 @@
 import pytest
 import random
 from collections import deque
-from bin.session import Client, root_group_id
+from bin.session import Session, root_group_id
 from bin.helpers import make_user_group_roles
 from bin.session import get_role_id
 from bin.common import parse_request, random_string
@@ -11,9 +11,9 @@ from bin.common import parse_request, random_string
 def group():
     data = parse_request('post_group', {"$name": random_string(),
                                         "$parentGroupId": root_group_id()})
-    response = Client.post("groups", data['request'])
+    response = Session.post("groups", data['request'])
     yield response.json()
-    Client.delete("groups", id=response.json()['groupId'])
+    Session.delete("groups", id=response.json()['groupId'])
 
 
 @pytest.fixture(scope="function")
@@ -30,11 +30,11 @@ def user(userGroupRoles, immutable_role):
                                         "$fax": random_string(),
                                         "$userGroupRoles": userGroupRoles
                                         })
-    response = Client.post("users", data['request'])
+    response = Session.post("users", data['request'])
     user = response.json()
     user['dateCreate'] = round(user['dateCreate']/1000) * 1000
     yield user
-    Client.delete("users", id=response.json()['userId'])
+    Session.delete("users", id=response.json()['userId'])
 
 
 @pytest.fixture(scope="module")
@@ -51,11 +51,11 @@ def immutable_user(userGroupRoles, immutable_role):
                                         "$fax": random_string(),
                                         "$userGroupRoles": userGroupRoles
                                         })
-    response = Client.post("users", data['request'])
+    response = Session.post("users", data['request'])
     user = response.json()
     user['dateCreate'] = round(user['dateCreate']/1000) * 1000
     yield user
-    Client.delete("users", id=response.json()['userId'])
+    Session.delete("users", id=response.json()['userId'])
 
 
 
@@ -64,9 +64,9 @@ def role(group):
     url = "roles"
     data = parse_request('post_roles', {"$name": random_string(),
                                         "$groupId": group['groupId']})
-    response = Client.post(url, data['request'])
+    response = Session.post(url, data['request'])
     yield response.json()
-    Client.delete(url, id=response.json()['roleId'])
+    Session.delete(url, id=response.json()['roleId'])
 
 
 @pytest.fixture(scope="module")
@@ -74,9 +74,9 @@ def immutable_role(immutable_group_with_child):
     url = "roles"
     data = parse_request('post_roles', {"$name": random_string(),
                                         "$groupId": immutable_group_with_child['groupId']})
-    response = Client.post(url, data['request'])
+    response = Session.post(url, data['request'])
     yield response.json()
-    Client.delete(url, id=response.json()['roleId'])
+    Session.delete(url, id=response.json()['roleId'])
 
 
 
@@ -98,7 +98,7 @@ def immutable_deleted_user(immutable_role, userGroupRoles):
                                         "$userGroupRoles": userGroupRoles
                                         })
     data['request']['deleted'] = True
-    response = Client.post("users", data['request'])
+    response = Session.post("users", data['request'])
     user = response.json()
     user['dateCreate'] = round(user['dateCreate']/1000) * 1000
     return user
@@ -131,13 +131,13 @@ def add_user_with_role(request):
                                             "$userGroupRoles": user_group_and_role
                                             })
         data['request']['enabled'] = enabled
-        response = Client.post("users", data['request'])
+        response = Session.post("users", data['request'])
         print(response.json())
         user = response.json()
         user['dateCreate'] = round(user['dateCreate'] / 1000) * 1000
 
         def fin():
-            Client.delete("users", id=user['userId'])
+            Session.delete("users", id=user['userId'])
         request.addfinalizer(fin)
         return user
     return _user
