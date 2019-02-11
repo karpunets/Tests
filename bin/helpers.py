@@ -1,9 +1,9 @@
 import json
-import random
+
 from urllib.parse import urljoin
 from definition import PROPERTIES_DIR
 from Data import URLs_MAP
-from bin.common import random_string
+
 
 
 def get_property(*args):

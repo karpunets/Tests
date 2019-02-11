@@ -3,8 +3,9 @@ import requests
 import os
 from json import dumps
 from collections import deque
-from bin.session import Session, root_group_id
+from bin.api import root_group_id
 from bin.common import parse_request, random_string
+from bin import _request
 
 
 @pytest.fixture(scope='session')
@@ -60,7 +61,7 @@ def clear_data(request):
     group_id_list = []
     yield group_id_list
     for id_to_delete in group_id_list:
-        Session.delete(url, id=id_to_delete)
+        request.delete(url, id_to_url=id_to_delete)
 
 @pytest.fixture(scope="module")
 def immutable_group_with_child():
@@ -70,13 +71,13 @@ def immutable_group_with_child():
     groupsId = deque([], maxlen=5)
     data = parse_request('Tests/Manager_new/Test_data/post_group', {"$name": random_string(),
                                         "$parentGroupId": root_group_id()})
-    responseParent = Session.post("groups", data['request'])
+    responseParent = _request.post("groups", data['request'])
     groupsId.appendleft(responseParent.json()['groupId'])
     dataChild = parse_request('Tests/Manager_new/Test_data/post_group', {"$name": random_string(),
                                              "$parentGroupId": groupsId[0]})
-    responseChild = Session.post("groups", dataChild['request'])
-    response = Session.get("groups", id=groupsId[0])
+    responseChild = _request.post("groups", dataChild['request'])
+    response = _request.get("groups", id_to_url=groupsId[0])
     groupsId.appendleft(responseChild.json()['groupId'])
     yield response.json()
     for id in groupsId:
-        Session.delete("groups", id=id)
+        _request.delete("groups", id_to_url=id)

@@ -1,3 +1,3 @@
 from .session import Session
 
-request = Session()
+_request = Session()

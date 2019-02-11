@@ -5,8 +5,6 @@ import pytest
 import random
 from bin.session import Session
 from bin.session import root_group_id, root_role_id
-from bin.session import get_headers_with_credentials
-from bin.helpers import make_user_group_roles
 from bin.common import parse_request, equal_schema, random_string
 from bin.helpers import get_property
 
@@ -193,7 +191,7 @@ class TestConnectors:
     @allure.feature('Функциональный тест')
     @allure.story('Удаляем коннектор')
     def test_delete_connector(self, connector):
-        response = Session.delete(TestConnectors.url, id=connector['rid'])
+        response = Session.delete(TestConnectors.url, id_to_url=connector['rid'])
         print(response.json())
         assert (response.status_code, response.json()) == (200, connector)
 
@@ -201,7 +199,7 @@ class TestConnectors:
     @allure.story('Удаляем коннектор с не правильным id')
     def test_delete_connector_with_unknown_id(self, connector):
         random_id = random_string()
-        response = Session.delete(TestConnectors.url, id=random_id)
+        response = Session.delete(TestConnectors.url, id_to_url=random_id)
         expected_response = {'UNMAPPED_EXCEPTION': 'SMCRequestException: Connector with id=%s not found'%random_id}
         print(response.json())
         assert (response.status_code, response.json()) == (500, expected_response)
