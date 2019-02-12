@@ -1,0 +1,18 @@
+[
+  "api.py::TestConnectors::()::test_add_unknown_connector_with_not_ROOT_group",
+  "api.py::TestConnectors::()::test_add_unknown_connector_with_ROOT_group",
+  "api.py::TestConnectors::()::test_get_connectors",
+  "api.py::TestConnectors::()::test_add_connector_with_empty_name",
+  "api.py::TestConnectors::()::test_add_connector_with_empty_url",
+  "api.py::TestConnectors::()::test_add_connector_without_group",
+  "api.py::TestConnectors::()::test_add_connector_with_existing_name",
+  "api.py::TestConnectors::()::test_add_connector_with_existing_URL",
+  "api.py::TestConnectors::()::test_edit_connector",
+  "api.py::TestConnectors::()::test_edit_connector_without_name",
+  "api.py::TestConnectors::()::test_edit_connector_without_URL",
+  "api.py::TestConnectors::()::test_edit_connector_without_group",
+  "api.py::TestConnectors::()::test_edit_connector_with_random_rid",
+  "api.py::TestConnectors::()::test_delete_connector",
+  "api.py::TestConnectors::()::test_delete_connector_with_unknown_id",
+  "api.py::TestAccounts::()::test_add_unknown_connector_with_ROOT_group"
+]

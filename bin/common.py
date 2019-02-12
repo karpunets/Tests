@@ -1,5 +1,5 @@
 import json, re, random, string, codecs, os, time
-import Data.URLs_MAP as URLs
+
 from definition import ROOT_DIR
 
 
@@ -14,6 +14,9 @@ def random_string():
 
 def date_now():
     return round(time.time() * 1000)
+
+
+
 
 
 # Получаем и преобразуем JSON файл, согласно переданным параметрам

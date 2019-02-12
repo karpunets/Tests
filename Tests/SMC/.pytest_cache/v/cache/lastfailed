@@ -1,0 +1,23 @@
+{
+  "api.py::TestAccounts::()::test_add_unknown_connector_with_ROOT_group": true,
+  "api.py::TestConnectors::()::test_add_connector": true,
+  "api.py::TestConnectors::()::test_add_connector_with_existing_name": true,
+  "api.py::TestConnectors::()::test_add_connectors[/CiscoSparkConnector]": true,
+  "api.py::TestConnectors::()::test_add_connectors[/ECEConnector]": true,
+  "api.py::TestConnectors::()::test_add_connectors[/EchoConnector]": true,
+  "api.py::TestConnectors::()::test_add_connectors[/FacebookConnector]": true,
+  "api.py::TestConnectors::()::test_add_connectors[/TelegramConnector]": true,
+  "api.py::TestConnectors::()::test_add_connectors[/ViberConnector]": true,
+  "api.py::TestConnectors::()::test_add_connectors[/WebConnector]": true,
+  "api.py::TestConnectors::()::test_add_unknown_connector[/CiscoSparkConnector]": true,
+  "api.py::TestConnectors::()::test_add_unknown_connector[/ECEConnector]": true,
+  "api.py::TestConnectors::()::test_add_unknown_connector[/EchoConnector]": true,
+  "api.py::TestConnectors::()::test_add_unknown_connector[/FacebookConnector]": true,
+  "api.py::TestConnectors::()::test_add_unknown_connector[/TelegramConnector]": true,
+  "api.py::TestConnectors::()::test_add_unknown_connector[/ViberConnector]": true,
+  "api.py::TestConnectors::()::test_add_unknown_connector[/WebConnector]": true,
+  "api.py::TestConnectors::()::test_add_unknown_connector_with_ROOT_group": true,
+  "api.py::TestConnectors::()::test_add_unknown_connector_with_not_ROOT_group": true,
+  "api.py::TestConnectors::()::test_edit_connector": true,
+  "api.py::TestConnectors::()::test_edit_connector_without_rid": true
+}

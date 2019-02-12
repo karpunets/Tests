@@ -1,0 +1,3 @@
+[
+  "api.py::TestAuthorizationServer::()::test_get_token_for_user_without_credentials"
+]

@@ -5,7 +5,7 @@ from json import dumps
 from collections import deque
 from bin.api import root_group_id
 from bin.common import parse_request, random_string
-from bin import _request
+from bin import req
 
 
 @pytest.fixture(scope='session')
@@ -35,7 +35,7 @@ def send_request(get_role):
     def some_request(url, data=None, method='POST', params=None):
         headers = get_role['headers']
         payload = dumps(data)
-        response = requests.request(method, url, data=payload, headers=headers, params=params)
+        response = req.request(method, url, data=payload, headers=headers, params=params)
         return response
 
     return some_request
@@ -50,7 +50,7 @@ def clear_result(send_request):
             for i in data['id']:
                 send_request(url=data['url'], params={'id': int(i)}, method = "DELETE")
         else:
-            send_request(url=data['url'], params={'id': int(data['id'])},method = "DELETE")
+            send_request(url=data['url'], params={'id': int(data['id'])}, method = "DELETE")
     except KeyError:
         pass
 
@@ -61,23 +61,24 @@ def clear_data(request):
     group_id_list = []
     yield group_id_list
     for id_to_delete in group_id_list:
-        request.delete(url, id_to_url=id_to_delete)
+        req.delete(url, id_to_url=id_to_delete)
 
 @pytest.fixture(scope="module")
 def immutable_group_with_child():
     """
     :return: {}
     """
-    groupsId = deque([], maxlen=5)
+    groups_id = deque([], maxlen=5)
     data = parse_request('Tests/Manager_new/Test_data/post_group', {"$name": random_string(),
                                         "$parentGroupId": root_group_id()})
-    responseParent = _request.post("groups", data['request'])
-    groupsId.appendleft(responseParent.json()['groupId'])
-    dataChild = parse_request('Tests/Manager_new/Test_data/post_group', {"$name": random_string(),
-                                             "$parentGroupId": groupsId[0]})
-    responseChild = _request.post("groups", dataChild['request'])
-    response = _request.get("groups", id_to_url=groupsId[0])
-    groupsId.appendleft(responseChild.json()['groupId'])
+    response_parent = req.post("groups", data['request'])
+    groups_id.appendleft(response_parent.json()['groupId'])
+    data_child = parse_request('Tests/Manager_new/Test_data/post_group', {"$name": random_string(),
+                                             "$parentGroupId": groups_id[0]})
+    response_child = req.post("groups", data_child['request'])
+    response = req.get("groups", id_to_url=groups_id[0])
+    print(response.json())
+    groups_id.appendleft(response_child.json()['groupId'])
     yield response.json()
-    for id in groupsId:
-        _request.delete("groups", id_to_url=id)
+    for id in groups_id:
+        req.delete("groups", id_to_url=id)
