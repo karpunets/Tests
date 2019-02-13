@@ -15,6 +15,7 @@ def get_auth_token_with_headers(*args):
     else:
         payload = {"principal": args[0], "credential": args[1]}
     response = requests.post(url=get_url("token"), json=payload, headers=headers)
+    assert response.status_code == 200, "AUTH SERVER PROBLEM, response_code = %d" % response.status_code
     headers[response.json()['name']] = response.json()['token']
     return headers
 
@@ -53,10 +54,10 @@ class Session(Requests_session):
         return self.choose_request_method(method="POST", url=url, json=json, id_to_url=id_to_url, **kwargs)
 
     def put(self, url, json=None, id_to_url=None, **kwargs):
-        return self.choose_request_method(method="PUT", url=url, id_to_url=id_to_url, **kwargs)
+        return self.choose_request_method(method="PUT", url=url, json=json, id_to_url=id_to_url, **kwargs)
 
     def delete(self, url, id_to_url=None, **kwargs):
         return self.choose_request_method(method="DELETE", url=url, id_to_url=id_to_url, **kwargs)
 
 
-
+get_auth_token_with_headers()
