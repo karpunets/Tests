@@ -1,4 +1,5 @@
 import requests
+from bin.cleaner import Cleaner
 from requests.sessions import Session as Requests_session
 from bin.helpers import get_property, get_url
 
@@ -28,6 +29,8 @@ class Session(Requests_session):
     """
 
     def __init__(self):
+        self.cleaner = Cleaner()
+        self.cleaner.clear_db()
         super(Session, self).__init__()
         self.headers = get_auth_token_with_headers()
 
@@ -51,7 +54,9 @@ class Session(Requests_session):
         return self.choose_request_method(method="GET", url=url, id_to_url=id_to_url, **kwargs)
 
     def post(self, url, json=None, id_to_url=None, **kwargs):
-        return self.choose_request_method(method="POST", url=url, json=json, id_to_url=id_to_url, **kwargs)
+        response = self.choose_request_method(method="POST", url=url, json=json, id_to_url=id_to_url, **kwargs)
+        self.cleaner.add_for_clean(url, response)
+        return response
 
     def put(self, url, json=None, id_to_url=None, **kwargs):
         return self.choose_request_method(method="PUT", url=url, json=json, id_to_url=id_to_url, **kwargs)

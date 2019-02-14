@@ -1,18 +1,19 @@
 import collections
-
-
+import
 
 class Cleaner(object):
 
     def __init__(self):
-        self.storage = collections.deque
+        self.storage = collections.deque()
+
 
     def write_to_file(self):
 
-    def add_for_clean(self):
+    def add_for_clean(self, url, response):
+        self.storage.append()
 
-    def prepare_data_from_request(self):
+    def normalize(self, url, response):
 
     def success_deleted(self):
 
-    def tear_down_delete(self):
+    def clear_db(self):
