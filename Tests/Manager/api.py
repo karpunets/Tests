@@ -3,7 +3,7 @@
 import allure
 import pytest
 import random
-from bin import req
+from bin.session import req
 
 from bin.api import root_group_id, root_role_id
 from bin.common import parse_request, equal_schema, random_string
@@ -130,10 +130,9 @@ class TestGroups:
         data = parse_request("post_group", {"$name": random_string(),
                                             "$parentGroupId": root_group_id()})
         response = req.post(TestGroups.url, data['request'])
-        clear_data.append(response.json()['groupId'])
+        # clear_data.append(response.json()['groupId'])
         assert equal_schema(response.json(), data['schema']) and response.status_code == 201
 
-    #
     @allure.feature('Проверка валидации')
     @allure.story('Создаем группу без имени')
     def test_addGroup_without_name(self):
@@ -238,6 +237,7 @@ class TestRoles:
         data = parse_request('post_roles', {"$name": random_string(),
                                             "$groupId": immutable_group_with_child['groupId']})
         response = req.post(TestRoles.url, data['request'])
+        print(response.json())
         clear_data.append(response.json()['roleId'])
         assert equal_schema(response.json(), data['schema']) and response.status_code == 201
 

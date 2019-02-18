@@ -1,4 +1,4 @@
-from bin import req
+from bin.session import req
 
 
 def root_group_id():

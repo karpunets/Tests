@@ -1,0 +1,1 @@
+('ad1cff4b-e681-4daa-9546-58accf8fad05', 'http://10.100.90.14:8080/SmiddleManager/adm/management/groups')
