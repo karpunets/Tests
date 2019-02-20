@@ -3,8 +3,8 @@
 import allure
 import pytest
 import random
-from bin.session import req
 
+from bin.client import req
 from bin.api import root_group_id, root_role_id
 from bin.common import parse_request, equal_schema, random_string
 from bin.helpers import get_property

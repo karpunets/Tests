@@ -5,7 +5,6 @@ from definition import PROPERTIES_DIR
 from Data import URLs_MAP
 
 
-
 def get_property(*args):
     f = open(PROPERTIES_DIR, encoding="utf-8").read()
     properties = json.loads(f)
@@ -34,18 +33,18 @@ def make_user_group_roles(group_roles_obj):
     :return: [{'group': {'groupId': str}, 'roles': [{'roleId': str}], 'applyRolesRecursively': False}]
     """
     user_group_roles = list()
-    for groupId in group_roles_obj:
+    for i in group_roles_obj:
         result = dict()
-        roles = list()
-        result['group'] = {"groupId": groupId}
-        if isinstance(group_roles_obj[groupId], list):
-            for roleId in group_roles_obj[groupId]:
-                roles.append({'roleId': roleId})
+        result['group'] = {"groupId": i}
+        if isinstance(group_roles_obj[i], list):
+            roles = [{'roleId': groupId} for groupId in group_roles_obj[i]]
         else:
-            roles.append({'roleId': group_roles_obj[groupId]})
+            roles = [{'roleId': group_roles_obj[i]}]
         result['roles'] = roles
         result["applyRolesRecursively"] = False
         user_group_roles.append(result)
     return user_group_roles
 
+
+print(make_user_group_roles({"gr":"zzz"}))
 
