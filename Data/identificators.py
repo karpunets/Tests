@@ -1,3 +1,3 @@
-ids_list = ["userId",
-            "groupId",
-            "roleId"]
+rid_params_map = ["userId",
+                  "groupId",
+                  "roleId"]

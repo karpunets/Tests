@@ -8,7 +8,7 @@ from Data import URLs_MAP
 def get_property(*args):
     f = open(PROPERTIES_DIR, encoding="utf-8").read()
     properties = json.loads(f)
-    if len(args) != 0:
+    if args:
         return {key: properties[key] for key in args}
     else:
         return properties
@@ -44,7 +44,4 @@ def make_user_group_roles(group_roles_obj):
         result["applyRolesRecursively"] = False
         user_group_roles.append(result)
     return user_group_roles
-
-
-print(make_user_group_roles({"gr":"zzz"}))
 

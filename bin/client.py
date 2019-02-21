@@ -37,14 +37,14 @@ class Session(Requests_session):
 
     def post(self, url, json=None, id_to_url=None, **kwargs):
         response = self.choose_request_method(method="POST", url=url, json=json, id_to_url=id_to_url, **kwargs)
-        self.cleaner.add_for_clean(url, response)
+        self.cleaner.add(url, response)
         return response
 
     def put(self, url, json=None, id_to_url=None, **kwargs):
         return self.choose_request_method(method="PUT", url=url, json=json, id_to_url=id_to_url, **kwargs)
 
     def delete(self, url, id_to_url=None, **kwargs):
-        self.cleaner.success_deleted(id_to_url)
+        self.cleaner.remove(id_to_url)
         return self.choose_request_method(method="DELETE", url=url, id_to_url=id_to_url, **kwargs)
 
 
