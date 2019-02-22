@@ -6,7 +6,6 @@ from bin.api import root_group_id
 from bin.common import parse_request, random_string
 from bin import req
 
-
 @pytest.fixture(scope="function")
 def clear_data(request):
     url = getattr(request.cls, "url")

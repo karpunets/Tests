@@ -1,4 +1,5 @@
 from requests.sessions import Session as Requests_session
+from ast import literal_eval as make_tuple
 from .cleaner import Cleaner
 from .helpers import get_url
 from .authorization import get_auth_token_with_headers
@@ -15,6 +16,9 @@ class Session(Requests_session):
         super(Session, self).__init__()
         self.headers = get_auth_token_with_headers()
         self.cleaner = Cleaner()
+
+    def __del__(self):
+        self.clean()
 
     def choose_request_method(self, method, url, id_to_url, **kwargs):
         """
@@ -44,8 +48,14 @@ class Session(Requests_session):
         return self.choose_request_method(method="PUT", url=url, json=json, id_to_url=id_to_url, **kwargs)
 
     def delete(self, url, id_to_url=None, **kwargs):
-        self.cleaner.remove(id_to_url)
+        self.cleaner.remove(url, id_to_url)
         return self.choose_request_method(method="DELETE", url=url, id_to_url=id_to_url, **kwargs)
 
+    # def clean(self):
+    #     with open(self.cleaner.file_path, "r") as f:
+    #         for i in f.readlines():
+    #             rid_url = make_tuple(i)
+    #             self.delete(url=rid_url[1], id_to_url=rid_url[0])
 
-req = Session()
+#
+# req = Session()

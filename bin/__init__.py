@@ -1,3 +1,3 @@
-# from bin.session import Session
-#
-# req = Session()
+from bin.session import Session
+
+req = Session()
