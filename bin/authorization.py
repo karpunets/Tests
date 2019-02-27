@@ -9,7 +9,7 @@ def get_auth_token_with_headers(*args):
               "X-Smiddle-Auth-Token: str: token}
     """
     headers = {"Content-Type": "application/json;charset=UTF-8"}
-    if args:
+    if not args:
         payload = get_property("principal", "credential")
     else:
         payload = {"principal": args[0], "credential": args[1]}

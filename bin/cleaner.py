@@ -4,13 +4,15 @@ from definition import DATA_DIR
 from Data import identificators
 from bin.helpers import get_url
 from os import path
+from definition import DATA_TO_CLEAN
+
 
 
 class Cleaner:
 
     def __init__(self):
         self.storage = collections.deque()
-        self.file_path = path.join(DATA_DIR, "data_to_clean.txt")
+        self.file_path = DATA_TO_CLEAN
         # self.clean()
 
     def __del__(self):
@@ -23,15 +25,15 @@ class Cleaner:
 
     def add(self, url_name, response):
         rid_list = self.take_rid_list_from_response(response)
-        url = get_url(url_name)
         for i in rid_list:
-            self.storage.append((url, i))
+            self.storage.append((url_name, i))
 
     @staticmethod
     def take_rid_list_from_response(response):
         response = response.json()
         params_list = identificators.rid_params_map
         rid_list = [response[i] for i in params_list if i in response.keys() if isinstance(response[i], str)]
+
         # rid_list = {param: response[param] for param in params_list if param in response.keys()}
         # if len(ident.keys()) > 1:
         #     for i in ident:
@@ -46,6 +48,7 @@ class Cleaner:
         url_with_rid = (url, rid)
         while url_with_rid in self.storage:
             self.storage.remove(url_with_rid)
+
 
     # def clean(self):
     #     for i in self.file.readlines():
