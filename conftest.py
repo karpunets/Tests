@@ -33,3 +33,8 @@ def immutable_group_with_child():
     yield response.json()
     for id in groups_id:
         send_request.delete("groups", id_to_url=id)
+
+
+@pytest.fixture(scope="module")
+def teardown_clear():
+    return

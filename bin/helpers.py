@@ -6,12 +6,12 @@ from Data import URLs_MAP
 
 
 def get_property(*args):
-    f = open(PROPERTIES_DIR, encoding="utf-8").read()
-    properties = json.loads(f)
+    with open(PROPERTIES_DIR, encoding="utf-8") as f:
+        prop_file = f.read()
+    properties = json.loads(prop_file)
     if args:
         return {key: properties[key] for key in args}
-    else:
-        return properties
+    return properties
 
 
 def get_url(name, id=None):
@@ -22,8 +22,7 @@ def get_url(name, id=None):
         server_address = "http://" + server_address
     new_url = urljoin(server_address, url)
     if id is not None:
-        new_url = new_url + "/"
-        new_url = urljoin(new_url, id)
+        new_url = urljoin(new_url + "/", id)
     return new_url
 
 
