@@ -5,20 +5,21 @@ from Data import identificators
 from bin.helpers import get_url
 from os import path
 from definition import DATA_TO_CLEAN
-
+import atexit
 
 class Cleaner:
 
     def __init__(self):
         self.storage = collections.deque()
         self.file_path = DATA_TO_CLEAN
+        atexit.register(self.write_to_file())
         # self.clean()
 
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.write_to_file()
+    # def __enter__(self):
+    #     return self
+    #
+    # def __exit__(self, exc_type, exc_val, exc_tb):
+    #     self.write_to_file()
 
     def write_to_file(self):
         with open(self.file_path, "w") as f:
@@ -51,6 +52,8 @@ class Cleaner:
             self.storage.remove(url_with_rid)
 
 
+
+
     # def clean(self):
     #     for i in self.file.readlines():
     #         rid_url = make_tuple(i)
@@ -61,6 +64,7 @@ class Cleaner:
 
 
 
+cleaner = Cleaner()
 
 
 

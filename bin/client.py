@@ -1,6 +1,6 @@
 from requests.sessions import Session as Requests_session
 from ast import literal_eval as make_tuple
-from .cleaner import Cleaner
+from .cleaner import cleaner
 from .helpers import get_url
 from .authorization import get_auth_token_with_headers
 from definition import DATA_TO_CLEAN
@@ -17,8 +17,7 @@ class Session(Requests_session):
         super(Session, self).__init__()
         self.headers = get_auth_token_with_headers()
         self.clean()
-        with Cleaner() as cleaner:
-            self.cleaner = cleaner
+        self.cleaner = cleaner
 
     def choose_request_method(self, method, url, id_to_url, **kwargs):
         """
