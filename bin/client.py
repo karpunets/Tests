@@ -17,7 +17,8 @@ class Session(Requests_session):
         super(Session, self).__init__()
         self.headers = get_auth_token_with_headers()
         self.clean()
-        self.cleaner = Cleaner()
+        with Cleaner() as cleaner:
+            self.cleaner = cleaner
 
     def choose_request_method(self, method, url, id_to_url, **kwargs):
         """

@@ -130,6 +130,7 @@ class TestGroups:
         data = parse_request("post_group", {"$name": random_string(),
                                             "$parentGroupId": root_group_id()})
         response = send_request.post(TestGroups.url, data['request'])
+        print(response.json())
         # clear_data.append(response.json()['groupId'])
         assert equal_schema(response.json(), data['schema']) and response.status_code == 201
 

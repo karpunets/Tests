@@ -1,5 +1,4 @@
 import json
-
 from urllib.parse import urljoin
 from definition import PROPERTIES_DIR
 from Data import URLs_MAP
@@ -43,4 +42,3 @@ def make_user_group_roles(group_roles_obj):
         result["applyRolesRecursively"] = False
         user_group_roles.append(result)
     return user_group_roles
-

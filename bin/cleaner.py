@@ -7,7 +7,6 @@ from os import path
 from definition import DATA_TO_CLEAN
 
 
-
 class Cleaner:
 
     def __init__(self):
@@ -15,7 +14,10 @@ class Cleaner:
         self.file_path = DATA_TO_CLEAN
         # self.clean()
 
-    def __del__(self):
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
         self.write_to_file()
 
     def write_to_file(self):
@@ -44,8 +46,7 @@ class Cleaner:
         return rid_list
 
     def remove(self, url_name, rid):
-        url = get_url(url_name)
-        url_with_rid = (url, rid)
+        url_with_rid = (url_name, rid)
         while url_with_rid in self.storage:
             self.storage.remove(url_with_rid)
 
