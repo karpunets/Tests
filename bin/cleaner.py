@@ -11,24 +11,28 @@ import atexit
 class Cleaner:
 
     def __init__(self):
-        self.storage = collections.deque()
+        self._storage = collections.deque()
         self.file_path = DATA_TO_CLEAN
         atexit.register(self.write_to_file)
 
-    # @property
-    # def storage(self):
-    #     return self._storage
+    @property
+    def storage(self):
+        return self._storage
+
+    @property
+    def storage_copy(self):
+        return list(self._storage)
 
     def write_to_file(self):
-        if self.storage:
+        if self._storage:
             with open(self.file_path, "w") as f:
-                    for i in self.storage:
+                    for i in self._storage:
                         f.write(str(i))
 
     def add(self, url_name, response):
         rid_list = self.take_rid_list_from_response(response)
         for i in rid_list:
-            self.storage.append((url_name, i))
+            self._storage.append((url_name, i))
 
     @staticmethod
     def take_rid_list_from_response(response):
@@ -39,12 +43,5 @@ class Cleaner:
 
     def remove(self, url_name, rid):
         url_with_rid = (url_name, rid)
-        while url_with_rid in self.storage:
-            self.storage.remove(url_with_rid)
-
-
-
-# cleaner = Cleaner()
-
-
-
+        while url_with_rid in self._storage:
+            self._storage.remove(url_with_rid)
