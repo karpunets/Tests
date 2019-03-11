@@ -1,6 +1,7 @@
+import atexit
 from requests.sessions import Session as Requests_session
 from ast import literal_eval as make_tuple
-from .cleaner import cleaner
+from .cleaner import Cleaner
 from .helpers import get_url
 from .authorization import get_auth_token_with_headers
 from definition import DATA_TO_CLEAN
@@ -17,7 +18,7 @@ class Session(Requests_session):
         super(Session, self).__init__()
         self.headers = get_auth_token_with_headers()
         self.clean()
-        self.cleaner = cleaner
+        self.cleaner = Cleaner()
 
     def choose_request_method(self, method, url, id_to_url, **kwargs):
         """
@@ -55,7 +56,7 @@ class Session(Requests_session):
         with open(DATA_TO_CLEAN, "r") as f:
             for i in f.readlines():
                 rid_url = make_tuple(i)
-                self.delete(url=rid_url[1], id_to_url=rid_url[0], cleaner=True)
+                self.delete(url=rid_url[0], id_to_url=rid_url[1], cleaner=True)
 
 
 send_request = Session()

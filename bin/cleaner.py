@@ -7,24 +7,19 @@ from os import path
 from definition import DATA_TO_CLEAN
 import atexit
 
+
 class Cleaner:
 
     def __init__(self):
         self.storage = collections.deque()
         self.file_path = DATA_TO_CLEAN
-        atexit.register(self.write_to_file())
-        # self.clean()
-
-    # def __enter__(self):
-    #     return self
-    #
-    # def __exit__(self, exc_type, exc_val, exc_tb):
-    #     self.write_to_file()
+        atexit.register(self.write_to_file)
 
     def write_to_file(self):
-        with open(self.file_path, "w") as f:
-            for i in self.storage:
-                f.write(str(i))
+        if self.storage:
+            with open(self.file_path, "w") as f:
+                    for i in self.storage:
+                        f.write(str(i))
 
     def add(self, url_name, response):
         rid_list = self.take_rid_list_from_response(response)
@@ -36,14 +31,6 @@ class Cleaner:
         response = response.json()
         params_list = identificators.rid_params_map
         rid_list = [response[i] for i in params_list if i in response.keys() if isinstance(response[i], str)]
-
-        # rid_list = {param: response[param] for param in params_list if param in response.keys()}
-        # if len(ident.keys()) > 1:
-        #     for i in ident:
-        #         rid = ident[i] if url_name.startswith(i) else None
-        # else:
-        #     rid = list(ident.values())[0]
-        # url = get_url(url_name)
         return rid_list
 
     def remove(self, url_name, rid):
@@ -53,18 +40,7 @@ class Cleaner:
 
 
 
-
-    # def clean(self):
-    #     for i in self.file.readlines():
-    #         rid_url = make_tuple(i)
-    #         for j in rid_url[0]:
-    #             print(j, "hello")
-    #             # self.delete(url=rid_url[1], id_to_url=j)
-
-
-
-
-cleaner = Cleaner()
+# cleaner = Cleaner()
 
 
 
