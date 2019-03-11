@@ -11,13 +11,13 @@ import atexit
 class Cleaner:
 
     def __init__(self):
-        self.storage = collections.deque()
+        self._storage = collections.deque()
         self.file_path = DATA_TO_CLEAN
         atexit.register(self.write_to_file)
 
-    # @property
-    # def storage(self):
-    #     return self._storage
+    @property
+    def storage(self):
+        return self._storage
 
     def write_to_file(self):
         if self.storage:
