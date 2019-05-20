@@ -7,7 +7,7 @@ from os import path
 from definition import DATA_TO_CLEAN
 import atexit
 
-
+#TODO: записывать в json файл, ссылку на файл для очистки. Файл генерировать с данными новый, где в названии указывать дату\сервер? И очищать после чистки
 class Cleaner:
 
     def __init__(self):

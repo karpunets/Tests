@@ -1,0 +1,31 @@
+{
+  "request": {
+    "name": "$name",
+    "url": "$url",
+    "enabled": "$enabled",
+    "groups": [
+      {
+        "groupId": "$groupId"
+      }
+    ]
+  },
+  "schema": {
+    "rid": {"type":"string"},
+    "name": "$name",
+    "url": "$url",
+    "enabled": false,
+    "groups": [
+      {
+        "name": {"type":"string"},
+        "groupId": "$groupId"
+      }
+    ],
+    "state": "DISCONNECTED",
+    "manifest": {},
+    "gateways": [
+      {
+        "url": "http://10.100.70.16:8080/MessengerGateway"
+      }
+    ]
+  }
+}

@@ -7,6 +7,7 @@ from .authorization import get_auth_token_with_headers
 from definition import DATA_TO_CLEAN
 
 
+# TODO: Перенести очистку данных в cleaner не используя Session
 class Session(Requests_session):
     """
     Reinitialize requests.Session with Smiddle auth token.

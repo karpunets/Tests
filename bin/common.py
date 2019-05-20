@@ -1,12 +1,27 @@
 import json, re, random, string, codecs, os, time
-
+from types import DynamicClassAttribute
 from definition import ROOT_DIR
+from enum import Enum
+
+
+class MyEnum(Enum):
+
+    def __str__(self):
+        return str(self.value)
+
+    @DynamicClassAttribute
+    def path(self):
+        """Class path"""
+        return "%s.%s" % (self.__class__.__name__, self._name_)
+
+
+
+
+
 
 
 # TODO: Избавится от файла, перенести в сессии или helpers
-
 # TODO: Нужно придумать, как сделать проверку по тому, отбрабатывает ли запрос без токена
-
 
 def random_string():
     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(random.randint(3, 10)))
@@ -26,21 +41,17 @@ def parse_request(json_name, data={}):
     if "/" not in json_name:
         path = 'Test_data/%s.json' % json_name
     else:
-        path = os.path.normpath(os.path.join(ROOT_DIR, json_name + ".json" ))
+        path = os.path.normpath(os.path.join(ROOT_DIR, json_name + ".json"))
     json_file = open(path, encoding="utf8").read()
 
     # Доп. ф-ция для использования рекурсии
     # TODO: Вынести replace в helpers, rename on replace_string_on
 
     def replace(json_file, data):
-        dictTypeInData = False
         if len(data) > 0:
             for key, val in iter(data.items()):
                 try:
                     if isinstance(val, (int, dict)):
-                        # Если в параметрах есть dict и в нем нужно подставить параметры
-                        if isinstance(val, dict) and key in json_file:
-                            dictTypeInData = True
                         # Для того, чтобы подставить int число в строку
                         if '"%s"' % key in json_file:
                             key = '"%s"' % key
@@ -54,9 +65,6 @@ def parse_request(json_name, data={}):
                     continue
         # Для преобразования методом json.loads должны быть везде двойные кавычки
         json_file = json_file.replace("'", '"')
-        # Если подставили dict и в нем нужно заменить значения, делаем рекурсию
-        if dictTypeInData:
-            json_file = replace(json_file, data)
         json_file = json_file.replace("False", 'false')
         json_file = json_file.replace("True", 'true')
         return json_file
