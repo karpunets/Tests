@@ -3,9 +3,7 @@
 # def request_response(schema_name):
 #     pass
 
-class RequestBuilder:
+class Generator:
 
-    def __init__(self, schema, data):
-        self.schema = schema
-        self.data = data
-
+    def user(self):
+        pass
