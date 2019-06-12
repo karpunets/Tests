@@ -1,5 +1,5 @@
 {
-  "server": "10.100.90.14:8080",
+  "server": "10.100.70.11:8080",
   "DB_address": "10.100.70.20/SMGE",
   "DB_username": "developer",
   "DB_password": "Smidle098adm!",

@@ -3,6 +3,7 @@
   "api.py::TestAuthorizationServer::()::test_get_token_for_system_roles[ADMINISTRATOR-300]": true,
   "api.py::TestAuthorizationServer::()::test_get_token_for_system_roles[USER-300]": true,
   "api.py::TestGroups::()::test_addGroup_with_unknown_parentGroupId": true,
+  "api.py::TestGroups::()::test_add_group": true,
   "api.py::TestRoles::()::test_add_role_with_existing_name": true,
   "api.py::TestRoles::()::test_edit_role_name_on_existing": true,
   "api.py::TestRoles::()::test_put_role_on_unknown_group": true,

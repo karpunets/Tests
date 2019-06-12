@@ -12,18 +12,28 @@ def get_property(*args):
         return {key: properties[key] for key in args}
     return properties
 
-#LEGACY
-def get_url(name, id=None):
+##LEGACY
+# def get_url(name, id=None):
+#     server = get_property("server")
+#     server_address = server['server']
+#     url = getattr(URLs_MAP, name)
+#     if "http" not in server_address:
+#         server_address = "http://" + server_address
+#     new_url = urljoin(server_address, url)
+#     if id is not None:
+#         new_url = urljoin(new_url + "/", id)
+#     return new_url
+
+
+def get_url(url, id=None):
     server = get_property("server")
     server_address = server['server']
-    url = getattr(URLs_MAP, name)
     if "http" not in server_address:
         server_address = "http://" + server_address
-    new_url = urljoin(server_address, url)
+    new_url = urljoin(server_address, str(url))
     if id is not None:
         new_url = urljoin(new_url + "/", id)
     return new_url
-
 
 
 def make_user_group_roles(group_roles_obj):

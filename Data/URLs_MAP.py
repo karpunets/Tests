@@ -1,7 +1,6 @@
 from bin.common import MyEnum
 
 
-
 class Manager(MyEnum):
     current_user = "/SmiddleManager/adm/management/users/current"
     groups = "/SmiddleManager/adm/management/groups"
@@ -15,6 +14,7 @@ class Manager(MyEnum):
     tag_to_call = "/SmiddleMicroRecording-CallProvider/smr/call-provider/crm/tag-to-call"
     recover = "/SmiddleManager/adm/management/users/$userId/recover"
     account = "/SmiddleManager/adm/management/users/current/account"
+    names = "/SmiddleManager/adm/admin/active-directory/domains/names"
 
 
 class AuthServer(MyEnum):
