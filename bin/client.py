@@ -1,5 +1,4 @@
 from requests.sessions import Session as Requests_session
-from .helpers import get_url
 from .authorization import get_auth_token_with_headers
 
 
@@ -13,12 +12,12 @@ class Session(Requests_session):
 
     def __init__(self):
         super(Session, self).__init__()
-        # self.headers = get_auth_token_with_headers()
+        self.headers = get_auth_token_with_headers()
 
-    # TODO: Дописать если при передаче есть хедеры, но это не хедеры авторизации, то нужно их просто добавить
     def choose_request_method(self, method, url, **kwargs):
         """
         Если headers переданы создам "одноразовую" сессию, в противном случае используем старую сессию
+        Если headers переданы без X-Smiddle-Auth-Token то добавляем авторизацию
         :param method:
         :param url:
         :param id_to_url:
@@ -28,9 +27,12 @@ class Session(Requests_session):
 
         if "headers" not in kwargs:
             return self.request(method=method, url=url, **kwargs)
-        else:
-            with Requests_session() as session:
-                return session.request(method=method, url=url, **kwargs)
+        elif "X-Smiddle-Auth-Token" not in kwargs['headers'].keys():
+            new_headers = self.headers.copy()
+            new_headers.update(kwargs['headers'])
+            kwargs['headers'] = new_headers
+        with Requests_session() as session:
+            return session.request(method=method, url=url, **kwargs)
 
     def send_request(self, method, url, **kwargs):
         return self.choose_request_method(method=method, url=url,  **kwargs)

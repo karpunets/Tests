@@ -1,9 +1,5 @@
 import collections
-from ast import literal_eval as make_tuple
-from definition import DATA_DIR
 from Data import identificators
-from bin.helpers import get_url
-from os import path
 from definition import DATA_TO_CLEAN
 import atexit
 

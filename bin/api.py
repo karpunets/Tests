@@ -1,8 +1,9 @@
-from bin.client import send_request
+from bin.project import send_request
+from Data.URLs_MAP import Manager
 
 
 def root_group_id():
-    response = send_request.get('groups')
+    response = send_request.get(Manager.groups)
     if "ROOT" in response.json()[0]["name"]:
         return response.json()[0]["groupId"]
 

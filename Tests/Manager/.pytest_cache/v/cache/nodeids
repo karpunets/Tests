@@ -1,3 +1,3 @@
 [
-  "api.py::TestGroups::()::test_add_group"
+  "try_new_api.py::test_add_group"
 ]

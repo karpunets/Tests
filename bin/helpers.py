@@ -1,7 +1,7 @@
 import json
 from urllib.parse import urljoin
 from definition import PROPERTIES_DIR
-from Data import URLs_MAP
+
 
 
 def get_property(*args):
