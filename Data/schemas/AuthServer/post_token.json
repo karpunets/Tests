@@ -1,0 +1,19 @@
+{
+  "request": {
+    "principal": "$principal",
+    "credential": "$credential"
+  },
+  "schema": {
+    "name": {
+      "allowed": [
+        "X-Smiddle-Auth-Token"
+      ]
+    },
+    "token": {
+      "type": "string"
+    },
+    "sessionLiveTimeSec": {
+      "type": "number"
+    }
+  }
+}

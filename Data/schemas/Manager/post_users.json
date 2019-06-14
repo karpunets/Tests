@@ -1,0 +1,42 @@
+{
+  "request": {
+    "agentId": "$agentId",
+    "login": "$login",
+    "loginAD": "$ADlogin",
+    "lname": "$lname",
+    "password":"$password",
+    "fname": "$fname",
+    "pname": "$pname",
+    "email": "$email",
+    "phone": "$phone",
+    "fax": "$fax",
+    "enabled": true,
+    "deleted": false,
+    "roles": [
+      {
+        "roleId": "$roleId"
+      }
+    ],
+    "userGroupRoles": "$userGroupRoles"
+  },
+  "schema": {
+    "userId": {"type": "string"},
+    "agentId": {"allowed": ["$agentId"]},
+    "login": {"allowed": ["$login"]},
+    "loginAD": {"allowed": ["$ADlogin"]},
+    "lname": {"allowed": ["$lname"]},
+    "fname": {"allowed": ["$fname"]},
+    "pname": {"allowed": ["$pname"]},
+    "email": {"allowed": ["$email"]},
+    "phone": {"allowed": ["$phone"]},
+    "fax": {"allowed": ["$fax"]},
+    "dateCreate": {"type":"number"},
+    "enabled": {"allowed": [true]},
+    "deleted": {"allowed": [false]},
+    "groups": {"type": "list"},
+    "roles": {"type": "list"},
+    "userGroupRoles": {"type":"list"},
+    "domain": null,
+    "imgUrl": null
+  }
+}

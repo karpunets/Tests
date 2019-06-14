@@ -7,5 +7,6 @@
   "api.py::TestRoles::()::test_add_role_with_existing_name": true,
   "api.py::TestRoles::()::test_edit_role_name_on_existing": true,
   "api.py::TestRoles::()::test_put_role_on_unknown_group": true,
-  "api.py::test_assert": true
+  "api.py::test_assert": true,
+  "try_new_api.py::TestAuthorizationServer::()::test_get_token_for_root": true
 }

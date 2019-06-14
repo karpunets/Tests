@@ -1,37 +1,20 @@
 {
   "request": {
+    "roleId":"$roleId",
     "name": "$name",
-    "system": false,
     "templateRole": "$templateRole",
     "sessionLiveTimeSec": 300,
     "group": {
-      "groupId": "$groupId"
-    }
-  },
-
-
-  "schema": {
-    "name": "$name",
-    "sessionLiveTimeSec": 300,
-    "group": {
-      "name": {"type":"string"},
-      "cid": {"type":"number"},
       "groupId": "$groupId"
     },
-    "templateRole": "$templateRole",
-    "system": false,
-    "roleId": {"type":"string"}
+    "system": false
   },
-
-
-  "response_schema":
-          {
+  "schema": {
     "name": {"allowed": ["$name"]},
     "sessionLiveTimeSec": {"allowed": [300]},
     "group":
-        {
-            "type": "dict",
-            "schema": {
+        {"type": "dict",
+          "schema": {
                 "name": {"type": "string"},
                 "cid": {"type": "integer"},
                 "groupId": {"allowed": ["$groupId"]}
@@ -41,7 +24,3 @@
     "system": {"allowed": [false]},
     "roleId": {"type": "string"}}
 }
-
-
-
-
