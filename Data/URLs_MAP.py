@@ -5,7 +5,7 @@ class Manager(MyEnum):
     current_user = "/SmiddleManager/adm/management/users/current"
     groups = "/SmiddleManager/adm/management/groups"
     roles = "/SmiddleManager/adm/management/roles"
-    users = "/SmiddleManager/adm/management/users/"
+    users = "/SmiddleManager/adm/management/users"
     users_search = "/SmiddleManager/adm/management/users/search"
     AD_search = "/SmiddleManager/adm/management/import/active-directory/users/search"
     domains = "/SmiddleManager/adm/admin/active-directory/domains"

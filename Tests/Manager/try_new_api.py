@@ -14,13 +14,14 @@ from bin.helpers import get_property
 
 class TestAuthorizationServer:
 
-    # @allure.feature('Функциональный тест')
-    # @allure.story('Получаем токент для рута')
-    # def test_get_token_for_root(self):
-    #     data = get_property("principal", "credential")
-    #     response = send_request.post(AuthServer.token, data)
-    #     print(response.json())
-    #     assert (response.status_code, "X-Smiddle-Auth-Token") == (200, response.json()['name'])
+    @allure.feature('Функциональный тест')
+    @allure.story('Получаем токент для рута')
+    def test_get_token_for_root(self):
+        credentials = get_property("principal", "credential")
+        data = {"$principal":credentials['principal'],
+                "$credential":credentials['credential']}
+        response = send_request.post(AuthServer.token, data)
+        assert (response.status_code, "X-Smiddle-Auth-Token") == (200, response.json()['name'])
 
     # @allure.feature('Функциональный тест')
     # @allure.story('Получаем токент для разных системных ролей')
@@ -50,14 +51,14 @@ class TestAuthorizationServer:
         expected_result = {'PRINCIPAL_EMPTY': 'principal is empty', 'CREDENTIALS_EMPTY': 'credentials is empty'}
         assert (response.status_code, response.json()) == (400, expected_result)
 
-    # @allure.feature('Функциональный тест')
-    # @allure.story('Получаем токент для удаленного пользователя')
-    # def test_get_token_for_deleted_user(self, immutable_deleted_user):
-    #     data = {"$principal": immutable_deleted_user['login'],
-    #             "$credential": "qwerty"}
-    #     response = send_request.post(TestAuthorizationServer.url, data['request'])
-    #     expected_response = {'PRINCIPAL_NOT_FOUND': 'Not authorized. No user found'}
-    #     assert (response.json(), response.status_code) == (expected_response, response.status_code)
+    @allure.feature('Функциональный тест')
+    @allure.story('Получаем токент для удаленного пользователя')
+    def test_get_token_for_deleted_user(self, immutable_deleted_user):
+        data = {"$principal": immutable_deleted_user['login'],
+                "$credential": "qwerty"}
+        response = send_request.post(AuthServer.token, data)
+        expected_response = {'PRINCIPAL_NOT_FOUND': 'Not authorized. No user found'}
+        assert (response.json(), response.status_code) == (expected_response, response.status_code)
 
     # @allure.feature('Функциональный тест')
     # @allure.story('Получаем токент для пользователя без прав доступа')
@@ -92,11 +93,13 @@ class TestAuthorizationServer:
         response_current_account = send_request.get('account', headers=headers)
         assert user['login'] == response_current_account.json()['login']
 
-# @allure.feature('Функциональный тест')
-# @allure.story('Создаем группу')
-# def test_add_group():
-#     data = {"$name": random_string(),
-#             "$parentGroupId": root_group_id()}
-#     response = send_request.post(Manager.groups, data)
-#     assert equal_schema(response.json(), response.expected)
-#     assert response.status_code == 201
+@allure.feature('Функциональный тест')
+@allure.story('Создаем группу')
+def test_add_group():
+    data = {"$name": random_string(),
+            "$parentGroupId": root_group_id()}
+    response = send_request.post(Manager.groups, data)
+    print(response.expected)
+    print(response.json())
+    assert equal_schema(response.json(), response.expected)
+    assert response.status_code == 201

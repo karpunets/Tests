@@ -28,7 +28,6 @@ def immutable_group_with_child():
                   "$parentGroupId": groups_id[0]}
     response_child = send_request.post(Manager.groups, data_child)
     response = send_request.get(Manager.groups, id_to_url=groups_id[0])
-    print(response.json())
     groups_id.appendleft(response_child.json()['groupId'])
     yield response.json()
     for id in groups_id:

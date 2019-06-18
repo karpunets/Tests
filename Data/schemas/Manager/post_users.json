@@ -10,8 +10,8 @@
     "email": "$email",
     "phone": "$phone",
     "fax": "$fax",
-    "enabled": true,
-    "deleted": false,
+    "enabled": {"default": true, "value": "$enabled"},
+    "deleted": {"default": false, "value": "$deleted"},
     "roles": [
       {
         "roleId": "$roleId"
@@ -31,8 +31,8 @@
     "phone": {"allowed": ["$phone"]},
     "fax": {"allowed": ["$fax"]},
     "dateCreate": {"type":"number"},
-    "enabled": {"allowed": [true]},
-    "deleted": {"allowed": [false]},
+    "enabled": {"allowed": ["$enabled"]},
+    "deleted": {"allowed": ["$deleted"]},
     "groups": {"type": "list"},
     "roles": {"type": "list"},
     "userGroupRoles": {"type":"list"},

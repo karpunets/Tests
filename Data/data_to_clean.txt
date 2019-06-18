@@ -1,1 +1,1 @@
-('http://10.100.70.11:8080/SmiddleManager/adm/management/groups', '054bebb4-4f0b-4749-8dec-96e300ea47d7')
+('http://10.100.70.11:8080/SmiddleManager/adm/management/groups', 'a67b5b89-9f59-469b-850f-40f016823808')('http://10.100.70.11:8080/SmiddleManager/adm/management/groups', 'fff5a09a-d196-47a5-8930-7d00a96cbc61')('http://10.100.70.11:8080/SmiddleManager/adm/management/roles', 'c49da609-9d34-41e3-96e8-3d6b1c1c4876')('http://10.100.70.11:8080/SmiddleManager/adm/management/users', 'f5fe40dd-07f0-46f9-a318-d41fe7c9145e')

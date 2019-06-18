@@ -35,6 +35,7 @@ class Session(Requests_session):
             return session.request(method=method, url=url, **kwargs)
 
     def send_request(self, method, url, **kwargs):
+
         return self.choose_request_method(method=method, url=url,  **kwargs)
 
     # def get(self, url, id_to_url=None, **kwargs):
