@@ -24,13 +24,13 @@ class Cleaner:
     def write_to_file(self):
         if self._storage:
             with open(self.file_path, "w") as f:
-                    for i in self._storage:
-                        f.write(str(i))
+                for i in self._storage:
+                    f.write(str(i)+"\n")
 
     def add(self, url_name, response):
         rid_list = self.take_rid_list_from_response(response)
         for i in rid_list:
-            self._storage.append((url_name, i))
+            self._storage.appendleft((url_name, i))
 
     @staticmethod
     def take_rid_list_from_response(response):

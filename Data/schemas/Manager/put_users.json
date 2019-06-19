@@ -1,5 +1,6 @@
 {
   "request": {
+    "userId": "$userId",
     "agentId": "$agentId",
     "login": "$login",
     "loginAD": "$ADlogin",
@@ -20,7 +21,7 @@
     "userGroupRoles": "$userGroupRoles"
   },
   "schema": {
-    "userId": {"type": "string"},
+    "userId": {"allowed": ["$userId"]},
     "agentId": {"allowed": ["$agentId"], "nullable": true},
     "login": {"allowed": ["$login"]},
     "loginAD": {"allowed": ["$ADlogin"], "nullable": true},

@@ -3,7 +3,6 @@ from urllib.parse import urljoin
 from definition import PROPERTIES_DIR
 
 
-
 def get_property(*args):
     with open(PROPERTIES_DIR, encoding="utf-8") as f:
         prop_file = f.read()
@@ -53,3 +52,4 @@ def make_user_group_roles(group_roles_obj):
         result["applyRolesRecursively"] = False
         user_group_roles.append(result)
     return user_group_roles
+

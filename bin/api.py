@@ -9,14 +9,14 @@ def root_group_id():
 
 
 def root_role_id():
-    response = send_request.get('roles')
+    response = send_request.get(Manager.roles)
     for role in response.json():
         if role['name'] == "ROOT":
             return role['roleId']
 
 
 def get_role_id(role_name):
-    response = send_request.get('roles')
+    response = send_request.get(Manager.roles)
     for role in response.json():
         if role['name'] == role_name:
             return role['roleId']

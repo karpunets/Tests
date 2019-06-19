@@ -12,7 +12,7 @@ class Project:
     def __init__(self):
         self.session = Session()
         self.cleaner = Cleaner()
-        # self.set_up_clean()
+        self.set_up_clean()
         self.json_schema = json_schema
         # atexit.register(self.tear_down_clean)
 
@@ -51,6 +51,7 @@ class Project:
             for i in f.readlines():
                 rid_url = make_tuple(i)
                 self.session.send_request(method="DELETE", url=get_url(rid_url[0], rid_url[1]))
+
 
     def tear_down_clean(self):
         """

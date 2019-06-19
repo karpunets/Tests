@@ -18,7 +18,7 @@
                 "groupId": {"allowed": ["$groupId"]}
             }
         },
-    "templateRole": {"allowed": ["$templateRole"]},
+    "templateRole": {"allowed": ["$templateRole"], "nullable": true},
     "system": {"allowed": [false]},
     "roleId": {"type": "string"}}
 }

@@ -1,9 +1,8 @@
 import pytest
 import random
 from bin.project import send_request
-from bin.api import root_group_id
+from bin.api import root_group_id, get_role_id
 from bin.helpers import make_user_group_roles
-from bin.api import get_role_id
 from bin.common import random_string
 from Data.URLs_MAP import Manager
 
@@ -14,7 +13,7 @@ def group():
             "$parentGroupId": root_group_id()}
     response = send_request.post(Manager.groups, data)
     yield response.json()
-    send_request.delete("groups", id_to_url=response.json()['groupId'])
+    send_request.delete(Manager.groups, id_to_url=response.json()['groupId'])
 
 
 @pytest.fixture(scope="function")
@@ -35,7 +34,7 @@ def user(userGroupRoles, immutable_role):
     user = response.json()
     user['dateCreate'] = round(user['dateCreate']/1000) * 1000
     yield user
-    send_request.delete("users", id_to_url=response.json()['userId'])
+    send_request.delete(Manager.users, id_to_url=response.json()['userId'])
 
 
 @pytest.fixture(scope="module")
@@ -110,7 +109,7 @@ def add_user_with_role(request):
     def _user(role_name=None, enabled=True):
         role_name = "ROOT" if role_name is None else role_name
         role_id = get_role_id(role_name)
-        user_group_and_role = make_user_group_roles({root_group_id():role_id})
+        user_group_and_role = make_user_group_roles({root_group_id(): role_id})
         data = {"$login": random_string(),
                 "$fname": random_string(),
                 "$lname": random_string(),
@@ -123,7 +122,7 @@ def add_user_with_role(request):
                 "$phone": str(random.randint(11111, 99999999)),
                 "$fax": random_string(),
                 "$userGroupRoles": user_group_and_role,
-                "$enables": enabled
+                "$enabled": enabled
                 }
         response = send_request.post(Manager.users, data)
         user = response.json()
