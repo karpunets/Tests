@@ -20,10 +20,10 @@ pipeline {
     }
     post {
         failure {
-            notification("_Failed_ 💩 : *${env.JOB_NAME}* - ${env.BUILD_NUMBER} after ${currentBuild.durationString} \n [Jenkins](${env.BUILD_URL})")
+            notification("🤖 _Failed_ 💩 : *${env.JOB_NAME}* - ${env.BUILD_NUMBER} after ${currentBuild.durationString} \n [Jenkins](${env.BUILD_URL})")
         }
         success {
-            notification("_Success_ 👍 : *${env.JOB_NAME}* - ${env.BUILD_NUMBER} after ${currentBuild.durationString} \n[Jenkins](${env.BUILD_URL})")
+            notification("🤖 _Success_ 👍 : *${env.JOB_NAME}* - ${env.BUILD_NUMBER} after ${currentBuild.durationString} \n[Jenkins](${env.BUILD_URL})")
         }
     }
 }
