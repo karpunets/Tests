@@ -14,7 +14,9 @@ pipeline {
         stage('image') {
             steps {
                 notification("🤖 _Started_ 😱 : *${env.JOB_NAME}* \nBranch - ${env.GIT_BRANCH} by ${env.GIT_AUTHOR} \n[Jenkins](${env.BUILD_URL})")
-                docker.build "latest"
+                script {
+                    docker.build "latest"
+                }
             }
         }
     }
