@@ -1,10 +1,10 @@
 import json
 from urllib.parse import urljoin
-from definition import PROPERTIES_DIR
+from definition import PROJECT_CFG
 
 
 def get_property(*args):
-    with open(PROPERTIES_DIR, encoding="utf-8") as f:
+    with open(PROJECT_CFG, encoding="utf-8") as f:
         prop_file = f.read()
     properties = json.loads(prop_file)
     if args:

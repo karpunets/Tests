@@ -1,4 +1,3 @@
-import atexit
 from bin.client import Session
 from bin.cleaner import Cleaner
 from ast import literal_eval as make_tuple
