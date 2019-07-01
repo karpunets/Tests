@@ -5,11 +5,11 @@ import pytest
 import random
 
 from bin.project import send_request
-from bin.validator import equal_schema
-from bin.api import root_group_id, root_role_id
+from helpers.validator import equal_schema
+from helpers.api import root_group_id, root_role_id
 from bin.common import random_string
 from Data.URLs_MAP import Manager, AuthServer
-from bin.helpers import get_property
+from helpers.utils import get_property
 
 
 class TestAuthorizationServer:

@@ -1,11 +1,9 @@
 import pytest
-import random
-from collections import deque
 from bin import req
-from bin.helpers import root_group_id
+from helpers.utils import root_group_id
 
 from bin.common import parse_request, random_string
-import pymysql as db
+
 
 @pytest.fixture(scope='function')
 def connector():

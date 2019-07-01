@@ -1,5 +1,5 @@
 from requests.sessions import Session as Requests_session
-from .authorization import get_auth_token_with_headers
+from helpers.authorization import get_auth_token_with_headers
 
 
 # TODO: Перенести очистку данных в cleaner не используя Session

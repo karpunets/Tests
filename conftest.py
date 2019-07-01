@@ -1,6 +1,6 @@
 import pytest
 from collections import deque
-from bin.api import root_group_id
+from helpers.api import root_group_id
 from bin.common import random_string
 from bin.project import send_request
 from Data.URLs_MAP import Manager

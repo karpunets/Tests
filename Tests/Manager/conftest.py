@@ -1,8 +1,8 @@
 import pytest
 import random
 from bin.project import send_request
-from bin.api import root_group_id, get_role_id
-from bin.helpers import make_user_group_roles
+from helpers.api import root_group_id, get_role_id
+from helpers.utils import make_user_group_roles
 from bin.common import random_string
 from Data.URLs_MAP import Manager
 

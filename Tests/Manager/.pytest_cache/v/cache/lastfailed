@@ -1,11 +1,7 @@
 {
-  "api.py::TestAuthorizationServer::()": true,
   "api.py::TestAuthorizationServer::()::test_get_token_for_root[ADMIN-300]": true,
   "api.py::TestAuthorizationServer::()::test_get_token_for_system_roles[ADMINISTRATOR-300]": true,
   "api.py::TestAuthorizationServer::()::test_get_token_for_system_roles[USER-300]": true,
-  "api.py::TestGroups::()": true,
-  "api.py::TestRoles::()": true,
   "api.py::TestRoles::()::test_put_role_on_unknown_group": true,
-  "api.py::TestUsers::()": true,
   "api.py::test_assert": true
 }

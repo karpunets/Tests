@@ -1,27 +1,15 @@
 import json
 from urllib.parse import urljoin
-from definition import PROJECT_CFG
+from definition import SETTINGS
 
 
 def get_property(*args):
-    with open(PROJECT_CFG, encoding="utf-8") as f:
+    with open(SETTINGS, encoding="utf-8") as f:
         prop_file = f.read()
     properties = json.loads(prop_file)
     if args:
         return {key: properties[key] for key in args}
     return properties
-
-##LEGACY
-# def get_url(name, id=None):
-#     server = get_property("server")
-#     server_address = server['server']
-#     url = getattr(URLs_MAP, name)
-#     if "http" not in server_address:
-#         server_address = "http://" + server_address
-#     new_url = urljoin(server_address, url)
-#     if id is not None:
-#         new_url = urljoin(new_url + "/", id)
-#     return new_url
 
 
 def get_url(url, id=None):

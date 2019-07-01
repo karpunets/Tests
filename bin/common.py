@@ -14,8 +14,6 @@ class MyEnum(Enum):
         return "%s.%s" % (self.__class__.__name__, self.name)
 
 
-
-
 def random_string():
     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(random.randint(3, 10)))
 

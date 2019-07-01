@@ -1,6 +1,7 @@
 import requests
-from bin.helpers import get_property, get_url
+from helpers.utils import get_property, get_url
 from Data.URLs_MAP import AuthServer
+
 
 def get_auth_token_with_headers(*args):
     """

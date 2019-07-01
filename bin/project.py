@@ -2,8 +2,8 @@ from bin.client import Session
 from bin.cleaner import Cleaner
 from ast import literal_eval as make_tuple
 from definition import DATA_TO_CLEAN
-from .helpers import get_url
-from .json_parser import json_schema
+from helpers.utils import get_url
+from helpers.json_parser import json_schema
 
 
 class Project:

@@ -1,9 +1,6 @@
 import pytest
 import os
 from json import dumps
-from collections import deque
-from bin.api import root_group_id
-from bin.common import parse_request, random_string
 from bin import req
 
 
