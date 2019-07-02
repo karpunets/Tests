@@ -9,7 +9,7 @@ from helpers.validator import equal_schema
 from helpers.api import root_group_id, root_role_id
 from bin.common import random_string
 from Data.URLs_MAP import Manager, AuthServer
-from helpers.utils import get_property
+from bin.project_config import cfg
 
 
 class TestAuthorizationServer:
@@ -17,7 +17,7 @@ class TestAuthorizationServer:
     @allure.feature('Функциональный тест')
     @allure.story('Получаем токент для рута')
     def test_get_token_for_root(self):
-        credentials = get_property("principal", "credential")
+        credentials = cfg.credentials
         data = {"$principal": credentials['principal'],
                 "$credential": credentials['credential']}
         response = send_request.post(AuthServer.token, data)

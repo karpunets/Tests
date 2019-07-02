@@ -1,5 +1,6 @@
 import requests
-from helpers.utils import get_property, get_url
+from bin.project_config import cfg
+from helpers.utils import get_url
 from Data.URLs_MAP import AuthServer
 
 
@@ -11,7 +12,7 @@ def get_auth_token_with_headers(*args):
     """
     headers = {"Content-Type": "application/json;charset=UTF-8"}
     if not args:
-        payload = get_property("principal", "credential")
+        payload = {"principal": cfg.credentials['principal'], "credential": cfg.credentials['credential']}
     else:
         payload = {"principal": args[0], "credential": args[1]}
     response = requests.post(url=get_url(AuthServer.token), json=payload, headers=headers)

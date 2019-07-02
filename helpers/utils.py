@@ -1,23 +1,12 @@
-import json
+from bin.project_config import cfg
 from urllib.parse import urljoin
-from definition import SETTINGS
-
-
-def get_property(*args):
-    with open(SETTINGS, encoding="utf-8") as f:
-        prop_file = f.read()
-    properties = json.loads(prop_file)
-    if args:
-        return {key: properties[key] for key in args}
-    return properties
 
 
 def get_url(url, id=None):
-    server = get_property("server")
-    server_address = server['server']
-    if "http" not in server_address:
-        server_address = "http://" + server_address
-    new_url = urljoin(server_address, str(url))
+    host = cfg.host
+    if "http" not in host:
+        host = "http://" + host
+    new_url = urljoin(host, str(url))
     if id is not None:
         new_url = urljoin(new_url + "/", id)
     return new_url

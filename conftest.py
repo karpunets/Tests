@@ -4,6 +4,7 @@ from helpers.api import root_group_id
 from bin.common import random_string
 from bin.project import send_request
 from Data.URLs_MAP import Manager
+from bin.project_config import cfg
 
 
 @pytest.fixture(scope="module")
@@ -33,10 +34,15 @@ def pytest_addoption(parser):
                      help=f"If is not set QA host will be taken as default")
 
 
-
 @pytest.fixture(scope="session")
 def environment(request):
     option = request.config.getoption("--host")
     if not option or option.upper():
         raise EnvironmentError("Specified environment is invalid. Use --help for more information")
+    print("OPTION", option)
+    return cfg.set_host(option)
 
+
+# @pytest.fixture(scope="session")
+# def add_to_config(enviroment):
+#     return cfg.set_host(enviroment)

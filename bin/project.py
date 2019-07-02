@@ -4,6 +4,7 @@ from ast import literal_eval as make_tuple
 from definition import DATA_TO_CLEAN
 from helpers.utils import get_url
 from helpers.json_parser import json_schema
+import pytest
 
 
 class Project:
