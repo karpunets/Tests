@@ -9,9 +9,10 @@ COPY __init__.py ./
 COPY conftest.py ./
 COPY definition.py ./
 COPY definition.py ./
-COPY settings.json ./
+COPY config ./config
+COPY helpers ./helpers
 COPY requirements.txt ./
 
 RUN pip install -r requirements.txt
 
-CMD [ "python", "-m", "pytest", "./Tests/Manager/api.py" ]
+#docker run smiddle_qa /bin/bash -c "python -m pytest Tests/Manager"
