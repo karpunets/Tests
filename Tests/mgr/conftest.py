@@ -4,16 +4,16 @@ from bin.project import send_request
 from helpers.api import root_group_id, get_role_id
 from helpers.utils import make_user_group_roles
 from bin.common import random_string
-from Data.URLs_MAP import Manager
+from Data.URLs_MAP import mgr
 
 
 @pytest.fixture(scope="function")
 def group():
     data = {"$name": random_string(),
             "$parentGroupId": root_group_id()}
-    response = send_request.post(Manager.groups, data)
+    response = send_request.post(mgr.groups, data)
     yield response.json()
-    send_request.delete(Manager.groups, id_to_url=response.json()['groupId'])
+    send_request.delete(mgr.groups, id_to_url=response.json()['groupId'])
 
 
 @pytest.fixture(scope="function")
@@ -30,11 +30,11 @@ def user(userGroupRoles, immutable_role):
             "$fax": random_string(),
             "$userGroupRoles": userGroupRoles
             }
-    response = send_request.post(Manager.users, data)
+    response = send_request.post(mgr.users, data)
     user = response.json()
     user['dateCreate'] = round(user['dateCreate']/1000) * 1000
     yield user
-    send_request.delete(Manager.users, id_to_url=response.json()['userId'])
+    send_request.delete(mgr.users, id_to_url=response.json()['userId'])
 
 
 @pytest.fixture(scope="module")
@@ -51,29 +51,29 @@ def immutable_user(userGroupRoles, immutable_role):
             "$fax": random_string(),
             "$userGroupRoles": userGroupRoles
             }
-    response = send_request.post(Manager.users, data)
+    response = send_request.post(mgr.users, data)
     user = response.json()
     user['dateCreate'] = round(user['dateCreate']/1000) * 1000
     yield user
-    send_request.delete(Manager.users, id_to_url=response.json()['userId'])
+    send_request.delete(mgr.users, id_to_url=response.json()['userId'])
 
 
 @pytest.fixture(scope="function")
 def role(group):
     data = {"$name": random_string(),
             "$groupId": group['groupId']}
-    response = send_request.post(Manager.roles, data)
+    response = send_request.post(mgr.roles, data)
     yield response.json()
-    send_request.delete(Manager.roles, id_to_url=response.json()['roleId'])
+    send_request.delete(mgr.roles, id_to_url=response.json()['roleId'])
 
 
 @pytest.fixture(scope="module")
 def immutable_role(immutable_group_with_child):
     data = {"$name": random_string(),
             "$groupId": immutable_group_with_child['groupId']}
-    response = send_request.post(Manager.roles, data)
+    response = send_request.post(mgr.roles, data)
     yield response.json()
-    send_request.delete(Manager.roles, id_to_url=response.json()['roleId'])
+    send_request.delete(mgr.roles, id_to_url=response.json()['roleId'])
 
 
 @pytest.fixture(scope='module')
@@ -92,7 +92,7 @@ def immutable_deleted_user(immutable_role, userGroupRoles):
             "$userGroupRoles": userGroupRoles,
             "$deleted": True
             }
-    response = send_request.post(Manager.users, data)
+    response = send_request.post(mgr.users, data)
     user = response.json()
     user['dateCreate'] = round(user['dateCreate']/1000) * 1000
     return user
@@ -124,12 +124,12 @@ def add_user_with_role(request):
                 "$userGroupRoles": user_group_and_role,
                 "$enabled": enabled
                 }
-        response = send_request.post(Manager.users, data)
+        response = send_request.post(mgr.users, data)
         user = response.json()
         user['dateCreate'] = round(user['dateCreate'] / 1000) * 1000
 
         def fin():
-            send_request.delete(Manager.users, id_to_url=user['userId'])
+            send_request.delete(mgr.users, id_to_url=user['userId'])
         request.addfinalizer(fin)
         return user
     return _user

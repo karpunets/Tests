@@ -15,4 +15,4 @@ COPY requirements.txt ./
 
 RUN pip install -r requirements.txt
 
-#docker run smiddle_qa /bin/bash -c "python -m pytest Tests/Manager"
+#docker run smiddle_qa /bin/bash -c "python -m pytest Tests/mgr"

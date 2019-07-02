@@ -8,7 +8,7 @@ from bin.project import send_request
 from helpers.validator import equal_schema
 from helpers.api import root_group_id, root_role_id
 from bin.common import random_string
-from Data.URLs_MAP import Manager, AuthServer
+from Data.URLs_MAP import mgr, AuthServer
 from bin.project_config import cfg
 
 
@@ -89,7 +89,7 @@ class TestAuthorizationServer:
         response_auth = send_request.post(AuthServer.token, data)
         response_auth = response_auth.json()
         headers = {'content-type': "application/json;charset=UTF-8", response_auth['name']: response_auth['token']}
-        response_current_account = send_request.get(Manager.account, headers=headers)
+        response_current_account = send_request.get(mgr.account, headers=headers)
         assert user['login'] == response_current_account.json()['login']
 
 
@@ -98,19 +98,19 @@ class TestGroups:
     @allure.feature('Функциональный тест')
     @allure.story('Получаем все группы')
     def test_get_groups(self):
-        response = send_request.get(Manager.groups)
+        response = send_request.get(mgr.groups)
         assert response.status_code == 200 and "ROOT" in response.json()[0]['name']
 
     @allure.feature('Функциональный тест')
     @allure.story('Получаем групу по ID')
     def test_get_group_by_id(self, group):
-        response = send_request.get(Manager.groups, id_to_url=group['groupId'])
+        response = send_request.get(mgr.groups, id_to_url=group['groupId'])
         assert (response.status_code, response.json()) == (200, group)
 
     @allure.feature('Функциональный тест')
     @allure.story('Проверяем есть ли ранеее созданная группа в списке полученных груп')
     def test_get_group_bew_group_in_group_list(self, group):
-        response = send_request.get(Manager.groups)
+        response = send_request.get(mgr.groups)
         rootChildrenIds = [group['groupId'] for group in response.json()[0]['children']]
         assert response.status_code == 200 and group['groupId'] in rootChildrenIds
 
@@ -118,7 +118,7 @@ class TestGroups:
     @allure.story('Получаем группу с неизвестным id')
     def test_get_group_with_unknownId(self):
         unknown_id = random_string()
-        response = send_request.get(Manager.groups, id_to_url=unknown_id)
+        response = send_request.get(mgr.groups, id_to_url=unknown_id)
         excepted_response = {'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'GROUP by groupId=%s not found' % unknown_id}
         assert (response.status_code, response.json()) == (400, excepted_response)
 
@@ -128,7 +128,7 @@ class TestGroups:
     def test_add_group(self):
         data = {"$name": random_string(),
                 "$parentGroupId": root_group_id()}
-        response = send_request.post(Manager.groups, data)
+        response = send_request.post(mgr.groups, data)
         assert equal_schema(response.json(), response.expected) and response.status_code == 201
 
     @allure.feature('Проверка валидации')
@@ -136,7 +136,7 @@ class TestGroups:
     def test_addGroup_without_name(self):
         data = {"$name": None,
                 "$parentGroupId": root_group_id()}
-        response = send_request.post(Manager.groups, data)
+        response = send_request.post(mgr.groups, data)
         excepted_response = {'ADM_VALIDATION_GROUP_NAME': 'Group name not specified'}
         assert (response.status_code, response.json()) == (400, excepted_response)
 
@@ -145,7 +145,7 @@ class TestGroups:
     def test_addGroup_without_group(self):
         data = {"$name": random_string(),
                 "$parentGroupId": None}
-        response = send_request.post(Manager.groups, data)
+        response = send_request.post(mgr.groups, data)
         excepted_response = {'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'GROUP by groupId=null not found'}
         assert (response.status_code, response.json()) == (400, excepted_response)
 
@@ -156,7 +156,7 @@ class TestGroups:
         data = {"$name": random_string(),
                 "$parentGroupId": random_group_id
                 }
-        response = send_request.post(Manager.groups, data)
+        response = send_request.post(mgr.groups, data)
         expected_response = {'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'GROUP by groupId=%s not found' % random_group_id}
         assert (response.status_code, response.json()) == (400, expected_response)
 
@@ -166,7 +166,7 @@ class TestGroups:
         existin_group_name = immutable_group_with_child['name']
         data = {"$name": existin_group_name,
                 "$parentGroupId": root_group_id()}
-        response = send_request.post(Manager.groups, data)
+        response = send_request.post(mgr.groups, data)
         assert equal_schema(response.json(), response.expected) and response.status_code == 201
 
     @allure.feature('Функциональный тест')
@@ -174,7 +174,7 @@ class TestGroups:
     def test_edit_group(self, group):
         data = {"$name": random_string(),
                 "$groupId": group['groupId']}
-        response = send_request.put(Manager.groups, data, id_to_url=group['groupId'])
+        response = send_request.put(mgr.groups, data, id_to_url=group['groupId'])
         assert response.status_code == 200 and equal_schema(response.json(), response.expected)
 
     @allure.feature('Функциональный тест')
@@ -182,7 +182,7 @@ class TestGroups:
     def test_edit_group_on_empty_name(self, group):
         data = {"$name": None,
                 "$groupId": group['groupId']}
-        response = send_request.put(Manager.groups, data, id_to_url=group['groupId'])
+        response = send_request.put(mgr.groups, data, id_to_url=group['groupId'])
         expected_response = {'ADM_VALIDATION_GROUP_NAME': 'Group name not specified'}
         assert (response.status_code, response.json()) == (400, expected_response)
 
@@ -192,21 +192,21 @@ class TestGroups:
         unknown_group_id = random_string()
         data = {"$name": random_string(),
                 "$groupId": group['groupId']}
-        response = send_request.put(Manager.groups, data, id_to_url=unknown_group_id)
+        response = send_request.put(mgr.groups, data, id_to_url=unknown_group_id)
         expected_response = {'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'GROUP by groupId=%s not found' % unknown_group_id}
         assert (response.status_code, response.json()) == (400, expected_response)
 
     @allure.feature('Функциональный тест')
     @allure.story('Удаляем группу')
     def test_delete_group(self, group):
-        response = send_request.delete(Manager.groups, id_to_url=group['groupId'])
+        response = send_request.delete(mgr.groups, id_to_url=group['groupId'])
         assert (response.status_code, response.json()) == (200, group)
 
     @allure.feature('Проверка валидации')
     @allure.story('Удаляем группу с неизвестным id')
     def test_delete_group_with_unknown_id(self):
         unknown_group_id = random_string()
-        response = send_request.delete(Manager.groups, id_to_url=unknown_group_id)
+        response = send_request.delete(mgr.groups, id_to_url=unknown_group_id)
         expected_response = {'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'GROUP by groupId=%s not found' % unknown_group_id}
         assert (response.status_code, response.json()) == (400, expected_response)
 
@@ -214,7 +214,7 @@ class TestGroups:
     @allure.story('Удаляем группу у которой есть child')
     def test_delete_group_with_child(self, immutable_group_with_child):
         group_id = immutable_group_with_child['groupId']
-        response = send_request.delete(Manager.groups, id_to_url=group_id)
+        response = send_request.delete(mgr.groups, id_to_url=group_id)
         expected_response = {'COMMON_NOT_ALLOWED_OPERATION': 'The group has subgroups'}
         assert (response.status_code, response.json()) == (400, expected_response)
 
@@ -226,7 +226,7 @@ class TestRoles:
     def test_add_role_with_first_root_child(self, immutable_group_with_child):
         data = {"$name": random_string(),
                 "$groupId": immutable_group_with_child['groupId']}
-        response = send_request.post(Manager.roles, data)
+        response = send_request.post(mgr.roles, data)
         assert equal_schema(response.json(), response.expected) and response.status_code == 201
 
     @allure.feature('Функциональний тест')
@@ -234,7 +234,7 @@ class TestRoles:
     def test_add_role_without_name(self, immutable_group_with_child):
         data = {"$name": None,
                 "$groupId": immutable_group_with_child['groupId']}
-        response = send_request.post(Manager.roles, data)
+        response = send_request.post(mgr.roles, data)
         expected_response = {'ADM_VALIDATION_ROLE_NAME': 'Role name not specified'}
         assert (response.status_code, response.json()) == (400, expected_response)
 
@@ -243,7 +243,7 @@ class TestRoles:
     def test_add_role_with_root_group(self):
         data = {"$name": random_string(),
                 "$groupId": root_group_id()}
-        response = send_request.post(Manager.roles, data)
+        response = send_request.post(mgr.roles, data)
         assert equal_schema(response.json(), response.expected) and response.status_code == 201
 
     @allure.feature('Функциональний тест')
@@ -252,7 +252,7 @@ class TestRoles:
         data = {"$name": random_string(),
                 "$groupId": root_group_id(),
                 "$templateRole": {"roleId": root_role_id()}}
-        response = send_request.post(Manager.roles, data)
+        response = send_request.post(mgr.roles, data)
         assert (response.status_code, response.json()['templateRole']['roleId']) == (201, root_role_id())
 
     @allure.feature('Функциональний тест')
@@ -261,7 +261,7 @@ class TestRoles:
         child_group_id = immutable_group_with_child['children'][0]['groupId']
         data = {"$name": random_string(),
                 "$groupId": child_group_id}
-        response = send_request.post(Manager.roles, data)
+        response = send_request.post(mgr.roles, data)
         assert (response.status_code, response.json()['group']['groupId']) == (
             201, immutable_group_with_child['groupId'])
 
@@ -270,7 +270,7 @@ class TestRoles:
     def test_add_role_without_group(self):
         data = {"$name": random_string(),
                 "$groupId": None}
-        response = send_request.post(Manager.roles, data)
+        response = send_request.post(mgr.roles, data)
         expected_response = {'ADM_VALIDATION_ROLE_GROUP_EMPTY': 'Role group not specified'}
         assert (response.status_code, response.json()) == (400, expected_response)
 
@@ -280,7 +280,7 @@ class TestRoles:
         unknown_group_id = random_string()
         data = {"$name": random_string(),
                 "$groupId": unknown_group_id}
-        response = send_request.post(Manager.roles, data)
+        response = send_request.post(mgr.roles, data)
         expected_response = {
             'ADM_VALIDATION_GROUP_NOT_FOUND': 'Group by the following group id not found: %s' % unknown_group_id}
         assert (response.status_code, response.json()) == (400, expected_response)
@@ -291,21 +291,21 @@ class TestRoles:
         existing_name = role['name']
         data = {"$name": existing_name,
                 "$groupId": role['group']['groupId']}
-        response = send_request.post(Manager.roles, data)
+        response = send_request.post(mgr.roles, data)
         expected_response = {'COMMON_ENTITY_WITH_SUCH_FIELD_EXISTS': 'Name is not unique'}
         assert (response.status_code, response.json()) == (409, expected_response)
 
     @allure.feature('Функциональний тест')
     @allure.story('Получаем все роли')
     def test_get_roles(self, role):
-        response = send_request.get(Manager.roles)
+        response = send_request.get(mgr.roles)
         role.pop("templateRole")
         assert response.status_code == 200 and role in response.json()
 
     @allure.feature('Функциональний тест')
     @allure.story('Получаем конкретную роль по id')
     def test_get_role_by_id(self, role):
-        response = send_request.get(Manager.roles, id_to_url=role['roleId'])
+        response = send_request.get(mgr.roles, id_to_url=role['roleId'])
         role.pop("templateRole")
         assert (response.status_code, response.json()) == (200, role)
 
@@ -313,7 +313,7 @@ class TestRoles:
     @allure.story('Получаем конкретную роль по не известному id')
     def test_get_role_by_unknown_id(self):
         unknown_role_id = random_string()
-        response = send_request.get(Manager.roles, id_to_url=unknown_role_id)
+        response = send_request.get(mgr.roles, id_to_url=unknown_role_id)
         expected_response = {'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'ROLE by roleId=%s not found' % unknown_role_id}
         assert (response.status_code, response.json()) == (400, expected_response)
 
@@ -321,14 +321,14 @@ class TestRoles:
     @allure.story('Удаляем роль')
     def test_delete_role(self, role):
         role.pop("templateRole")
-        response = send_request.delete(Manager.roles, id_to_url=role['roleId'])
+        response = send_request.delete(mgr.roles, id_to_url=role['roleId'])
         assert (response.status_code, response.json()) == (200, role)
 
     @allure.feature('Функциональний тест')
     @allure.story('Удаляем роль с неизвестным id')
     def test_delete_role_by_unknown_id(self):
         unknown_role_id = random_string()
-        response = send_request.delete(Manager.roles, id_to_url=unknown_role_id)
+        response = send_request.delete(mgr.roles, id_to_url=unknown_role_id)
         expected_response = {'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'ROLE by roleId=%s not found' % unknown_role_id}
         assert (response.status_code, response.json()) == (400, expected_response)
 
@@ -339,7 +339,7 @@ class TestRoles:
                 "$name": random_string(),
                 "$groupId": immutable_group_with_child['groupId']
                 }
-        response = send_request.put(Manager.roles, data, id_to_url=role['roleId'])
+        response = send_request.put(mgr.roles, data, id_to_url=role['roleId'])
         assert response.status_code == 200 and equal_schema(response.json(), response.expected)
 
     @allure.feature('Функциональний тест')
@@ -349,7 +349,7 @@ class TestRoles:
                 "$name": None,
                 "$groupId": immutable_group_with_child['groupId']
                 }
-        response = send_request.put(Manager.roles, data, id_to_url=role['roleId'])
+        response = send_request.put(mgr.roles, data, id_to_url=role['roleId'])
         expected_response = {'ADM_VALIDATION_ROLE_NAME': 'Role name not specified'}
         assert (response.json(), response.status_code) == (expected_response, 400)
 
@@ -361,7 +361,7 @@ class TestRoles:
                 "$name": random_string(),
                 "$groupId": unknown_group_id
                 }
-        response = send_request.put(Manager.roles, data, id_to_url=role['roleId'])
+        response = send_request.put(mgr.roles, data, id_to_url=role['roleId'])
         expected_response = {
             'ADM_VALIDATION_GROUP_NOT_FOUND': 'Group by the following group id not found: %s' % unknown_group_id}
         assert (response.json(), response.status_code) == (expected_response, 400)
@@ -374,7 +374,7 @@ class TestRoles:
                 "$name": existing_name,
                 "$groupId": immutable_role['group']['groupId']
                 }
-        response = send_request.put(Manager.roles, data, id_to_url=role['roleId'])
+        response = send_request.put(mgr.roles, data, id_to_url=role['roleId'])
         expected_response = {'COMMON_ENTITY_WITH_SUCH_FIELD_EXISTS': 'Name is not unique'}
         assert (response.json(), response.status_code) == (expected_response, 409)
         
@@ -391,7 +391,7 @@ class TestUsers:
                 "$roleId": immutable_role['roleId'],
                 "$userGroupRoles": userGroupRoles
                 }
-        response = send_request.post(Manager.users, data)
+        response = send_request.post(mgr.users, data)
         assert equal_schema(response.json(), response.expected) and response.status_code == 201
 
     @allure.feature('функциональный тест')
@@ -409,7 +409,7 @@ class TestUsers:
                 "$fax": random_string(),
                 "$userGroupRoles": userGroupRoles
                 }
-        response = send_request.post(Manager.users, data)
+        response = send_request.post(mgr.users, data)
         assert equal_schema(response.json(), response.expected) and response.status_code == 201
 
     @allure.feature('функциональный тест')
@@ -421,7 +421,7 @@ class TestUsers:
                 "$lname": random_string(),
                 "$userGroupRoles": userGroupRoles,
                 "$roleId": immutable_role['roleId']}
-        response = send_request.post(Manager.users, data)
+        response = send_request.post(mgr.users, data)
         expected_response = {'COMMON_ENTITY_WITH_SUCH_FIELD_EXISTS': 'Login is not unique'}
         assert (response.status_code, response.json()) == (409, expected_response)
 
@@ -441,7 +441,7 @@ class TestUsers:
                 "$phone": str(random.randint(1111111, 999999999)),
                 "$fax": existing_field['phone']
                 }
-        response = send_request.post(Manager.users, data)
+        response = send_request.post(mgr.users, data)
         assert equal_schema(response.json(), response.expected) and response.status_code == 201
 
     @allure.feature('функциональный тест')
@@ -454,7 +454,7 @@ class TestUsers:
                 "$userGroupRoles": userGroupRoles,
                 "$roleId": immutable_role['roleId'],
                 "$phone": existing_phone}
-        response = send_request.post(Manager.users, data)
+        response = send_request.post(mgr.users, data)
         expected_response = {'COMMON_EXCEPTION': 'Not deleted user with phone = %s already exist!' % existing_phone}
         assert (response.status_code, response.json()) == (500, expected_response)
 
@@ -468,7 +468,7 @@ class TestUsers:
                 "$userGroupRoles": userGroupRoles,
                 "$roleId": immutable_role['roleId'],
                 "$agentId": existing_agent_id}
-        response = send_request.post(Manager.users, data)
+        response = send_request.post(mgr.users, data)
         expected_response = {'COMMON_ENTITY_WITH_SUCH_FIELD_EXISTS': 'AGENT ID =%s already exists' % existing_agent_id}
         assert (response.status_code, response.json()) == (409, expected_response)
 
@@ -480,7 +480,7 @@ class TestUsers:
                 "$lname": None,
                 "$userGroupRoles": userGroupRoles,
                 "$roleId": immutable_role['roleId']}
-        response = send_request.post(Manager.users, data)
+        response = send_request.post(mgr.users, data)
         expected_response = {'ADM_VALIDATION_USER_LAST_NAME_LENGTH': 'Last name length from 1 to 256',
                              'ADM_VALIDATION_USER_FIRST_NAME_LENGTH': 'First name length from 1 to 256',
                              'ADM_VALIDATION_USER_LOGIN_LENGTH': 'Login length from 1 to 104'}
@@ -494,7 +494,7 @@ class TestUsers:
                 "$lname": random_string(),
                 "$userGroupRoles": userGroupRoles,
                 "$roleId": None}
-        response = send_request.post(Manager.users, data)
+        response = send_request.post(mgr.users, data)
         expected_response = {'ADM_VALIDATION_ROLES_NOT_FOUND': 'Roles by the following role ids not found: null'}
         assert (response.status_code, response.json()) == (400, expected_response)
 
@@ -506,7 +506,7 @@ class TestUsers:
                 "$lname": random_string(),
                 "$groupId": None,
                 "$roleId": immutable_role['roleId']}
-        response = send_request.post(Manager.users, data)
+        response = send_request.post(mgr.users, data)
         expected_response = {'ADM_VALIDATION_USER_USER_GROUP_ROLES': 'User group roles is empty'}
         assert (response.status_code, response.json()) == (400, expected_response)
 
@@ -518,7 +518,7 @@ class TestUsers:
                 "$lname": random_string(),
                 "$roleId": immutable_role['roleId'],
                 "$userGroupRoles": userGroupRoles}
-        response = send_request.post(Manager.users, data)
+        response = send_request.post(mgr.users, data)
         response_user_group_roles = response.json()['userGroupRoles']
         response_group_roles_set = set(
             response_user_group_roles[0]['group'].items() | response_user_group_roles[0]['roles'][0].items())
@@ -533,7 +533,7 @@ class TestUsers:
                 "$lname": random_string(),
                 "$roleId": root_role_id(),
                 "$userGroupRoles": userGroupRoles}
-        response = send_request.post(Manager.users, data)
+        response = send_request.post(mgr.users, data)
         expected_response = {
             'ADM_VALIDATION_USER_NOT_ALLOWED_ROLE_IN_GROUP': 'Roles in groups by the following role ids not allowed: %s'%
                                                              userGroupRoles[0]['roles'][0]['roleId']}
@@ -542,34 +542,34 @@ class TestUsers:
     @allure.feature('функциональный тест')
     @allure.story('Получаем пользователя по userId')
     def test_get_user(self, immutable_user):
-        response = send_request.get(Manager.users, id_to_url=immutable_user['userId'])
+        response = send_request.get(mgr.users, id_to_url=immutable_user['userId'])
         assert (response.json(), response.status_code) == (immutable_user, 200)
 
     @allure.feature('функциональный тест')
     @allure.story('Получаем пользователя по неизвестному id')
     def test_get_user_with_unknown_id(self):
         unknown_user_id = random_string()
-        response = send_request.get(Manager.users, id_to_url=unknown_user_id)
+        response = send_request.get(mgr.users, id_to_url=unknown_user_id)
         expected_response = {'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'USER not found by userId=%s' % unknown_user_id}
         assert (response.json(), response.status_code) == (expected_response, 400)
 
     @allure.feature('функциональный тест')
     @allure.story('Получаем удаленного пользователя по userId')
     def test_get_deleted_user(self, immutable_deleted_user):
-        response = send_request.get(Manager.users, id_to_url=immutable_deleted_user['userId'])
+        response = send_request.get(mgr.users, id_to_url=immutable_deleted_user['userId'])
         assert (response.json(), response.status_code) == (immutable_deleted_user, 200)
 
     @allure.feature('функциональный тест')
     @allure.story('Удаляем пользователя по userId')
     def test_delete_user(self, user):
-        response = send_request.delete(Manager.users, id_to_url=user['userId'])
+        response = send_request.delete(mgr.users, id_to_url=user['userId'])
         assert (response.json(), response.status_code) == (user, 200)
 
     @allure.feature('функциональный тест')
     @allure.story('Удаляем пользователя по неизвестному userId')
     def test_delete_user_by_unknown_userId(self):
         unknown_user_id = random_string()
-        response = send_request.delete(Manager.users, id_to_url=unknown_user_id)
+        response = send_request.delete(mgr.users, id_to_url=unknown_user_id)
         expected_response = {'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'USER not found by userId=%s' % unknown_user_id}
         assert (response.json(), response.status_code) == (expected_response, 400)
 
@@ -577,14 +577,14 @@ class TestUsers:
     @allure.story('Получаем disabled пользователя')
     def test_get_user_enabled_false(self, add_user_with_role):
         disabled_user = add_user_with_role(enabled=False)
-        response = send_request.get(Manager.users, id_to_url=disabled_user['userId'])
+        response = send_request.get(mgr.users, id_to_url=disabled_user['userId'])
         assert (response.json(), response.status_code) == (disabled_user, 200)
 
     @allure.feature('функциональный тест')
     @allure.story('Удаляем disabled пользователя')
     def test_delete_user_enabled_false(self, add_user_with_role):
         disabled_user = add_user_with_role(enabled=False)
-        response = send_request.delete(Manager.users, id_to_url=disabled_user['userId'])
+        response = send_request.delete(mgr.users, id_to_url=disabled_user['userId'])
         assert (response.json(), response.status_code) == (disabled_user, 200)
 
     @allure.feature('функциональный тест')

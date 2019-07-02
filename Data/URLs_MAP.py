@@ -1,7 +1,7 @@
 from bin.common import MyEnum
 
 
-class Manager(MyEnum):
+class mgr(MyEnum):
     current_user = "/SmiddleManager/adm/management/users/current"
     groups = "/SmiddleManager/adm/management/groups"
     roles = "/SmiddleManager/adm/management/roles"
@@ -88,18 +88,18 @@ get_user_list = '/SmiddleManager/adm/management/get_user_list'
 # delete_role_access = '%s/SmiddleManager/adm/management/delete_role_access' % server
 #
 # # CAMPAIGN MANAGER UCCE
-# get_campaign = '%s/SmiddleCampaignManager/cm/Manager/get_campaign' % server
-# get_batch = '%s/SmiddleCampaignManager/cm/Manager/get_batch' % server
+# get_campaign = '%s/SmiddleCampaignManager/cm/mgr/get_campaign' % server
+# get_batch = '%s/SmiddleCampaignManager/cm/mgr/get_batch' % server
 # get_dial_list = '%s/SmiddleCampaignManager/cm/dialer/get_dial_lists' % server
 # check_campaign_status = '%s/SmiddleCampaignManager/cm/dialer/check_campaign_status' % server
-# get_result_code = '%s/SmiddleCampaignManager/cm/Manager/get_result_code' % server
-# edit_batch = '%s/SmiddleCampaignManager/cm/Manager/edit_batch' % server
+# get_result_code = '%s/SmiddleCampaignManager/cm/mgr/get_result_code' % server
+# edit_batch = '%s/SmiddleCampaignManager/cm/mgr/edit_batch' % server
 # get_mapfields = '%s/SmiddleCampaignManager/cm/settings/get_mapfields' % server
-# edit_result_code = '%s/SmiddleCampaignManager/cm/Manager/edit_result_code' % server
-# get_result_variants = '%s/SmiddleCampaignManager/cm/Manager/get_result_variants' % server
-# edit_result_variant = '%s/SmiddleCampaignManager/cm/Manager/edit_result_variant' % server
+# edit_result_code = '%s/SmiddleCampaignManager/cm/mgr/edit_result_code' % server
+# get_result_variants = '%s/SmiddleCampaignManager/cm/mgr/get_result_variants' % server
+# edit_result_variant = '%s/SmiddleCampaignManager/cm/mgr/edit_result_variant' % server
 # map_field = '%s/SmiddleCampaignManager/cm/settings/map_field' % server
-# edit_campaign = '%s/SmiddleCampaignManager/cm/Manager/edit_campaign' % server
+# edit_campaign = '%s/SmiddleCampaignManager/cm/mgr/edit_campaign' % server
 # edit_dial_list = '%s/SmiddleCampaignManager/cm/dialer/edit_dial_list' % server
 # get_personal_callback = '%s/SmiddleCampaignManager/cm/dialer/get_personal_callback' % server
 # start_campaign = '%s/SmiddleCampaignManager/cm/dialer/start_campaign' % server
@@ -109,11 +109,11 @@ get_user_list = '/SmiddleManager/adm/management/get_user_list'
 # get_skillgroup_list = '%s/SmiddleCampaignManager/cm/dialer/get_skillgroup_list' % server
 # get_timezone_list = '%s/SmiddleCampaignManager/cm/dialer/get_timezone_list' % server
 # get_fixed_fields = '%s/SmiddleCampaignManager/cm/settings/get_fixed_fields' % server
-# remove_result_code = '%s/SmiddleCampaignManager/cm/Manager/remove_result_code' % server
+# remove_result_code = '%s/SmiddleCampaignManager/cm/mgr/remove_result_code' % server
 # delete_mapfield = '%s/SmiddleCampaignManager/cm/settings/delete_mapfield' % server
 # delete_dial_list = '%s/SmiddleCampaignManager/cm/dialer/delete_dial_list' % server
-# delete_campaign = '%s/SmiddleCampaignManager/cm/Manager/delete_campaign' % server
-# remove_result_variant = '%s/SmiddleCampaignManager/cm/Manager/remove_result_variant' % server
+# delete_campaign = '%s/SmiddleCampaignManager/cm/mgr/delete_campaign' % server
+# remove_result_variant = '%s/SmiddleCampaignManager/cm/mgr/remove_result_variant' % server
 #
 # # CAMPAIGN MANAGER UCCX
 #
