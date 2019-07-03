@@ -1,26 +1,11 @@
 import pytest
+import os
 from collections import deque
 from helpers.api import root_group_id
 from bin.common import random_string
 from bin.project import send_request
 from Data.URLs_MAP import mgr
-from bin.project_config import cfg
-from definition import LAST_TEST_RESULTS
-
-
-
-def pytest_sessionfinish(session, exitstatus):
-    reporter = session.config.pluginmanager.get_plugin('terminalreporter')
-    with open(LAST_TEST_RESULTS, 'w') as f:
-        if 'failed' in reporter.stats:
-            f.write("FAILED: {}\n".format(len(reporter.stats['failed'])))
-        else:
-            f.write("FAILED: 0\n")
-        if 'passed' in reporter.stats:
-            f.write("PASSED: {}\n".format(len(reporter.stats['passed'])))
-        else:
-            f.write("PASSED: 0\n")
-
+from definition import ROOT_DIR
 
 
 
@@ -44,22 +29,20 @@ def immutable_group_with_child():
         send_request.delete(mgr.groups, id_to_url=i)
 
 
-def pytest_addoption(parser):
-    # parser.addoption("--env", action="store", default=QA_ENV,
-    #                  help=f"Possible environment values: {ALL_ENVS}")
-    parser.addoption("--host", action="store", default=None,
-                     help=f"If is not set QA host will be taken as default")
+def pytest_sessionfinish(session):
+    try:
+        file_dir = os.environ['test_results_dir']
+    except KeyError:
+        file_dir = ROOT_DIR
+    reporter = session.config.pluginmanager.get_plugin('terminalreporter')
+    with open(os.path.join(file_dir, "test_results.txt"), 'w') as f:
+        if 'failed' in reporter.stats:
+            f.write("FAILED: {}\n".format(len(reporter.stats['failed'])))
+        else:
+            f.write("FAILED: 0\n")
+        if 'passed' in reporter.stats:
+            f.write("PASSED: {}\n".format(len(reporter.stats['passed'])))
+        else:
+            f.write("PASSED: 0\n")
 
 
-@pytest.fixture(scope="session")
-def environment(request):
-    option = request.config.getoption("--host")
-    if not option or option.upper():
-        raise EnvironmentError("Specified environment is invalid. Use --help for more information")
-    print("OPTION", option)
-    return cfg.set_host(option)
-
-
-# @pytest.fixture(scope="session")
-# def add_to_config(enviroment):
-#     return cfg.set_host(enviroment)
