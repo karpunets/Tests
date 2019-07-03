@@ -101,26 +101,26 @@ class TestGroups:
         response = send_request.get(mgr.groups)
         assert response.status_code == 200 and "ROOT" in response.json()[0]['name']
 
-    @allure.feature('Функциональный тест')
-    @allure.story('Получаем групу по ID')
-    def test_get_group_by_id(self, group):
-        response = send_request.get(mgr.groups, id_to_url=group['groupId'])
-        assert (response.status_code, response.json()) == (200, group)
-
-    @allure.feature('Функциональный тест')
-    @allure.story('Проверяем есть ли ранеее созданная группа в списке полученных груп')
-    def test_get_group_bew_group_in_group_list(self, group):
-        response = send_request.get(mgr.groups)
-        rootChildrenIds = [group['groupId'] for group in response.json()[0]['children']]
-        assert response.status_code == 200 and group['groupId'] in rootChildrenIds
-
-    @allure.feature('Проверка валидации')
-    @allure.story('Получаем группу с неизвестным id')
-    def test_get_group_with_unknownId(self):
-        unknown_id = random_string()
-        response = send_request.get(mgr.groups, id_to_url=unknown_id)
-        excepted_response = {'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'GROUP by groupId=%s not found' % unknown_id}
-        assert (response.status_code, response.json()) == (400, excepted_response)
+    # @allure.feature('Функциональный тест')
+    # @allure.story('Получаем групу по ID')
+    # def test_get_group_by_id(self, group):
+    #     response = send_request.get(mgr.groups, id_to_url=group['groupId'])
+    #     assert (response.status_code, response.json()) == (200, group)
+    #
+    # @allure.feature('Функциональный тест')
+    # @allure.story('Проверяем есть ли ранеее созданная группа в списке полученных груп')
+    # def test_get_group_bew_group_in_group_list(self, group):
+    #     response = send_request.get(mgr.groups)
+    #     rootChildrenIds = [group['groupId'] for group in response.json()[0]['children']]
+    #     assert response.status_code == 200 and group['groupId'] in rootChildrenIds
+    #
+    # @allure.feature('Проверка валидации')
+    # @allure.story('Получаем группу с неизвестным id')
+    # def test_get_group_with_unknownId(self):
+    #     unknown_id = random_string()
+    #     response = send_request.get(mgr.groups, id_to_url=unknown_id)
+    #     excepted_response = {'COMMON_REQUESTED_RESOURCES_NOT_FOUND': 'GROUP by groupId=%s not found' % unknown_id}
+    #     assert (response.status_code, response.json()) == (400, excepted_response)
 
     @allure.feature('Функциональный тест')
     @allure.story('Создаем группу')
