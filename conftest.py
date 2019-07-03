@@ -5,6 +5,23 @@ from bin.common import random_string
 from bin.project import send_request
 from Data.URLs_MAP import mgr
 from bin.project_config import cfg
+from definition import LAST_TEST_RESULTS
+
+
+
+def pytest_sessionfinish(session, exitstatus):
+    reporter = session.config.pluginmanager.get_plugin('terminalreporter')
+    with open(LAST_TEST_RESULTS, 'w') as f:
+        if 'failed' in reporter.stats:
+            f.write("FAILED: {}\n".format(len(reporter.stats['failed'])))
+        else:
+            f.write("FAILED: 0\n")
+        if 'passed' in reporter.stats:
+            f.write("PASSED: {}\n".format(len(reporter.stats['passed'])))
+        else:
+            f.write("PASSED: 0\n")
+
+
 
 
 @pytest.fixture(scope="module")
