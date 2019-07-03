@@ -34,6 +34,8 @@ def pytest_sessionfinish(session):
         file_dir = os.environ['test_results_dir']
     except KeyError:
         file_dir = ROOT_DIR
+    print("__________________________DIRECTORY file_dir", file_dir)
+    print(os.environ)
     reporter = session.config.pluginmanager.get_plugin('terminalreporter')
     with open(os.path.join(file_dir, "test_results.txt"), 'w') as f:
         if 'failed' in reporter.stats:
