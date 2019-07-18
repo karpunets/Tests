@@ -3,7 +3,6 @@
 import allure
 import pytest
 import random
-import
 
 from bin.project import send_request
 from helpers.validator import equal_schema
